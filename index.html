@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>خطة والبرنامج الزمني للتربية النفسية 2026 - 2027</title>
+    <!-- Tailwind CSS للتنسيق -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0fdf4; }
+        .slide { display: none; }
+        .slide.active { display: block; }
+        .tab-btn.active { background-color: #15803d; color: white; border-color: #15803d; }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <!-- شريط التبويبات الرئيسي -->
+    <nav class="bg-white shadow-md p-3 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto flex flex-wrap gap-2 justify-center" id="tabs-container">
+            <button onclick="showSlide(0)" class="tab-btn active px-3 py-1.5 rounded-lg border border-green-700 font-bold text-green-800 text-sm transition">المقدمة</button>
+            <button onclick="showSlide(1)" class="tab-btn px-3 py-1.5 rounded-lg border border-green-700 font-bold text-green-800 text-sm transition">الجلسات الوقائية الشهريّة</button>
+            <button onclick="showSlide(2)" class="tab-btn px-3 py-1.5 rounded-lg border border-green-700 font-bold text-green-800 text-sm transition">رعاية المتفوقين</button>
+            <button onclick="showSlide(3)" class="tab-btn px-3 py-1.5 rounded-lg border border-green-700 font-bold text-green-800 text-sm transition">المتأخرون دراسياً</button>
+            <button onclick="showSlide(4)" class="tab-btn px-3 py-1.5 rounded-lg border border-green-700 font-bold text-green-800 text-sm transition">رعاية الموهوبين</button>
+            <button onclick="showSlide(5)" class="tab-btn px-3 py-1.5 rounded-lg border border-green-700 font-bold text-green-800 text-sm transition">برنامج الدمج</button>
+            <button onclick="showSlide(6)" class="tab-btn px-3 py-1.5 rounded-lg border border-green-700 font-bold text-green-800 text-sm transition">البرامج التخصصية والمبادرات</button>
+        </div>
+    </nav>
+
+    <!-- منطقة عرض العرض التقديمي (Slides) -->
+    <main class="flex-grow flex items-center justify-center p-4">
+        <div class="w-full max-w-5xl bg-white rounded-2xl shadow-2xl border-4 border-green-600 p-6 md:p-8 min-h-[550px] flex flex-col justify-between">
+
+            <!-- الشريحة 0: المقدمة -->
+            <div class="slide active space-y-6 text-center my-auto">
+                <div class="inline-block bg-green-100 text-green-800 text-sm font-semibold px-4 py-1 rounded-full border border-green-300">وزارة التربية والتعليم والتعليم الفني</div>
+                <h1 class="text-3xl md:text-4xl font-extrabold text-green-800 leading-relaxed">الخطة والبرنامج الزمني للتربية النفسية</h1>
+                <h2 class="text-xl md:text-2xl font-semibold text-gray-700">للعام الدراسي 2026 / 2027 م</h2>
+                <div class="w-24 h-1 bg-green-600 mx-auto rounded"></div>
+                <p class="text-lg md:text-xl font-medium text-gray-600 pt-4">مع تحيات الأخصائي النفسي/ <span class="font-bold text-green-900">محمد عبدالوهاب القزاز</span></p>
+            </div>
+
+            <!-- الشريحة 1: جلسات الإرشاد النفسي الوقائي الشهري (الاستدراك) -->
+            <div class="slide space-y-4">
+                <div class="flex justify-between items-center border-b-2 border-green-500 pb-2">
+                    <h2 class="text-xl md:text-2xl font-bold text-green-700">سجل الازدهار النفسي - خطة الجلسات الوقائية الشهرية</h2>
+                    <span class="bg-green-100 text-green-800 text-xs px-2.5 py-1 rounded-full font-bold">جلسة شهريّة</span>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm text-right text-gray-700 border-collapse border border-gray-200 shadow-sm rounded-lg">
+                        <thead class="bg-green-700 text-white">
+                            <tr>
+                                <th class="p-2.5 border border-gray-300">الشهر</th>
+                                <th class="p-2.5 border border-gray-300">عنوان الجلسة</th>
+                                <th class="p-2.5 border border-gray-300">الهدف من الجلسة</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200">
+                            <tr class="hover:bg-green-50"><td class="p-2.5 font-bold border border-gray-300">سبتمبر</td><td class="p-2.5 font-semibold text-green-800 border border-gray-300">أنا أستحق أن أكون سعيداً</td><td class="p-2.5 border border-gray-300">تعزيز تقدير الذات.</td></tr>
+                            <tr class="hover:bg-green-50"><td class="p-2.5 font-bold border border-gray-300">أكتوبر</td><td class="p-2.5 font-semibold text-green-800 border border-gray-300">إدارة المشاعر</td><td class="p-2.5 border border-gray-300">اكتساب مهارة تعرف الطالب على مشاعره وفهمها وتنظيم طريقة التعبير عنها.</td></tr>
+                            <tr class="hover:bg-green-50"><td class="p-2.5 font-bold border border-gray-300">نوفمبر</td><td class="p-2.5 font-semibold text-green-800 border border-gray-300">قوة التفكير الإيجابي</td><td class="p-2.5 border border-gray-300">تعديل الأفكار السلبية.</td></tr>
+                            <tr class="hover:bg-green-50"><td class="p-2.5 font-bold border border-gray-300">ديسمبر</td><td class="p-2.5 font-semibold text-green-800 border border-gray-300">الامتحانات بثقة وهدوء</td><td class="p-2.5 border border-gray-300">خفض قلق الامتحانات.</td></tr>
+                            <tr class="hover:bg-green-50"><td class="p-2.5 font-bold border border-gray-300">يناير وفبراير</td><td class="p-2.5 font-semibold text-green-800 border border-gray-300">التعامل مع الضغوط</td><td class="p-2.5 border border-gray-300">تنمية مهارة التعامل مع الضغوط باستخدام استراتيجيات مناسبة تساعد الطالب على الحفاظ على توازنه النفسي.</td></tr>
+                            <tr class="hover:bg-green-50"><td class="p-2.5 font-bold border border-gray-300">مارس</td><td class="p-2.5 font-semibold text-green-800 border border-gray-300">الثقة بالنفس تبدأ بخطوة</td><td class="p-2.5 border border-gray-300">تنمية الثقة بالنفس.</td></tr>
+                            <tr class="hover:bg-green-50"><td class="p-2.5 font-bold border border-gray-300">أبريل</td><td class="p-2.5 font-semibold text-green-800 border border-gray-300">أنا مسؤول عن قراراتي</td><td class="p-2.5 border border-gray-300">تنمية مهارة تحمل المسؤولية واتخاذ القرار.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- الشريحة 2: جلسات رعاية المتفوقين دراسياً -->
+            <div class="slide space-y-4">
+                <h2 class="text-xl md:text-2xl font-bold text-green-700 border-b-2 border-green-500 pb-2">برنامج رعاية المتفوقين: "الفائقون... نحو التميز والريادة"</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                    <div class="p-3 border rounded-lg bg-green-50 border-green-200"><span class="font-bold text-green-800">1. أعرف قدراتي:</span> اكتشاف نقاط القوة والميول والقدرات.</div>
+                    <div class="p-3 border rounded-lg bg-green-50 border-green-200"><span class="font-bold text-green-800">2. العقل المبدع:</span> تنمية التفكير الإبداعي والابتكار.</div>
+                    <div class="p-3 border rounded-lg bg-green-50 border-green-200"><span class="font-bold text-green-800">3. قائد المستقبل:</span> تنمية مهارات القيادة والمبادرة وتحمل المسؤولية.</div>
+                    <div class="p-3 border rounded-lg bg-green-50 border-green-200"><span class="font-bold text-green-800">4. الذكاء الانفعالي:</span> تنمية مهارات إدارة المشاعر والتواصل الفعال.</div>
+                    <div class="p-3 border rounded-lg bg-green-50 border-green-200"><span class="font-bold text-green-800">5. التحدي والإصرار:</span> تنمية مهارة المرونة النفسية ومواجهة الفشل.</div>
+                    <div class="p-3 border rounded-lg bg-green-50 border-green-200"><span class="font-bold text-green-800">6. حل المشكلات واتخاذ القرار:</span> تدريب عملي على مواقف حياتية.</div>
+                    <div class="p-3 border rounded-lg bg-green-50 border-green-200"><span class="font-bold text-green-800">7. التخطيط للنجاح:</span> تدريب عملي على تحديد الأهداف وإدارة الوقت.</div>
+                    <div class="p-3 border rounded-lg bg-green-50 border-green-200"><span class="font-bold text-green-800">8. مشروعي المتميز:</span> تنفيذ كل طالب مشروعاً أو مبادرة تخدم المجتمع.</div>
+                </div>
+            </div>
+
+            <!-- الشريحة 3: جلسات المتأخرين دراسياً -->
+            <div class="slide space-y-4">
+                <h2 class="text-xl md:text-2xl font-bold text-green-700 border-b-2 border-green-500 pb-2">برنامج المتأخرين دراسياً: "خطوة نحو التفوق"</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                    <div class="p-3 border rounded-lg bg-amber-50 border-amber-200"><span class="font-bold text-amber-800">1. بداية جديدة:</span> بناء الثقة، تطبيق استبيان الأسباب، وكسر حاجز الفشل.</div>
+                    <div class="p-3 border rounded-lg bg-amber-50 border-amber-200"><span class="font-bold text-amber-800">2. أعرف نقاط قوتي:</span> تعزيز الثقة بالنفس وتقدير الذات.</div>
+                    <div class="p-3 border rounded-lg bg-amber-50 border-amber-200"><span class="font-bold text-amber-800">3. لماذا أتعلم؟:</span> زيادة الدافعية للتعلم.</div>
+                    <div class="p-3 border rounded-lg bg-amber-50 border-amber-200"><span class="font-bold text-amber-800">4. أتعلم بذكاء:</span> تدريب على مهارات الاستذكار الفعال.</div>
+                    <div class="p-3 border rounded-lg bg-amber-50 border-amber-200"><span class="font-bold text-amber-800">5. ركز تنجح:</span> تنمية الانتباه والتركيز.</div>
+                    <div class="p-3 border rounded-lg bg-amber-50 border-amber-200"><span class="font-bold text-amber-800">6. وقتي سر نجاحي:</span> تنمية مهارة إدارة الوقت وتنظيم المذاكرة.</div>
+                    <div class="p-3 border rounded-lg bg-amber-50 border-amber-200"><span class="font-bold text-amber-800">7. الامتحان بلا خوف:</span> خفض قلق الاختبارات.</div>
+                    <div class="p-3 border rounded-lg bg-amber-50 border-amber-200"><span class="font-bold text-amber-800">8. هدفي القادم:</span> وضع خطة شخصية للتحسن والمتابعة.</div>
+                </div>
+            </div>
+
+            <!-- الشريحة 4: جلسات الموهوبين -->
+            <div class="slide space-y-4">
+                <h2 class="text-xl md:text-2xl font-bold text-green-700 border-b-2 border-green-500 pb-2">برنامج الموهوبين: "موهبتي... من الاكتشاف إلى الإنجاز"</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                    <div class="p-3 border rounded-lg bg-blue-50 border-blue-200"><span class="font-bold text-blue-800">1. اكتشف موهبتك:</span> التعارف + أنشطة استكشاف المواهب وحصر نقاط القوة.</div>
+                    <div class="p-3 border rounded-lg bg-blue-50 border-blue-200"><span class="font-bold text-blue-800">2. شخصيتي الموهوبة:</span> تعزيز الثقة بالنفس وتقدير الذات.</div>
+                    <div class="p-3 border rounded-lg bg-blue-50 border-blue-200"><span class="font-bold text-blue-800">3. التفكير الابتكاري:</span> تنمية الطلاقة والمرونة والأصالة في التفكير.</div>
+                    <div class="p-3 border rounded-lg bg-blue-50 border-blue-200"><span class="font-bold text-blue-800">4. كيف أحول الفكرة إلى مشروع؟:</span> تنمية مهارات التخطيط والتنفيذ.</div>
+                    <div class="p-3 border rounded-lg bg-blue-50 border-blue-200"><span class="font-bold text-blue-800">5. الإصرار يصنع الإنجاز:</span> تعزيز الدافعية والمرونة النفسية.</div>
+                    <div class="p-3 border rounded-lg bg-blue-50 border-blue-200"><span class="font-bold text-blue-800">6. أبدع مع فريقي:</span> تنمية العمل التعاوني والقيادة.</div>
+                    <div class="p-3 border rounded-lg bg-blue-50 border-blue-200 font-medium md:col-span-2"><span class="font-bold text-blue-800">7. موهبتي تخدم مجتمعي:</span> توظيف الموهبة في خدمة المجتمع.</div>
+                </div>
+            </div>
+
+            <!-- الشريحة 5: جلسات برنامج الدمج -->
+            <div class="slide space-y-4">
+                <h2 class="text-xl md:text-2xl font-bold text-green-700 border-b-2 border-green-500 pb-2">برنامج لطلبة الدمج: "معاً نتعلم.. معاً ننجح" (اختلافنا قوة)</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                    <div class="p-3 border rounded-lg bg-purple-50 border-purple-200"><span class="font-bold text-purple-800">1. أنا مميز:</span> تعزيز تقدير الذات والثقة بالنفس.</div>
+                    <div class="p-3 border rounded-lg bg-purple-50 border-purple-200"><span class="font-bold text-purple-800">2. أتعرف على مشاعري:</span> التعبير عن المشاعر وإدارتها.</div>
+                    <div class="p-3 border rounded-lg bg-purple-50 border-purple-200"><span class="font-bold text-purple-800">3. صديقي يساعدني:</span> تنمية مهارات تكوين الصداقات.</div>
+                    <div class="p-3 border rounded-lg bg-purple-50 border-purple-200"><span class="font-bold text-purple-800">4. نتواصل باحترام:</span> تحسين مهارات التواصل اللفظي وغير اللفظي.</div>
+                    <div class="p-3 border rounded-lg bg-purple-50 border-purple-200"><span class="font-bold text-purple-800">5. أستطيع أن أشارك:</span> تشجيع المشاركة في الأنشطة المدرسية.</div>
+                    <div class="p-3 border rounded-lg bg-purple-50 border-purple-200"><span class="font-bold text-purple-800">6. عندما أواجه مشكلة:</span> تنمية مهارات حل المشكلات وطلب المساعدة.</div>
+                    <div class="p-3 border rounded-lg bg-purple-50 border-purple-200"><span class="font-bold text-purple-800">7. كلنا مختلفون وكلنا مهمون:</span> تعزيز تقبل الذات والآخرين.</div>
+                    <div class="p-3 border rounded-lg bg-purple-50 border-purple-200"><span class="font-bold text-purple-800">8. أنا أحقق النجاح:</span> الاحتفاء بالإنجاز ووضع أهداف مستقبلية.</div>
+                </div>
+            </div>
+
+            <!-- الشريحة 6: البرامج التخصصية والمبادرات -->
+            <div class="slide space-y-4">
+                <h2 class="text-xl md:text-2xl font-bold text-green-700 border-b-2 border-green-500 pb-2">البرامج التخصصية والمبادرات المدرسية</h2>
+                <div class="space-y-3 text-sm text-gray-700">
+                    <div class="p-3 border-r-4 border-green-600 bg-gray-50">
+                        <h3 class="font-bold text-green-800">1. مبادرة "بالوعي نحميها" و"بدايتنا صحة نفسية":</h3>
+                        <p>تخصيص الأحد الأول من كل شهر لنشر الصحة النفسية وتفعيل التوعية ضد التنمر، العنف، والإدمان الإلكتروني.</p>
+                    </div>
+                    <div class="p-3 border-r-4 border-green-600 bg-gray-50">
+                        <h3 class="font-bold text-green-800">2. برنامج "فواصل" (12 درساً):</h3>
+                        <p>الوقاية من التدخين والمخدرات وتنمية المهارات الحياتية لمواجهة ضغوط الأقران.</p>
+                    </div>
+                    <div class="p-3 border-r-4 border-green-600 bg-gray-50">
+                        <h3 class="font-bold text-green-800">3. برنامج "الصحة النفسية بالمدارس" (11 جلسة) وبرنامج "لائق للحياة":</h3>
+                        <p>تعزيز التكيف الاجتماعي وإدارة الصراعات والتعرف المبكر على الاضطرابات النفسية.</p>
+                    </div>
+                    <div class="p-3 border-r-4 border-green-600 bg-gray-50">
+                        <h3 class="font-bold text-green-800">4. برنامج "HAT" (ازدهار المراهقين):</h3>
+                        <p>تنمية المهارات العاطفية والسلوكية للتعامل مع مرحلة المراهقة (16 محيداً للابتدائي / 20 محيداً للثانوي).</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- أزرار التنقل السفلية -->
+            <div class="flex justify-between items-center pt-4 border-t border-gray-200 mt-4">
+                <button onclick="prevSlide()" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-5 rounded-lg transition text-sm">السابق</button>
+                <span id="slide-number" class="text-sm font-semibold text-gray-500">1 / 7</span>
+                <button onclick="nextSlide()" class="bg-green-700 hover:bg-green-800 text-white font-bold py-2 px-5 rounded-lg transition text-sm">التالي</button>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- البرمجة بلغة JavaScript -->
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const tabs = document.querySelectorAll('.tab-btn');
+        const slideNumber = document.getElementById('slide-number');
+
+        function showSlide(index) {
+            slides[currentSlide].classList.remove('active');
+            tabs[currentSlide].classList.remove('active');
+            
+            currentSlide = index;
+            if (currentSlide >= slides.length) currentSlide = 0;
+            if (currentSlide < 0) currentSlide = slides.length - 1;
+
+            slides[currentSlide].classList.add('active');
+            tabs[currentSlide].classList.add('active');
+            slideNumber.innerText = `${currentSlide + 1} / ${slides.length}`;
+        }
+
+        function nextSlide() { showSlide(currentSlide + 1); }
+        function prevSlide() { showSlide(currentSlide - 1); }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowLeft') nextSlide();
+            if (e.key === 'ArrowRight') prevSlide();
+        });
+    </script>
+</body>
+</html>
