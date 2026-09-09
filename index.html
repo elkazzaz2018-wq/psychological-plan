@@ -3,51 +3,133 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>مساعد الوكيل الذكي - السجل السحابي</title>
+  <title>منظومة الوكيل الذكي - الأستاذة أميرة علي شلبي</title>
   <style>
     :root {
-      --primary: #4f46e5;
-      --primary-hover: #4338ca;
-      --danger: #ef4444;
-      --success: #10b981;
+      --primary: #1e3a8a;
+      --primary-hover: #1e40af;
+      --accent: #d97706;
+      --danger: #dc2626;
+      --success: #16a34a;
+      --warning: #ca8a04;
       --bg: #f8fafc;
       --card: #ffffff;
-      --text: #1e293b;
-      --border: #e2e8f0;
+      --text: #0f172a;
+      --border: #cbd5e1;
     }
     body {
-      font-family: system-ui, -apple-system, sans-serif;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
       background-color: var(--bg);
       color: var(--text);
       margin: 0;
       padding: 20px;
     }
     .container {
-      max-width: 1000px;
+      max-width: 1280px;
       margin: 0 auto;
     }
+    
+    /* Header & Branding */
     .header {
       text-align: center;
       margin-bottom: 24px;
+      background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+      color: white;
+      padding: 24px;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
     .header h1 {
-      color: var(--primary);
-      margin-bottom: 6px;
+      margin: 0 0 8px 0;
+      font-size: 1.8rem;
     }
+    .header p {
+      margin: 0;
+      opacity: 0.9;
+      font-size: 1.1rem;
+    }
+    .principal-badge {
+      display: inline-block;
+      background: #fef3c7;
+      color: #92400e;
+      padding: 8px 20px;
+      border-radius: 20px;
+      font-size: 15px;
+      font-weight: bold;
+      margin-top: 12px;
+      border: 1px solid #fde68a;
+    }
+
+    /* Tabs System */
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .tab-btn {
+      background: #e2e8f0;
+      color: var(--text);
+      padding: 12px 18px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.2s;
+      font-size: 14px;
+    }
+    .tab-btn.active {
+      background: var(--primary);
+      color: white;
+      box-shadow: 0 2px 6px rgba(30, 58, 138, 0.3);
+    }
+
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .stat-card {
+      background: var(--card);
+      padding: 18px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      text-align: center;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    .stat-card .val {
+      font-size: 26px;
+      font-weight: bold;
+      color: var(--primary);
+      margin-top: 6px;
+    }
+
+    /* Cards & Forms */
     .card {
       background: var(--card);
       padding: 24px;
-      border-radius: 12px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      border-radius: 14px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      border: 1px solid var(--border);
       margin-bottom: 20px;
     }
     .card-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 18px;
+      border-bottom: 2px solid #f1f5f9;
+      padding-bottom: 10px;
     }
-    h2 { margin: 0; color: var(--primary); font-size: 1.25rem; }
+    h2 { margin: 0; color: var(--primary); font-size: 1.3rem; }
+
     .form-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -59,43 +141,42 @@
       flex-direction: column;
       gap: 6px;
     }
-    label { font-size: 14px; font-weight: 600; }
-    input, select {
-      padding: 10px;
+    label { font-size: 14px; font-weight: 600; color: #334155; }
+    input, select, textarea {
+      padding: 10px 12px;
       border: 1px solid var(--border);
-      border-radius: 6px;
+      border-radius: 8px;
       outline: none;
       font-size: 14px;
     }
-    input:focus, select:focus {
+    input:focus, select:focus, textarea:focus {
       border-color: var(--primary);
-      box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.1);
+      box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
     }
+
+    /* Buttons */
     button {
       background: var(--primary);
       color: white;
       border: none;
-      padding: 12px 20px;
-      border-radius: 6px;
+      padding: 10px 20px;
+      border-radius: 8px;
       cursor: pointer;
       font-weight: 600;
       transition: background 0.2s;
       font-size: 14px;
     }
     button:hover { background: var(--primary-hover); }
-    button:disabled { opacity: 0.6; cursor: not-allowed; }
     .btn-print { background: #059669; }
     .btn-print:hover { background: #047857; }
-    .btn-delete {
-      background: #fee2e2;
-      color: var(--danger);
-      padding: 6px 12px;
-      font-size: 12px;
-      border-radius: 4px;
-      border: none;
-      cursor: pointer;
-    }
-    .btn-delete:hover { background: #fca5a5; }
+    .btn-excel { background: #0284c7; }
+    .btn-excel:hover { background: #0369a1; }
+    .btn-upload { background: #7c3aed; }
+    .btn-wa { background: #25d366; color: white; padding: 5px 10px; font-size: 13px; border-radius: 6px; border: none; cursor: pointer; }
+    .btn-delete { background: #fee2e2; color: var(--danger); padding: 5px 10px; font-size: 13px; border-radius: 6px; border: none; cursor: pointer; }
+    .btn-view { background: #e0e7ff; color: #3730a3; padding: 5px 10px; font-size: 13px; border-radius: 6px; text-decoration: none; display: inline-block; }
+
+    /* Tables */
     table {
       width: 100%;
       border-collapse: collapse;
@@ -107,156 +188,564 @@
       text-align: right;
       font-size: 14px;
     }
-    th { background: #f1f5f9; font-weight: 700; }
-    .status {
-      margin-top: 10px;
-      font-size: 14px;
-      font-weight: bold;
+    th { background: #f1f5f9; font-weight: 700; color: #1e293b; }
+    tr:nth-child(even) { background-color: #f8fafc; }
+
+    .file-drop-zone {
+      border: 2px dashed var(--primary);
+      border-radius: 10px;
+      padding: 24px;
+      text-align: center;
+      background: #eff6ff;
+      cursor: pointer;
+      transition: background 0.2s;
     }
-    .status.success { color: var(--success); }
-    .status.error { color: var(--danger); }
+    .file-drop-zone:hover { background: #dbeafe; }
+
+    .status { margin-top: 12px; font-size: 14px; font-weight: bold; padding: 10px; border-radius: 8px; display: none; }
+    .status.success { background: #dcfce7; color: var(--success); display: block; }
+    .status.error { background: #fee2e2; color: var(--danger); display: block; }
+
+    .print-header, .print-footer { display: none; }
 
     @media print {
       body { background: white; padding: 0; }
-      .no-print { display: none !important; }
+      .no-print, .tabs { display: none !important; }
+      .tab-content { display: block !important; }
       .card { box-shadow: none; padding: 0; border: none; }
-      th, td { border: 1px solid #000; }
+      th, td { border: 1px solid #000; padding: 8px; }
+      .print-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 2px solid #000;
+        padding-bottom: 12px;
+        margin-bottom: 20px;
+      }
+      .print-footer {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 50px;
+        padding-top: 20px;
+        font-weight: bold;
+      }
     }
   </style>
 </head>
 <body>
 
 <div class="container">
-  <div class="header no-print">
-    <h1>🤖 مساعد الوكيل الذكي</h1>
-    <p style="color: #64748b; margin: 0;">نظام إسناد الحصص الاحتياطية وإدارة التغطية اليومية (مربوط بالسحابة)</p>
+  <!-- ترويسة الطباعة الرسمية -->
+  <div class="print-header">
+    <div>
+      <h3>محافظة البحيرة - مديرية التربية والتعليم</h3>
+      <h4>مدرسة: كدوة الكريون للتعليم الأساسي</h4>
+      <p>مكتب وكيل المدرسة: الأستاذة / أميرة علي شلبي</p>
+    </div>
+    <div style="text-align: left;">
+      <p>التاريخ: <span id="printDate"></span></p>
+      <p>نوع السجل: تقرير إداري معتمد</p>
+    </div>
   </div>
 
-  <!-- تسجيل الحصص الاحتياطية -->
-  <div class="card no-print">
-    <h2>📝 إسناد حصة احتياطية جديدة</h2>
-    <form id="agentForm" style="margin-top: 16px;">
-      <div class="form-grid">
-        <div class="form-group">
-          <label>اسم المعلم الغائب</label>
-          <input type="text" id="absentTeacher" placeholder="أدخل اسم المعلم الغائب" required>
+  <!-- الترويسة الرئيسية للنظام -->
+  <div class="header no-print">
+    <h1>🏛️ منظومة الوكيل الذكي الشاملة</h1>
+    <p>مدرسة كدوة الكريون للتعليم الأساسي</p>
+    <div class="principal-badge">👩‍💼 إعداد وإشراف: الأستاذة / أميرة علي شلبي (وكيل المدرسة)</div>
+  </div>
+
+  <!-- تبويبات النظام -->
+  <div class="tabs no-print">
+    <button class="tab-btn active" onclick="switchTab(event, 'subTab')">📌 الحصص الاحتياطية</button>
+    <button class="tab-btn" onclick="switchTab(event, 'teacherTab')">👨‍🏫 غياب وتأخير المعلمين</button>
+    <button class="tab-btn" onclick="switchTab(event, 'dutyTab')">🛡️ الإشراف اليومي والفسحة</button>
+    <button class="tab-btn" onclick="switchTab(event, 'studentTab')">👨‍🎓 متابعة انضباط الطلاب</button>
+    <button class="tab-btn" onclick="switchTab(event, 'visitTab')">📑 الزيارات الصفية والتكليفات</button>
+    <button class="tab-btn" onclick="switchTab(event, 'uploadTab')">📤 مرفقات ومستندات الوكيل</button>
+    <button class="tab-btn" onclick="switchTab(event, 'archiveTab')">📊 الأرشيف والتصدير لـ Excel</button>
+  </div>
+
+  <!-- 1. قسم الحصص الاحتياطية -->
+  <div id="subTab" class="tab-content active">
+    <div class="stats-grid no-print">
+      <div class="stat-card">
+        <div>إجمالي الاحتياطي اليوم</div>
+        <div class="val" id="todaySubCount">0</div>
+      </div>
+      <div class="stat-card">
+        <div>الأكثر تكليفاً بالإحتياطي</div>
+        <div class="val" id="topTeacher" style="font-size: 15px; margin-top: 8px;">-</div>
+      </div>
+    </div>
+
+    <div class="card no-print">
+      <h2>📝 إسناد حصة احتياطية جديدة</h2>
+      <form id="subForm" style="margin-top: 16px;">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>اسم المعلم الغائب</label>
+            <input type="text" id="absentTeacher" required placeholder="اسم المعلم الغائب">
+          </div>
+          <div class="form-group">
+            <label>المعلم المكلف (الاحتياطي)</label>
+            <input type="text" id="subTeacher" required placeholder="اسم المعلم البديل">
+          </div>
+          <div class="form-group">
+            <label>رقم هاتف المكلف (لواتساب)</label>
+            <input type="tel" id="subPhone" placeholder="010xxxxxxxx">
+          </div>
+          <div class="form-group">
+            <label>الصف / الفصل</label>
+            <input type="text" id="className" required placeholder="مثال: 1/2 أو 3/1">
+          </div>
+          <div class="form-group">
+            <label>الحصة</label>
+            <select id="period">
+              <option value="الحصة الأولى">الحصة الأولى</option>
+              <option value="الحصة الثانية">الحصة الثانية</option>
+              <option value="الحصة الثالثة">الحصة الثالثة</option>
+              <option value="الحصة الرابعة">الحصة الرابعة</option>
+              <option value="الحصة الخامسة">الحصة الخامسة</option>
+              <option value="الحصة السادسة">الحصة السادسة</option>
+              <option value="الحصة السابعة">الحصة السابعة</option>
+            </select>
+          </div>
         </div>
-        <div class="form-group">
-          <label>المعلم المكلف (الاحتياطي)</label>
-          <input type="text" id="subTeacher" placeholder="أدخل اسم المعلم المكلف" required>
-        </div>
-        <div class="form-group">
-          <label>الفصل / الصف</label>
-          <input type="text" id="className" placeholder="مثال: 1 / 2" required>
-        </div>
-        <div class="form-group">
-          <label>الحصة</label>
-          <select id="period">
-            <option value="الحصة الأولى">الحصة الأولى</option>
-            <option value="الحصة الثانية">الحصة الثانية</option>
-            <option value="الحصة الثالثة">الحصة الثالثة</option>
-            <option value="الحصة الرابعة">الحصة الرابعة</option>
-            <option value="الحصة الخامسة">الحصة الخامسة</option>
-            <option value="الحصة السادسة">الحصة السادسة</option>
-            <option value="الحصة السابعة">الحصة السابعة</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>ملاحظات التكليف</label>
-          <input type="text" id="notes" placeholder="مثال: تغطية حصة رياضيات">
+        <button type="submit" id="saveSubBtn">⚡ تسجيل التكليف وحفظه</button>
+      </form>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h2>📋 دفتر تكليفات الحصص الاحتياطية بمدرسة كدوة الكريون</h2>
+        <div class="no-print">
+          <button onclick="exportToCSV('subs')" class="btn-excel">📊 تصدير Excel</button>
+          <button onclick="window.print()" class="btn-print">🖨️ طباعة السجل</button>
         </div>
       </div>
-      <button type="submit" id="saveBtn">⚡ حفظ وإرسال للسحابة</button>
-      <div id="statusMsg" class="status"></div>
-    </form>
+      <table>
+        <thead>
+          <tr>
+            <th>المعلم الغائب</th>
+            <th>المعلم المكلف</th>
+            <th>الفصل</th>
+            <th>الحصة</th>
+            <th>التاريخ</th>
+            <th class="no-print">إجراءات</th>
+          </tr>
+        </thead>
+        <tbody id="subTable"></tbody>
+      </table>
+    </div>
   </div>
 
-  <!-- سجل التكليفات السحابي -->
-  <div class="card">
-    <div class="card-header">
-      <h2>📋 سجل تكليفات الحصص الاحتياطية</h2>
-      <button onclick="window.print()" class="btn-print no-print">🖨️ طباعة تقرير اليوم</button>
+  <!-- 2. قسم غياب المعلمين -->
+  <div id="teacherTab" class="tab-content">
+    <div class="card no-print">
+      <h2>🚨 تسجيل غياب / عذر معلم</h2>
+      <form id="teacherForm" style="margin-top: 16px;">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>اسم المعلم</label>
+            <input type="text" id="tName" required placeholder="الاسم ثلاثي">
+          </div>
+          <div class="form-group">
+            <label>المادة / التخصص</label>
+            <input type="text" id="tSubject" required placeholder="مثال: لغة عربية / علوم">
+          </div>
+          <div class="form-group">
+            <label>نوع الإجازة / العذر</label>
+            <select id="tReason">
+              <option value="عارضة">إجازة عارضة</option>
+              <option value="اعتيادي">إجازة اعتيادي</option>
+              <option value="مرضي">إجازة مرضية</option>
+              <option value="غياب بدون إذن">غياب بدون إذن</option>
+              <option value="تأخير صباحي">تأخير صباحي</option>
+              <option value="خط سير / مامورية">خط سير / مأمورية</option>
+            </select>
+          </div>
+        </div>
+        <button type="submit">📌 تسجيل السجل</button>
+      </form>
     </div>
-    <table>
-      <thead>
-        <tr>
-          <th>المعلم الغائب</th>
-          <th>المعلم المكلف</th>
-          <th>الفصل</th>
-          <th>الحصة</th>
-          <th>الملاحظات</th>
-          <th>التاريخ</th>
-          <th class="no-print" style="width: 80px; text-align: center;">إجراء</th>
-        </tr>
-      </thead>
-      <tbody id="recordsTable">
-        <tr>
-          <td colspan="7" style="text-align: center;">جاري جلب بيانات مساعد الوكيل من السحابة...</td>
-        </tr>
-      </tbody>
-    </table>
+
+    <div class="card">
+      <div class="card-header">
+        <h2>📑 دفتر متابعة حضور وغياب هيئة التدريس</h2>
+        <div class="no-print">
+          <button onclick="exportToCSV('teachers')" class="btn-excel">📊 تصدير Excel</button>
+        </div>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>اسم المعلم</th>
+            <th>المادة</th>
+            <th>نوع العذر/الغياب</th>
+            <th>التاريخ</th>
+            <th class="no-print">إجراء</th>
+          </tr>
+        </thead>
+        <tbody id="teacherTable"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 3. قسم الإشراف اليومي -->
+  <div id="dutyTab" class="tab-content">
+    <div class="card no-print">
+      <h2>🛡️ توزيع الإشراف اليومي والفسحة المدرسية</h2>
+      <form id="dutyForm" style="margin-top: 16px;">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>المعلم المشرف</label>
+            <input type="text" id="dTeacher" required placeholder="اسم المشرف">
+          </div>
+          <div class="form-group">
+            <label>موقع الإشراف</label>
+            <select id="dLocation">
+              <option value="الفناء المدرسي">الفناء المدرسي</option>
+              <option value="الدور الأرضي">الدور الأرضي</option>
+              <option value="الدور الأول علوي">الدور الأول علوي</option>
+              <option value="الدور الثاني علوي">الدور الثاني علوي</option>
+              <option value="البوابة الرئيسية">البوابة الرئيسية</option>
+              <option value="المقصف / الكانتين">المقصف / الكانتين</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>فترة الإشراف</label>
+            <select id="dShift">
+              <option value="اليوم الدراسي كاملاً">اليوم الدراسي كاملاً</option>
+              <option value="الفسحة المدرسية">الفسحة المدرسية</option>
+              <option value="طابور الصباح والانصراف">طابور الصباح والانصراف</option>
+            </select>
+          </div>
+        </div>
+        <button type="submit">🛡️ إسناد الإشراف</button>
+      </form>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h2>📋 جدول الإشراف اليومي - مدرسة كدوة الكريون</h2>
+        <div class="no-print">
+          <button onclick="exportToCSV('duties')" class="btn-excel">📊 تصدير Excel</button>
+        </div>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>اسم المشرف</th>
+            <th>موقع الإشراف</th>
+            <th>الفترة</th>
+            <th>التاريخ</th>
+            <th class="no-print">إجراء</th>
+          </tr>
+        </thead>
+        <tbody id="dutyTable"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 4. قسم الطلاب والسلوك -->
+  <div id="studentTab" class="tab-content">
+    <div class="card no-print">
+      <h2>👨‍🎓 تسجيل انضباط / غياب / سلوك طالب</h2>
+      <form id="studentForm" style="margin-top: 16px;">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>اسم الطالب</label>
+            <input type="text" id="sName" required placeholder="اسم الطالب">
+          </div>
+          <div class="form-group">
+            <label>الصف / الفصل</label>
+            <input type="text" id="sClass" required placeholder="مثال: الخامس / 1">
+          </div>
+          <div class="form-group">
+            <label>نوع الملاحظة</label>
+            <select id="sType">
+              <option value="تأخير عن الطابور">تأخير عن الطابور</option>
+              <option value="هروب من الحصة">هروب من الحصة</option>
+              <option value="مخالفة سلوكية">مخالفة سلوكية</option>
+              <option value="استدعاء ولي أمر">استدعاء ولي أمر</option>
+              <option value="غياب متكرر">غياب متكرر</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>الإجراء المتخذ من الوكيل</label>
+            <input type="text" id="sAction" placeholder="مثال: إخطار ولي الأمر / أخذ إقرار">
+          </div>
+        </div>
+        <button type="submit">⚠️ تسجيل الحالة</button>
+      </form>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h2>📑 سجل انضباط ومتابعة سلوك الطلاب</h2>
+        <div class="no-print">
+          <button onclick="exportToCSV('students')" class="btn-excel">📊 تصدير Excel</button>
+        </div>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>اسم الطالب</th>
+            <th>الفصل</th>
+            <th>الملاحظة السلوكية</th>
+            <th>الإجراء المتخذ</th>
+            <th>التاريخ</th>
+            <th class="no-print">إجراء</th>
+          </tr>
+        </thead>
+        <tbody id="studentTable"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 5. قسم الزيارات الصفية والتكليفات (جديد) -->
+  <div id="visitTab" class="tab-content">
+    <div class="card no-print">
+      <h2>📑 تسجيل زيارة صفية / تكليف إداري</h2>
+      <form id="visitForm" style="margin-top: 16px;">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>اسم المعلم المزار</label>
+            <input type="text" id="vTeacher" required placeholder="اسم المعلم">
+          </div>
+          <div class="form-group">
+            <label>المادة والصف</label>
+            <input type="text" id="vSubjectClass" required placeholder="مثال: رياضيات - 4/2">
+          </div>
+          <div class="form-group">
+            <label>موضوع الدرس / التكليف</label>
+            <input type="text" id="vTopic" placeholder="موضوع الدرس">
+          </div>
+          <div class="form-group">
+            <label>التقييم / الملاحظات</label>
+            <select id="vRating">
+              <option value="ممتاز - ملتزم بخطة الدرس">ممتاز - ملتزم بخطة الدرس</option>
+              <option value="جيد جداً - يحتاج لتفعيل الوسائل">جيد جداً - يحتاج لتفعيل الوسائل</option>
+              <option value="جيد - توجيه بمتابعة كراسات الطلاب">جيد - توجيه بمتابعة كراسات الطلاب</option>
+              <option value="توجيه إداري">توجيه إداري مباشر</option>
+            </select>
+          </div>
+        </div>
+        <button type="submit">📝 حفظ الزارة</button>
+      </form>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h2>📋 سجل الزيارات الصفية والتوجيهات الفنية للوكيل</h2>
+        <div class="no-print">
+          <button onclick="exportToCSV('visits')" class="btn-excel">📊 تصدير Excel</button>
+        </div>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>اسم المعلم</th>
+            <th>المادة والصف</th>
+            <th>موضوع الدرس</th>
+            <th>التقييم والملاحظات</th>
+            <th>التاريخ</th>
+            <th class="no-print">إجراء</th>
+          </tr>
+        </thead>
+        <tbody id="visitTable"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 6. قسم رفع المستندات والملفات -->
+  <div id="uploadTab" class="tab-content">
+    <div class="card no-print">
+      <h2>📤 رفع مستند أو تقرير رسمي خاص بالوكيل</h2>
+      <form id="uploadForm" style="margin-top: 16px;">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>عنوان المستند</label>
+            <input type="text" id="docTitle" placeholder="مثال: قرار تكليف إشراف / كشف إجازات" required>
+          </div>
+          <div class="form-group">
+            <label>تصنيف المستند</label>
+            <select id="docCategory">
+              <option value="قرارات وتكليفات">قرارات وتكليفات</option>
+              <option value="إجازات وأعذار">إجازات وأعذار معلمين</option>
+              <option value="تقارير انضباط طلاب">تقارير انضباط طلاب</option>
+              <option value="نشرات وزارية وإدارية">نشرات وزارية وإدارية</option>
+              <option value="مستندات أخرى">مستندات أخرى</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>ملاحظات إضافية</label>
+            <input type="text" id="docNotes" placeholder="أية تفاصيل إضافية...">
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 16px;">
+          <label>اختر الملف (صورة أو PDF)</label>
+          <div class="file-drop-zone" onclick="document.getElementById('docFile').click()">
+            📄 <span id="fileLabel">اضغط هنا لتحديد الملف من جهازك (PNG, JPG, PDF)</span>
+            <input type="file" id="docFile" accept="image/*,.pdf" style="display: none;" onchange="handleFileSelect(event)">
+          </div>
+        </div>
+
+        <button type="submit" class="btn-upload">🚀 رفع وحفظ المستند</button>
+      </form>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h2>📂 الأرشيف الرقمي للمستندات المرفوعة</h2>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>اسم المستند</th>
+            <th>التصنيف</th>
+            <th>الملاحظات</th>
+            <th>تاريخ الرفع</th>
+            <th class="no-print">إجراءات</th>
+          </tr>
+        </thead>
+        <tbody id="documentsTable"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 7. قسم أرشيف المستندات بـ Excel -->
+  <div id="archiveTab" class="tab-content">
+    <div class="card">
+      <div class="card-header">
+        <h2>📊 الأرشيف العام والتصدير الشامل</h2>
+        <div class="no-print" style="display: flex; gap: 8px;">
+          <button onclick="exportAllToCSV()" class="btn-excel">📥 تصدير الكاملاً لـ Excel</button>
+          <button onclick="window.print()" class="btn-print">🖨️ طباعة الأرشيف</button>
+        </div>
+      </div>
+
+      <div class="form-grid no-print" style="margin-bottom: 20px;">
+        <div class="form-group">
+          <label>🔍 بحث في كافة الأرشيف</label>
+          <input type="text" id="archiveSearch" placeholder="ابحث باسم المعلم، الطالب، الفصل..." oninput="renderArchiveTable()">
+        </div>
+        <div class="form-group">
+          <label>📁 تصفية حسب القسم</label>
+          <select id="archiveFilter" onchange="renderArchiveTable()">
+            <option value="all">كل السجلات</option>
+            <option value="subs">الحصص الاحتياطية</option>
+            <option value="teachers">غياب وتأخير المعلمين</option>
+            <option value="duties">الإشراف اليومي</option>
+            <option value="students">متابعة الطلاب</option>
+            <option value="visits">الزيارات الصفية</option>
+            <option value="documents">المستندات المرفوعة</option>
+          </select>
+        </div>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>نوع المستند/السجل</th>
+            <th>البيانات الأساسية</th>
+            <th>التفاصيل/الموقع/الحصة</th>
+            <th>التاريخ</th>
+            <th class="no-print">إجراء</th>
+          </tr>
+        </thead>
+        <tbody id="archiveTable"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="statusMsg" class="status"></div>
+
+  <!-- ترويسة التواقيع المعتمدة عند الطباعة -->
+  <div class="print-footer">
+    <div>مسؤول الإحصاء / السجلات: ....................</div>
+    <div>وكيل المدرسة: الأستاذة / أميرة علي شلبي</div>
+    <div>مدير المدرسة: ....................</div>
   </div>
 </div>
 
 <script>
-  // بيانات الربط السحابي
   const BIN_ID = "6aa17373ffd5d16053f2232a"; 
   const MASTER_KEY = "$2a$10$U1s8.ywSeF2F03hGxdnBupy6OizBVc3x.LhGexSy353/GgxyZ6vZ.";
 
-  const form = document.getElementById('agentForm');
-  const saveBtn = document.getElementById('saveBtn');
-  const statusMsg = document.getElementById('statusMsg');
-  const recordsTable = document.getElementById('recordsTable');
+  let appData = {
+    subs: [],
+    teachers: [],
+    duties: [],
+    students: [],
+    visits: [],
+    documents: []
+  };
 
-  let recordsData = [];
+  let selectedFileData = null;
 
-  // 1. جلب البيانات من السحابة
-  async function loadDataFromCloud() {
+  document.getElementById('printDate').textContent = new Date().toLocaleDateString('ar-EG');
+
+  function switchTab(evt, tabId) {
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+    
+    evt.currentTarget.classList.add('active');
+    document.getElementById(tabId).classList.add('active');
+
+    if (tabId === 'archiveTab') {
+      renderArchiveTable();
+    }
+  }
+
+  function handleFileSelect(evt) {
+    const file = evt.target.files[0];
+    if (file) {
+      document.getElementById('fileLabel').textContent = `الملف المختار: ${file.name} (${(file.size / 1024).toFixed(1)} KB)`;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        selectedFileData = {
+          name: file.name,
+          type: file.type,
+          data: e.target.result
+        };
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  async function loadAllData() {
     try {
-      showStatus("جاري الاتصال بالسحابة وجلب التكليفات...", "");
+      showStatus("جاري مزامنة بيانات منظومة الأستاذة أميرة مع السحابة...", "");
       const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
         method: 'GET',
         headers: { 'X-Master-Key': MASTER_KEY }
       });
 
-      if (!res.ok) throw new Error("تعذر جلب البيانات");
+      if (res.ok) {
+        const result = await res.json();
+        const record = result.record || {};
+        appData.subs = record.subs || record.records || [];
+        appData.teachers = record.teachers || [];
+        appData.duties = record.duties || [];
+        appData.students = record.students || [];
+        appData.visits = record.visits || [];
+        appData.documents = record.documents || [];
 
-      const result = await res.json();
-      recordsData = Array.isArray(result.record?.records) ? result.record.records : [];
-      renderTable();
-      showStatus("تم تحديث البيانات سحابياً بنجاح", "success");
+        renderAllTables();
+        updateStats();
+        showStatus("تم مزامنة منظومة مدرسة كدوة الكريون بنجاح", "success");
+      }
     } catch (err) {
-      console.error(err);
-      recordsTable.innerHTML = `<tr><td colspan="7" style="text-align: center; color: red;">تعذر الاتصال بالسحابة.</td></tr>`;
-      showStatus("خطأ في جلب البيانات من السحابة", "error");
+      showStatus(`خطأ اتصال بالسحابة: ${err.message}`, "error");
     }
   }
 
-  // 2. عرض البيانات بالجدول
-  function renderTable() {
-    if (recordsData.length === 0) {
-      recordsTable.innerHTML = `<tr><td colspan="7" style="text-align: center;">لا توجد تكليفات احتياطية مسجلة حالياً</td></tr>`;
-      return;
-    }
-
-    recordsTable.innerHTML = recordsData.map((item, index) => `
-      <tr>
-        <td>${item.absentTeacher}</td>
-        <td>${item.subTeacher}</td>
-        <td>${item.className}</td>
-        <td>${item.period}</td>
-        <td>${item.notes || '-'}</td>
-        <td>${item.date}</td>
-        <td class="no-print" style="text-align: center;">
-          <button class="btn-delete" onclick="deleteRecord(${index})">حذف</button>
-        </td>
-      </tr>
-    `).join('');
-  }
-
-  // 3. التحديث السحابي (PUT)
-  async function updateCloudData() {
+  async function saveToCloud() {
     try {
+      showStatus("جاري الحفظ بالسحابة...", "");
       const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
         method: 'PUT',
         headers: {
@@ -264,67 +753,394 @@
           'X-Master-Key': MASTER_KEY,
           'X-Bin-Versioning': 'false'
         },
-        body: JSON.stringify({ records: recordsData })
+        body: JSON.stringify(appData)
       });
-      return res.ok;
+
+      if (res.ok) {
+        showStatus("تم حفظ البيانات بنجاح!", "success");
+        renderAllTables();
+        updateStats();
+      }
     } catch (err) {
-      console.error(err);
-      return false;
+      showStatus(`فشل عملية الحفظ: ${err.message}`, "error");
     }
   }
 
-  // 4. حفظ تكليف جديد
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
+  function renderAllTables() {
+    // 1. الاحتياطي
+    const subBody = document.getElementById('subTable');
+    subBody.innerHTML = appData.subs.length === 0 ? `<tr><td colspan="6" style="text-align:center;">لا توجد تكليفات احتياطية</td></tr>` :
+    appData.subs.map((item, index) => `
+      <tr>
+        <td>${item.absentTeacher}</td>
+        <td>${item.subTeacher}</td>
+        <td>${item.className}</td>
+        <td>${item.period}</td>
+        <td>${item.date}</td>
+        <td class="no-print">
+          <button class="btn-wa" onclick="sendWhatsApp('${item.subPhone}', '${item.subTeacher}', '${item.className}', '${item.period}')">📱 واتساب</button>
+          <button class="btn-delete" onclick="deleteItem('subs', ${index})">🗑️</button>
+        </td>
+      </tr>
+    `).join('');
 
-    const newRecord = {
+    // 2. المعلمين
+    const tBody = document.getElementById('teacherTable');
+    tBody.innerHTML = appData.teachers.length === 0 ? `<tr><td colspan="5" style="text-align:center;">لا توجد حالات مسجلة اليوم</td></tr>` :
+    appData.teachers.map((item, index) => `
+      <tr>
+        <td>${item.name}</td>
+        <td>${item.subject}</td>
+        <td>${item.reason}</td>
+        <td>${item.date}</td>
+        <td class="no-print"><button class="btn-delete" onclick="deleteItem('teachers', ${index})">🗑️</button></td>
+      </tr>
+    `).join('');
+
+    // 3. الإشراف
+    const dBody = document.getElementById('dutyTable');
+    dBody.innerHTML = appData.duties.length === 0 ? `<tr><td colspan="5" style="text-align:center;">لا يوجد جدول إشراف مسجل</td></tr>` :
+    appData.duties.map((item, index) => `
+      <tr>
+        <td>${item.teacher}</td>
+        <td>${item.location}</td>
+        <td>${item.shift}</td>
+        <td>${item.date}</td>
+        <td class="no-print"><button class="btn-delete" onclick="deleteItem('duties', ${index})">🗑️</button></td>
+      </tr>
+    `).join('');
+
+    // 4. الطلاب
+    const sBody = document.getElementById('studentTable');
+    sBody.innerHTML = appData.students.length === 0 ? `<tr><td colspan="6" style="text-align:center;">لا توجد ملاحظات مسجلة</td></tr>` :
+    appData.students.map((item, index) => `
+      <tr>
+        <td>${item.name}</td>
+        <td>${item.className}</td>
+        <td>${item.type}</td>
+        <td>${item.action || '-'}</td>
+        <td>${item.date}</td>
+        <td class="no-print"><button class="btn-delete" onclick="deleteItem('students', ${index})">🗑️</button></td>
+      </tr>
+    `).join('');
+
+    // 5. الزيارات الصفية
+    const vBody = document.getElementById('visitTable');
+    vBody.innerHTML = appData.visits.length === 0 ? `<tr><td colspan="6" style="text-align:center;">لا توجد زيارات مسجلة حتى الآن</td></tr>` :
+    appData.visits.map((item, index) => `
+      <tr>
+        <td>${item.teacher}</td>
+        <td>${item.subjectClass}</td>
+        <td>${item.topic || '-'}</td>
+        <td>${item.rating}</td>
+        <td>${item.date}</td>
+        <td class="no-print"><button class="btn-delete" onclick="deleteItem('visits', ${index})">🗑️</button></td>
+      </tr>
+    `).join('');
+
+    // 6. المستندات
+    const docBody = document.getElementById('documentsTable');
+    docBody.innerHTML = appData.documents.length === 0 ? `<tr><td colspan="5" style="text-align:center;">لا توجد مستندات مرفوعة حتى الآن</td></tr>` :
+    appData.documents.map((item, index) => `
+      <tr>
+        <td><strong>📄 ${item.title}</strong></td>
+        <td>${item.category}</td>
+        <td>${item.notes || '-'}</td>
+        <td>${item.date}</td>
+        <td class="no-print">
+          ${item.fileData ? `<a href="${item.fileData.data}" download="${item.fileData.name}" class="btn-view">📥 تنزيل</a>` : '<span style="color:#aaa;">بدون ملف</span>'}
+          <button class="btn-delete" onclick="deleteItem('documents', ${index})">🗑️ مسح</button>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  function renderArchiveTable() {
+    const search = document.getElementById('archiveSearch').value.toLowerCase();
+    const filter = document.getElementById('archiveFilter').value;
+    const body = document.getElementById('archiveTable');
+    
+    let combined = [];
+
+    if (filter === 'all' || filter === 'subs') {
+      appData.subs.forEach((item, index) => {
+        combined.push({
+          type: 'حصص احتياطية',
+          key: 'subs',
+          origIndex: index,
+          mainInfo: `غائب: ${item.absentTeacher} | مكلف: ${item.subTeacher}`,
+          detail: `فصل: ${item.className} - ${item.period}`,
+          date: item.date
+        });
+      });
+    }
+
+    if (filter === 'all' || filter === 'teachers') {
+      appData.teachers.forEach((item, index) => {
+        combined.push({
+          type: 'غياب معلم',
+          key: 'teachers',
+          origIndex: index,
+          mainInfo: `المعلم: ${item.name}`,
+          detail: `المادة: ${item.subject} (${item.reason})`,
+          date: item.date
+        });
+      });
+    }
+
+    if (filter === 'all' || filter === 'duties') {
+      appData.duties.forEach((item, index) => {
+        combined.push({
+          type: 'إشراف يومي',
+          key: 'duties',
+          origIndex: index,
+          mainInfo: `المشرف: ${item.teacher}`,
+          detail: `الموقع: ${item.location} - ${item.shift}`,
+          date: item.date
+        });
+      });
+    }
+
+    if (filter === 'all' || filter === 'students') {
+      appData.students.forEach((item, index) => {
+        combined.push({
+          type: 'متابعة طالب',
+          key: 'students',
+          origIndex: index,
+          mainInfo: `الطالب: ${item.name} (${item.className})`,
+          detail: `ملاحظة: ${item.type} | إجراء: ${item.action || 'لا يوجد'}`,
+          date: item.date
+        });
+      });
+    }
+
+    if (filter === 'all' || filter === 'visits') {
+      appData.visits.forEach((item, index) => {
+        combined.push({
+          type: 'زيارة صفية',
+          key: 'visits',
+          origIndex: index,
+          mainInfo: `المعلم: ${item.teacher} (${item.subjectClass})`,
+          detail: `تقييم: ${item.rating}`,
+          date: item.date
+        });
+      });
+    }
+
+    if (filter === 'all' || filter === 'documents') {
+      appData.documents.forEach((item, index) => {
+        combined.push({
+          type: 'مستند مرفوع',
+          key: 'documents',
+          origIndex: index,
+          mainInfo: `المستند: ${item.title}`,
+          detail: `تصنيف: ${item.category} | ${item.notes || ''}`,
+          date: item.date
+        });
+      });
+    }
+
+    const filtered = combined.filter(row => 
+      row.type.toLowerCase().includes(search) ||
+      row.mainInfo.toLowerCase().includes(search) ||
+      row.detail.toLowerCase().includes(search) ||
+      row.date.toLowerCase().includes(search)
+    );
+
+    if (filtered.length === 0) {
+      body.innerHTML = `<tr><td colspan="5" style="text-align:center;">لا توجد مستندات تطابق البحث</td></tr>`;
+      return;
+    }
+
+    body.innerHTML = filtered.map(row => `
+      <tr>
+        <td><strong>${row.type}</strong></td>
+        <td>${row.mainInfo}</td>
+        <td>${row.detail}</td>
+        <td>${row.date}</td>
+        <td class="no-print">
+          <button class="btn-delete" onclick="deleteItem('${row.key}', ${row.origIndex})">🗑️ مسح</button>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  // Forms submit event handlers
+  document.getElementById('subForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    appData.subs.push({
       absentTeacher: document.getElementById('absentTeacher').value.trim(),
       subTeacher: document.getElementById('subTeacher').value.trim(),
+      subPhone: document.getElementById('subPhone').value.trim(),
       className: document.getElementById('className').value.trim(),
       period: document.getElementById('period').value,
-      notes: document.getElementById('notes').value.trim(),
       date: new Date().toLocaleDateString('ar-EG')
-    };
-
-    recordsData.push(newRecord);
-    saveBtn.disabled = true;
-    showStatus("جاري حفظ التكليف بالسحابة...", "");
-
-    if (await updateCloudData()) {
-      showStatus("تم تسجيل التكليف في السحابة بنجاح!", "success");
-      renderTable();
-      form.reset();
-    } else {
-      recordsData.pop();
-      showStatus("تعذر الحفظ السحابي، حاول مجدداً", "error");
-    }
-    
-    saveBtn.disabled = false;
+    });
+    e.target.reset();
+    saveToCloud();
   });
 
-  // 5. حذف تكليف
-  async function deleteRecord(index) {
-    if (!confirm("هل أنت تأكد من رغبتك في حذف هذا التكليف؟")) return;
+  document.getElementById('teacherForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    appData.teachers.push({
+      name: document.getElementById('tName').value.trim(),
+      subject: document.getElementById('tSubject').value.trim(),
+      reason: document.getElementById('tReason').value,
+      date: new Date().toLocaleDateString('ar-EG')
+    });
+    e.target.reset();
+    saveToCloud();
+  });
 
-    const removed = recordsData.splice(index, 1);
-    showStatus("جاري تحديث السحابة...", "");
+  document.getElementById('dutyForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    appData.duties.push({
+      teacher: document.getElementById('dTeacher').value.trim(),
+      location: document.getElementById('dLocation').value,
+      shift: document.getElementById('dShift').value,
+      date: new Date().toLocaleDateString('ar-EG')
+    });
+    e.target.reset();
+    saveToCloud();
+  });
 
-    if (await updateCloudData()) {
-      showStatus("تم الحذف بنجاح", "success");
-      renderTable();
-    } else {
-      recordsData.splice(index, 0, removed[0]);
-      showStatus("تعذر الحذف سحابياً", "error");
+  document.getElementById('studentForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    appData.students.push({
+      name: document.getElementById('sName').value.trim(),
+      className: document.getElementById('sClass').value.trim(),
+      type: document.getElementById('sType').value,
+      action: document.getElementById('sAction').value.trim(),
+      date: new Date().toLocaleDateString('ar-EG')
+    });
+    e.target.reset();
+    saveToCloud();
+  });
+
+  document.getElementById('visitForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    appData.visits.push({
+      teacher: document.getElementById('vTeacher').value.trim(),
+      subjectClass: document.getElementById('vSubjectClass').value.trim(),
+      topic: document.getElementById('vTopic').value.trim(),
+      rating: document.getElementById('vRating').value,
+      date: new Date().toLocaleDateString('ar-EG')
+    });
+    e.target.reset();
+    saveToCloud();
+  });
+
+  document.getElementById('uploadForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    appData.documents.push({
+      title: document.getElementById('docTitle').value.trim(),
+      category: document.getElementById('docCategory').value,
+      notes: document.getElementById('docNotes').value.trim(),
+      fileData: selectedFileData,
+      date: new Date().toLocaleDateString('ar-EG')
+    });
+    e.target.reset();
+    selectedFileData = null;
+    document.getElementById('fileLabel').textContent = "اضغط هنا لتحديد الملف من جهازك (PNG, JPG, PDF)";
+    saveToCloud();
+  });
+
+  // Excel Export
+  function exportToCSV(type) {
+    let rows = [];
+    let filename = `مدرسة_كدية_الكريون_${type}_${new Date().toISOString().slice(0,10)}.csv`;
+
+    if (type === 'subs') {
+      rows.push(["المعلم الغائب", "المعلم المكلف", "الهاتف", "الفصل", "الحصة", "التاريخ"]);
+      appData.subs.forEach(i => rows.push([i.absentTeacher, i.subTeacher, i.subPhone || '', i.className, i.period, i.date]));
+    } else if (type === 'teachers') {
+      rows.push(["اسم المعلم", "المادة", "نوع العذر", "التاريخ"]);
+      appData.teachers.forEach(i => rows.push([i.name, i.subject, i.reason, i.date]));
+    } else if (type === 'duties') {
+      rows.push(["اسم المشرف", "موقع الإشراف", "الفترة", "التاريخ"]);
+      appData.duties.forEach(i => rows.push([i.teacher, i.location, i.shift, i.date]));
+    } else if (type === 'students') {
+      rows.push(["اسم الطالب", "الفصل", "نوع الملاحظة", "الإجراء المتخذ", "التاريخ"]);
+      appData.students.forEach(i => rows.push([i.name, i.className, i.type, i.action || '', i.date]));
+    } else if (type === 'visits') {
+      rows.push(["اسم المعلم", "المادة والصف", "موضوع الدرس", "التقييم والملاحظات", "التاريخ"]);
+      appData.visits.forEach(i => rows.push([i.teacher, i.subjectClass, i.topic || '', i.rating, i.date]));
     }
+
+    downloadCSV(rows, filename);
+  }
+
+  function exportAllToCSV() {
+    let rows = [["قسم المستند", "بيانات العنصر 1", "بيانات العنصر 2", "التفاصيل / الملاحظات", "التاريخ"]];
+    
+    appData.subs.forEach(i => rows.push(["حصص احتياطية", i.absentTeacher, i.subTeacher, `${i.className} - ${i.period}`, i.date]));
+    appData.teachers.forEach(i => rows.push(["غياب معلم", i.name, i.subject, i.reason, i.date]));
+    appData.duties.forEach(i => rows.push(["إشراف يومي", i.teacher, i.location, i.shift, i.date]));
+    appData.students.forEach(i => rows.push(["متابعة طالب", i.name, i.className, `${i.type} - ${i.action || ''}`, i.date]));
+    appData.visits.forEach(i => rows.push(["زيارات صفية", i.teacher, i.subjectClass, `${i.topic || ''} (${i.rating})`, i.date]));
+    appData.documents.forEach(i => rows.push(["مستند مرفوع", i.title, i.category, i.notes || '', i.date]));
+
+    downloadCSV(rows, `أرشيف_الأستاذة_أميرة_على_شلبي_مدرسة_كدوة_الكريون_${new Date().toISOString().slice(0,10)}.csv`);
+  }
+
+  function downloadCSV(rows, filename) {
+    let csvContent = "\uFEFF" + rows.map(e => e.map(val => `"${val}"`).join(",")).join("\n");
+    let blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    let link = document.createElement("a");
+    let url = URL.createObjectURL(blob);
+    link.setAttribute("href", url);
+    link.setAttribute("download", filename);
+    link.click();
+  }
+
+  function deleteItem(type, index) {
+    if (confirm("هل أنت متأكد من مسح هذا السجل؟")) {
+      appData[type].splice(index, 1);
+      saveToCloud();
+      if (document.getElementById('archiveTab').classList.contains('active')) {
+        renderArchiveTable();
+      }
+    }
+  }
+
+  function updateStats() {
+    const todayStr = new Date().toLocaleDateString('ar-EG');
+    document.getElementById('todaySubCount').textContent = appData.subs.filter(r => r.date === todayStr).length;
+
+    const teacherCounts = {};
+    appData.subs.forEach(r => {
+      teacherCounts[r.subTeacher] = (teacherCounts[r.subTeacher] || 0) + 1;
+    });
+
+    let maxTeacher = '-';
+    let maxCount = 0;
+    for (const [teacher, count] of Object.entries(teacherCounts)) {
+      if (count > maxCount) {
+        maxCount = count;
+        maxTeacher = `${teacher} (${count} حصص)`;
+      }
+    }
+    document.getElementById('topTeacher').textContent = maxTeacher;
+  }
+
+  function sendWhatsApp(phone, teacher, className, period) {
+    const text = `الأستاذ/ة ${teacher} المحترم/ة،\nتحية طيبة وبعد،،\nيرجى العلم بأنه تم تكليفكم بحصة احتياطية بمدرسة كدوة الكريون:\n📍 الفصل: ${className}\n⏰ ${period}\nشاكرين تعاونكم - مكتب وكيل المدرسة الأستاذة / أميرة علي شلبي.`;
+    let url = `https://wa.me/`;
+    if (phone) {
+      const cleanPhone = phone.replace(/[^0-9]/g, '');
+      url += cleanPhone.startsWith('0') ? `2${cleanPhone}` : cleanPhone;
+    }
+    url += `?text=${encodeURIComponent(text)}`;
+    window.open(url, '_blank');
   }
 
   function showStatus(text, type) {
+    const statusMsg = document.getElementById('statusMsg');
     statusMsg.textContent = text;
     statusMsg.className = `status ${type}`;
   }
 
-  // تشغيل الجلب تلقائياً
-  loadDataFromCloud();
+  loadAllData();
 </script>
 
 </body>
