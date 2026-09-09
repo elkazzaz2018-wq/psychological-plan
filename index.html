@@ -1,74 +1,750 @@
-// 1. إعدادات الحاوية السحابية (JSONBin)
-const BIN_ID = "6aa17373ffd5d16053f2232a";
-const API_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منظومة الأستاذة أميرة شلبي - وكيل مدرسة كدوة الكريون</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Cairo -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Cairo', sans-serif; }
+        @media print {
+            .no-print { display: none !important; }
+            .print-only { display: block !important; }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
 
-// مفتاح الوصول API Key (تحتاج الحصول عليه مجاناً من حسابك في jsonbin.io)
-// يمكنك استبداله بمفتاحك الشخصي X-Master-Key أو Master Key
-const MASTER_KEY = "$2a$10$YOUR_MASTER_KEY_HERE"; 
+    <!-- Top Gift Ribbon Banner -->
+    <div class="bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 text-indigo-950 text-center py-1.5 px-4 text-xs sm:text-sm font-bold shadow-inner no-print flex justify-center items-center gap-2">
+        <i class="fa-solid fa-gift text-lg animate-bounce"></i>
+        <span>إهداء خاص للأستاذة الفاضلة / أميرة شلبي - وكيل مدرسة كدوة الكريون 💐</span>
+    </div>
 
-// 2. دالة جلب البيانات التلقائية من السحابة عند فتح الصفحة من أي جهاز
-async function loadDataFromCloud() {
-    const statusText = document.getElementById('sync-status-text');
-    const statusDot = document.getElementById('sync-status-dot');
-    
-    if (statusText) statusText.innerText = "جاري جلب البيانات من السحابة...";
+    <!-- Header / Navbar -->
+    <header class="bg-indigo-900 text-white shadow-xl sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-3 space-x-reverse">
+                <div class="bg-amber-400 text-indigo-950 p-3 rounded-2xl shadow-md">
+                    <i class="fa-solid fa-school-circle-check text-2xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl sm:text-2xl font-black tracking-wide">مدرسة كدوة الكريون</h1>
+                    <p class="text-xs sm:text-sm text-amber-300 font-bold">منظومة المتابعة الإدارية | الأستاذة أميرة شلبي</p>
+                </div>
+            </div>
+            <div class="text-left hidden md:block">
+                <p id="current-date" class="text-sm font-bold text-amber-300"></p>
+                <div class="flex items-center gap-2 mt-1">
+                    <span id="sync-status-dot" class="inline-block w-2.5 h-2.5 bg-amber-400 rounded-full animate-pulse"></span>
+                    <span id="sync-status-text" class="text-xs text-indigo-200 font-semibold">جاري الاتصال بالسحابة...</span>
+                </div>
+            </div>
+        </div>
+    </header>
 
-    try {
-        const response = await fetch(`${API_URL}/latest`, {
-            method: 'GET',
-            headers: {
-                'X-Master-Key': MASTER_KEY
-            }
-        });
+    <!-- Main Layout -->
+    <div class="max-w-7xl mx-auto px-4 py-6 flex-1 w-full grid grid-cols-1 md:grid-cols-4 gap-6">
 
-        if (!response.ok) throw new Error("فشل الاتصال بالسحابة");
+        <!-- Sidebar Navigation -->
+        <aside class="md:col-span-1 bg-white rounded-2xl shadow-sm p-4 border border-slate-100 flex flex-col justify-between no-print">
+            <nav class="space-y-2">
+                <button onclick="switchTab('dashboard')" id="btn-dashboard" class="nav-btn w-full flex items-center space-x-3 space-x-reverse px-4 py-3 rounded-xl font-bold transition text-indigo-900 bg-indigo-50">
+                    <i class="fa-solid fa-chart-pie text-lg text-indigo-600"></i>
+                    <span>لوحة التحكم الرئيسية</span>
+                </button>
 
-        const data = await response.json();
+                <button onclick="switchTab('substitute')" id="btn-substitute" class="nav-btn w-full flex items-center space-x-3 space-x-reverse px-4 py-3 rounded-xl font-bold text-slate-600 hover:bg-slate-50 transition">
+                    <i class="fa-solid fa-user-clock text-lg text-amber-500"></i>
+                    <span>جدول الاحتياطي اليومي</span>
+                </button>
+
+                <button onclick="switchTab('supervision')" id="btn-supervision" class="nav-btn w-full flex items-center space-x-3 space-x-reverse px-4 py-3 rounded-xl font-bold text-slate-600 hover:bg-slate-50 transition">
+                    <i class="fa-solid fa-eye text-lg text-blue-500"></i>
+                    <span>جدول الإشراف اليومي</span>
+                </button>
+
+                <button onclick="switchTab('visits')" id="btn-visits" class="nav-btn w-full flex items-center space-x-3 space-x-reverse px-4 py-3 rounded-xl font-bold text-slate-600 hover:bg-slate-50 transition">
+                    <i class="fa-solid fa-chalkboard-user text-lg text-emerald-600"></i>
+                    <span>سجل الزيارات الصفية</span>
+                </button>
+
+                <button onclick="switchTab('behavior')" id="btn-behavior" class="nav-btn w-full flex items-center space-x-3 space-x-reverse px-4 py-3 rounded-xl font-bold text-slate-600 hover:bg-slate-50 transition">
+                    <i class="fa-solid fa-clipboard-check text-lg text-rose-500"></i>
+                    <span>الانضباط والغياب</span>
+                </button>
+
+                <button onclick="switchTab('documents')" id="btn-documents" class="nav-btn w-full flex items-center space-x-3 space-x-reverse px-4 py-3 rounded-xl font-bold text-slate-600 hover:bg-slate-50 transition">
+                    <i class="fa-solid fa-folder-open text-lg text-purple-600"></i>
+                    <span>أرشيف المستندات</span>
+                </button>
+
+                <button onclick="switchTab('tasks')" id="btn-tasks" class="nav-btn w-full flex items-center space-x-3 space-x-reverse px-4 py-3 rounded-xl font-bold text-slate-600 hover:bg-slate-50 transition">
+                    <i class="fa-solid fa-list-check text-lg text-teal-600"></i>
+                    <span>قائمة المهام اليومية</span>
+                </button>
+            </nav>
+
+            <div class="mt-8 pt-4 border-t border-slate-100 text-center space-y-2">
+                <button onclick="changePassword()" class="text-xs text-indigo-600 hover:underline font-bold flex items-center justify-center gap-1 mx-auto">
+                    <i class="fa-solid fa-key"></i> تغيير كلمة سر التعديل
+                </button>
+                <p class="text-[11px] text-slate-400">مدرسة كدوة الكريون © 2026</p>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="md:col-span-3 space-y-6">
+
+            <!-- 1. DASHBOARD TAB -->
+            <section id="tab-dashboard" class="tab-content space-y-6">
+                <div class="bg-gradient-to-r from-indigo-900 via-indigo-800 to-indigo-900 rounded-3xl p-6 sm:p-8 text-white shadow-xl relative overflow-hidden">
+                    <div class="relative z-10">
+                        <span class="bg-amber-400 text-indigo-950 text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider mb-3 inline-block">أهلاً بكِ أستاذتنا القديرة</span>
+                        <h2 class="text-2xl sm:text-3xl font-black mb-2">أ. أميرة شلبي 👋</h2>
+                        <p class="text-indigo-200 text-sm max-w-xl leading-relaxed">
+                            مرحباً بكِ في منظومتكِ السحابية لإدارة مدرسة <strong>كدوة الكريون</strong>. التعديلات تحفظ وتظهر فوراً عبر جميع أجهزتكِ.
+                        </p>
+                        <div class="mt-6 flex flex-wrap gap-3 no-print">
+                            <button onclick="window.print()" class="bg-amber-400 hover:bg-amber-300 text-indigo-950 font-bold px-4 py-2 rounded-xl text-sm transition flex items-center gap-2 shadow">
+                                <i class="fa-solid fa-print"></i> طباعة تقرير اليوم
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stats Grid -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 text-center">
+                        <div class="w-10 h-10 mx-auto bg-amber-100 text-amber-600 rounded-xl flex items-center justify-center mb-2">
+                            <i class="fa-solid fa-user-xmark text-lg"></i>
+                        </div>
+                        <p class="text-xs text-slate-500 font-bold">الغياب اليوم</p>
+                        <p id="stat-absent" class="text-xl font-black text-slate-800 mt-1">0</p>
+                    </div>
+
+                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 text-center">
+                        <div class="w-10 h-10 mx-auto bg-indigo-100 text-indigo-600 rounded-xl flex items-center justify-center mb-2">
+                            <i class="fa-solid fa-chalkboard-user text-lg"></i>
+                        </div>
+                        <p class="text-xs text-slate-500 font-bold">حافز الاحتياطي</p>
+                        <p id="stat-subs" class="text-xl font-black text-slate-800 mt-1">0</p>
+                    </div>
+
+                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 text-center">
+                        <div class="w-10 h-10 mx-auto bg-emerald-100 text-emerald-600 rounded-xl flex items-center justify-center mb-2">
+                            <i class="fa-solid fa-street-view text-lg"></i>
+                        </div>
+                        <p class="text-xs text-slate-500 font-bold">الزيارات الصفية</p>
+                        <p id="stat-visits" class="text-xl font-black text-slate-800 mt-1">0</p>
+                    </div>
+
+                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 text-center">
+                        <div class="w-10 h-10 mx-auto bg-purple-100 text-purple-600 rounded-xl flex items-center justify-center mb-2">
+                            <i class="fa-solid fa-folder text-lg"></i>
+                        </div>
+                        <p class="text-xs text-slate-500 font-bold">المستندات المرفوعة</p>
+                        <p id="stat-docs" class="text-xl font-black text-slate-800 mt-1">0</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. SUBSTITUTE TEACHERS TAB -->
+            <section id="tab-substitute" class="tab-content hidden space-y-6">
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 no-print">
+                    <h3 class="font-bold text-lg text-slate-800 mb-4 flex items-center space-x-2 space-x-reverse">
+                        <i class="fa-solid fa-plus-circle text-indigo-600"></i>
+                        <span>توزيع حصة احتياطية</span>
+                    </h3>
+                    <form id="form-substitute" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-600 mb-1">المعلم الغائب</label>
+                            <input type="text" id="absent-teacher" required placeholder="أدخل اسم المعلم الغائب" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-indigo-600 text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-600 mb-1">المعلم البديل (الاحتياطي)</label>
+                            <input type="text" id="sub-teacher" required placeholder="أدخل اسم المعلم المكلف" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-indigo-600 text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-600 mb-1">الفصل</label>
+                            <input type="text" id="sub-class" required placeholder="مثال: 4 / 1" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-indigo-600 text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-600 mb-1">الحصة</label>
+                            <select id="sub-period" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-indigo-600 text-sm">
+                                <option value="الأولى">الحصة الأولى</option>
+                                <option value="الثانية">الحصة الثانية</option>
+                                <option value="الثالثة">الحصة الثالثة</option>
+                                <option value="الرابعة">الحصة الرابعة</option>
+                                <option value="الخامسة">الحصة الخامسة</option>
+                                <option value="السادسة">الحصة السادسة</option>
+                            </select>
+                        </div>
+                        <div class="md:col-span-2">
+                            <button type="submit" class="w-full bg-indigo-900 hover:bg-indigo-800 text-white font-bold py-3 rounded-xl transition shadow">
+                                <i class="fa-solid fa-cloud-arrow-up text-xs ml-1"></i> حفظ وتحديث سحابي
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                    <div class="p-4 border-b border-slate-100 flex justify-between items-center">
+                        <h4 class="font-bold text-slate-800">سجل الاحتياطي اليومي</h4>
+                        <span class="text-xs bg-indigo-50 text-indigo-700 font-bold px-3 py-1 rounded-full">مدرسة كدوة الكريون</span>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm text-right">
+                            <thead class="bg-slate-50 text-slate-600 font-bold border-b border-slate-100">
+                                <tr>
+                                    <th class="p-3">المعلم الغائب</th>
+                                    <th class="p-3">المعلم البديل</th>
+                                    <th class="p-3">الفصل</th>
+                                    <th class="p-3">الحصة</th>
+                                    <th class="p-3 text-center no-print">إجراء</th>
+                                </tr>
+                            </thead>
+                            <tbody id="list-substitute" class="divide-y divide-slate-100"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. SUPERVISION TAB -->
+            <section id="tab-supervision" class="tab-content hidden space-y-6">
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 no-print">
+                    <h3 class="font-bold text-lg text-slate-800 mb-4 flex items-center space-x-2 space-x-reverse">
+                        <i class="fa-solid fa-user-shield text-blue-600"></i>
+                        <span>توزيع الإشراف اليومي</span>
+                    </h3>
+                    <form id="form-supervision" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-600 mb-1">اسم المعلم المشرف</label>
+                            <input type="text" id="sup-teacher" required placeholder="اسم المعلم" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-indigo-600 text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-600 mb-1">مكان الإشراف</label>
+                            <select id="sup-place" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-indigo-600 text-sm">
+                                <option value="الفناء المدرسي">الفناء المدرسي</option>
+                                <option value="البوابة الرئيسية">البوابة الرئيسية</option>
+                                <option value="الدور الأرضي">الدور الأرضي</option>
+                                <option value="الدور الأول">الدور الأول</option>
+                                <option value="الدور الثاني">الدور الثاني</option>
+                                <option value="المقصف / الدورة المياه">المقصف ودورات المياه</option>
+                            </select>
+                        </div>
+                        <div class="md:col-span-2">
+                            <button type="submit" class="w-full bg-indigo-900 hover:bg-indigo-800 text-white font-bold py-3 rounded-xl transition shadow">
+                                <i class="fa-solid fa-cloud-arrow-up text-xs ml-1"></i> تسجيل وإرسال للسحابة
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                    <div class="p-4 border-b border-slate-100">
+                        <h4 class="font-bold text-slate-800">جدول الإشراف اليومي للمدرسة</h4>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm text-right">
+                            <thead class="bg-slate-50 text-slate-600 font-bold border-b border-slate-100">
+                                <tr>
+                                    <th class="p-3">المعلم المشرف</th>
+                                    <th class="p-3">مكان الإشراف</th>
+                                    <th class="p-3 text-center no-print">إجراء</th>
+                                </tr>
+                            </thead>
+                            <tbody id="list-supervision" class="divide-y divide-slate-100"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4. CLASS VISITS TAB -->
+            <section id="tab-visits" class="tab-content hidden space-y-6">
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 no-print">
+                    <h3 class="font-bold text-lg text-slate-800 mb-4 flex items-center space-x-2 space-x-reverse">
+                        <i class="fa-solid fa-pen-to-square text-emerald-600"></i>
+                        <span>توثيق زيارة صفية للمعلم</span>
+                    </h3>
+                    <form id="form-visit" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-600 mb-1">اسم المعلم</label>
+                            <input type="text" id="visit-teacher" required placeholder="اسم المعلم المزار" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-indigo-600 text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-600 mb-1">المادة والفصل</label>
+                            <input type="text" id="visit-subject" required placeholder="مثال: لغة عربية - 5 / 1" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-indigo-600 text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-600 mb-1">التقييم العام</label>
+                            <select id="visit-rating" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-indigo-600 text-sm">
+                                <option value="ممتاز 🌟">ممتاز 🌟</option>
+                                <option value="جيد جداً 👍">جيد جداً 👍</option>
+                                <option value="جيد 🟢">جيد 🟢</option>
+                                <option value="يحتاج توجيه ⚠️">يحتاج توجيه ⚠️</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-600 mb-1">ملاحظات والتوجيهات</label>
+                            <input type="text" id="visit-notes" placeholder="ملاحظات التوجيه والتحفيز" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-indigo-600 text-sm">
+                        </div>
+                        <div class="md:col-span-2">
+                            <button type="submit" class="w-full bg-indigo-900 hover:bg-indigo-800 text-white font-bold py-3 rounded-xl transition shadow">
+                                <i class="fa-solid fa-cloud-arrow-up text-xs ml-1"></i> حفظ الزيارة سحابياً
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                    <div class="p-4 border-b border-slate-100">
+                        <h4 class="font-bold text-slate-800">سجل الزيارات الصفية والتوجيه الفني</h4>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm text-right">
+                            <thead class="bg-slate-50 text-slate-600 font-bold border-b border-slate-100">
+                                <tr>
+                                    <th class="p-3">المعلم</th>
+                                    <th class="p-3">المادة والفصل</th>
+                                    <th class="p-3">التقييم</th>
+                                    <th class="p-3">التوجيهات والملاحظات</th>
+                                    <th class="p-3 text-center no-print">إجراء</th>
+                                </tr>
+                            </thead>
+                            <tbody id="list-visits" class="divide-y divide-slate-100"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 5. BEHAVIOR TAB -->
+            <section id="tab-behavior" class="tab-content hidden space-y-6">
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 no-print">
+                    <h3 class="font-bold text-lg text-slate-800 mb-4 flex items-center space-x-2 space-x-reverse">
+                        <i class="fa-solid fa-user-pen text-rose-600"></i>
+                        <span>رصد غياب أو سلوك تلميذ</span>
+                    </h3>
+                    <form id="form-behavior" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-600 mb-1">اسم التلميذ / التلميذة</label>
+                            <input type="text" id="student-name" required placeholder="اسم التلميذ الثلاثي" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-indigo-600 text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-600 mb-1">الصف والفصل</label>
+                            <input type="text" id="student-class" required placeholder="مثال: 3 / 2" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-indigo-600 text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-600 mb-1">نوع الحالة</label>
+                            <select id="case-type" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-indigo-600 text-sm">
+                                <option value="غياب بدون عذر">غياب بدون عذر</option>
+                                <option value="تأخر عن الطابور">تأخر عن طابور الصباح</option>
+                                <option value="سلوك يحتاج متابعة">سلوك يحتاج متابعة وتوجيه</option>
+                                <option value="تفوق ومبادرة إيجابية">تفوق ومبادرة إيجابية</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-600 mb-1">الإجراء المتخذ</label>
+                            <input type="text" id="action-taken" placeholder="مثال: استدعاء ولي أمر / توجيه" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-indigo-600 text-sm">
+                        </div>
+                        <div class="md:col-span-2">
+                            <button type="submit" class="w-full bg-indigo-900 hover:bg-indigo-800 text-white font-bold py-3 rounded-xl transition shadow">
+                                <i class="fa-solid fa-cloud-arrow-up text-xs ml-1"></i> تسجيل الحالة سحابياً
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                    <div class="p-4 border-b border-slate-100">
+                        <h4 class="font-bold text-slate-800">سجل انضباط التلاميذ</h4>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm text-right">
+                            <thead class="bg-slate-50 text-slate-600 font-bold border-b border-slate-100">
+                                <tr>
+                                    <th class="p-3">التلميذ</th>
+                                    <th class="p-3">الفصل</th>
+                                    <th class="p-3">نوع الحالة</th>
+                                    <th class="p-3">الإجراء المتخذ</th>
+                                    <th class="p-3 text-center no-print">إجراء</th>
+                                </tr>
+                            </thead>
+                            <tbody id="list-behavior" class="divide-y divide-slate-100"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 6. DOCUMENTS ARCHIVE TAB -->
+            <section id="tab-documents" class="tab-content hidden space-y-6">
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 no-print">
+                    <h3 class="font-bold text-lg text-slate-800 mb-4 flex items-center space-x-2 space-x-reverse">
+                        <i class="fa-solid fa-cloud-arrow-up text-purple-600"></i>
+                        <span>رفع وتوثيق مستند أو قرار مالي/إداري</span>
+                    </h3>
+                    <form id="form-doc" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-600 mb-1">عنوان المستند / القرار</label>
+                            <input type="text" id="doc-title" required placeholder="مثال: الخطة السنوية / قرار الإخلاء" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-indigo-600 text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-600 mb-1">اختر الملف (صورة أو PDF)</label>
+                            <input type="file" id="doc-file" accept="image/*,.pdf" required class="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm bg-slate-50">
+                        </div>
+                        <div class="md:col-span-2">
+                            <button type="submit" class="w-full bg-purple-700 hover:bg-purple-800 text-white font-bold py-3 rounded-xl transition shadow">
+                                <i class="fa-solid fa-cloud-arrow-up text-xs ml-1"></i> رفع وحفظ المستند في الأرشيف السحابي
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
+                    <h4 class="font-bold text-slate-800 mb-4">أرشيف المستندات والخطط الرسمية</h4>
+                    <div id="list-docs" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
+                </div>
+            </section>
+
+            <!-- 7. TASKS TAB -->
+            <section id="tab-tasks" class="tab-content hidden space-y-6">
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 no-print">
+                    <h3 class="font-bold text-lg text-slate-800 mb-4 flex items-center space-x-2 space-x-reverse">
+                        <i class="fa-solid fa-tasks text-teal-600"></i>
+                        <span>إضافة مهمة إدارية جديدة</span>
+                    </h3>
+                    <form id="form-task" class="flex gap-2">
+                        <input type="text" id="task-title" required placeholder="مثال: التوقيع على دفاتر الحضور، متابعة النظافة..." class="flex-1 px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-indigo-600 text-sm">
+                        <button type="submit" class="bg-indigo-900 hover:bg-indigo-800 text-white font-bold px-6 py-2.5 rounded-xl transition shadow">
+                            إضافة
+                        </button>
+                    </form>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
+                    <h4 class="font-bold text-slate-800 mb-4">قائمة مهام الأستاذة أميرة شلبي</h4>
+                    <div id="list-tasks" class="space-y-3"></div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Application JavaScript Logic with JSONBin Integration -->
+    <script>
+        // --- 1. JSONBin Configuration ---
+        const BIN_ID = "6aa17373ffd5d16053f2232a";
+        const API_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
         
-        // تحديث مصفوفات البرنامج بالبيانات الجاهزة من السحابة
-        if (data.record) {
-            window.appData = data.record;
-            renderAll(); // إعادة رسم كافة الجداول واللوحات
+        // 🔑 ضعي الـ Master Key الخاص بكِ من حسابك في jsonbin.io بين القوسين بالأسفل:
+        const MASTER_KEY ="6aa17373ffd5d16053f2232a";
+
+        // Global State
+        window.appData = {
+            pass: '1234',
+            subs: [],
+            sup: [],
+            visits: [],
+            behavior: [],
+            docs: [],
+            tasks: []
+        };
+
+        // --- 2. Load Data from JSONBin ---
+        async function loadDataFromCloud() {
+            const dot = document.getElementById('sync-status-dot');
+            const text = document.getElementById('sync-status-text');
+            if (text) text.innerText = "جاري جلب البيانات من السحابة...";
+
+            try {
+                const response = await fetch(`${API_URL}/latest`, {
+                    method: 'GET',
+                    headers: { 'X-Master-Key': MASTER_KEY }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.record) {
+                        window.appData = Object.assign(window.appData, data.record);
+                        renderAll();
+                    }
+                    if (dot && text) {
+                        dot.className = "inline-block w-2.5 h-2.5 bg-emerald-400 rounded-full animate-pulse";
+                        text.innerText = "السحابة متصلة ومحدثة ⚡";
+                    }
+                } else {
+                    throw new Error("فشل الوصول إلى البيانات السحابية");
+                }
+            } catch (error) {
+                console.error("خطأ في الاتصال بالسحابة:", error);
+                if (text) text.innerText = "تعذر الاتصال بالسحابة (تأكدي من الـ Master Key)";
+            }
         }
 
-        if (statusText && statusDot) {
-            statusText.innerText = "السحابة متصلة ومحدثة ⚡";
-            statusDot.className = "inline-block w-2.5 h-2.5 bg-emerald-400 rounded-full animate-pulse";
-        }
-    } catch (error) {
-        console.error("خطأ في جلب البيانات:", error);
-        if (statusText) statusText.innerText = "تعذر الاتصال بالسحابة (يعمل أوفلاين)";
-    }
-}
+        // --- 3. Save Data to JSONBin ---
+        window.saveToCloud = async function() {
+            const text = document.getElementById('sync-status-text');
+            if (text) text.innerText = "جاري الحفظ سحابياً...";
 
-// 3. دالة حفظ أي تعديل وإرساله فوراً للسحابة لتشاهده جميع الأجهزة
-async function saveToCloud() {
-    const statusText = document.getElementById('sync-status-text');
-    if (statusText) statusText.innerText = "جاري حفظ التعديل على السحابة...";
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Master-Key': MASTER_KEY
+                    },
+                    body: JSON.stringify(window.appData)
+                });
 
-    try {
-        const response = await fetch(API_URL, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-Master-Key': MASTER_KEY
-            },
-            body: JSON.stringify(window.appData)
+                if (response.ok) {
+                    if (text) text.innerText = "تم حفظ التعديل عبر كافة الأجهزة ⚡";
+                    renderAll();
+                } else {
+                    alert("⚠️ فشل الحفظ السحابي: يُرجى التأكد من كتابة Master Key صحيح في الكود.");
+                }
+            } catch (error) {
+                console.error("خطأ أثناء الحفظ:", error);
+                alert("تعذر الحفظ السحابي، تحقق من الاتصال بالإنترنت.");
+            }
+        };
+
+        // Setup Date
+        document.getElementById('current-date').innerText = new Date().toLocaleDateString('ar-EG', {
+            weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
         });
 
-        if (response.ok) {
-            if (statusText) statusText.innerText = "تم الحفظ المباشر عبر كافة الأجهزة ⚡";
-            renderAll();
-        } else {
-            alert("حدث خطأ أثناء الحفظ السحابي، يُرجى التأكد من الـ Master Key");
+        // Auth Check Function
+        function authenticate() {
+            const pass = window.appData.pass || '1234';
+            if (!pass) return true;
+            const input = prompt("🔐 يُرجى إدخال كلمة سر التعديل لإتمام العملية:");
+            if (input === pass) return true;
+            alert("❌ كلمة السر غير صحيحة! تم إلغاء العملية لحماية البيانات.");
+            return false;
         }
-    } catch (error) {
-        console.error("خطأ في الحفظ السحابي:", error);
-        alert("تعذر الاتصال بالسيرفر لحفظ التعديلات.");
-    }
-}
 
-// 4. تشغيل جلب البيانات تلقائياً بمجرد فتح الصفحة من الموبايل أو الكمبيوتر
-document.addEventListener('DOMContentLoaded', () => {
-    loadDataFromCloud();
-});
+        function changePassword() {
+            if (!authenticate()) return;
+            const newP = prompt("أدخلي كلمة السر الجديدة (أو اتركيها فارغة للإلغاء):");
+            if (newP !== null) {
+                window.appData.pass = newP;
+                window.saveToCloud();
+                alert("✅ تم تحديث كلمة السر بنجاح على جميع الأجهزة!");
+            }
+        }
+
+        // Tab Navigation
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.nav-btn').forEach(el => {
+                el.classList.remove('bg-indigo-50', 'text-indigo-900');
+                el.classList.add('text-slate-600');
+            });
+
+            document.getElementById(`tab-${tabName}`).classList.remove('hidden');
+            const activeBtn = document.getElementById(`btn-${tabName}`);
+            if (activeBtn) {
+                activeBtn.classList.add('bg-indigo-50', 'text-indigo-900');
+                activeBtn.classList.remove('text-slate-600');
+            }
+        }
+
+        // Render Functions
+        function renderAll() {
+            const d = window.appData;
+
+            // Substitutes
+            document.getElementById('list-substitute').innerHTML = (!d.subs || d.subs.length === 0)
+                ? `<tr><td colspan="5" class="text-center p-4 text-slate-400">لا توجد حصص احتياطية مسجلة</td></tr>`
+                : d.subs.map((item, i) => `
+                    <tr class="hover:bg-slate-50">
+                        <td class="p-3 font-bold text-slate-700">${item.absent}</td>
+                        <td class="p-3 text-indigo-700 font-bold">${item.sub}</td>
+                        <td class="p-3">${item.class}</td>
+                        <td class="p-3"><span class="bg-amber-100 text-amber-800 text-xs px-2.5 py-1 rounded-lg font-bold">${item.period}</span></td>
+                        <td class="p-3 text-center no-print">
+                            <button onclick="deleteSub(${i})" class="text-rose-500 hover:text-rose-700"><i class="fa-solid fa-trash"></i></button>
+                        </td>
+                    </tr>`).join('');
+
+            // Supervision
+            document.getElementById('list-supervision').innerHTML = (!d.sup || d.sup.length === 0)
+                ? `<tr><td colspan="3" class="text-center p-4 text-slate-400">لا يوجد مشرفين مسجلين اليوم</td></tr>`
+                : d.sup.map((item, i) => `
+                    <tr class="hover:bg-slate-50">
+                        <td class="p-3 font-bold text-slate-700">${item.teacher}</td>
+                        <td class="p-3 text-indigo-700 font-bold">${item.place}</td>
+                        <td class="p-3 text-center no-print">
+                            <button onclick="deleteSup(${i})" class="text-rose-500 hover:text-rose-700"><i class="fa-solid fa-trash"></i></button>
+                        </td>
+                    </tr>`).join('');
+
+            // Visits
+            document.getElementById('list-visits').innerHTML = (!d.visits || d.visits.length === 0)
+                ? `<tr><td colspan="5" class="text-center p-4 text-slate-400">لا توجد زيارات صفية مسجلة</td></tr>`
+                : d.visits.map((item, i) => `
+                    <tr class="hover:bg-slate-50">
+                        <td class="p-3 font-bold text-slate-700">${item.teacher}</td>
+                        <td class="p-3">${item.subject}</td>
+                        <td class="p-3 font-bold text-emerald-600">${item.rating}</td>
+                        <td class="p-3 text-slate-600">${item.notes || '-'}</td>
+                        <td class="p-3 text-center no-print">
+                            <button onclick="deleteVisit(${i})" class="text-rose-500 hover:text-rose-700"><i class="fa-solid fa-trash"></i></button>
+                        </td>
+                    </tr>`).join('');
+
+            // Behaviors
+            document.getElementById('list-behavior').innerHTML = (!d.behavior || d.behavior.length === 0)
+                ? `<tr><td colspan="5" class="text-center p-4 text-slate-400">لا توجد حالات سلوكية مسجلة</td></tr>`
+                : d.behavior.map((item, i) => `
+                    <tr class="hover:bg-slate-50">
+                        <td class="p-3 font-bold text-slate-700">${item.student}</td>
+                        <td class="p-3">${item.class}</td>
+                        <td class="p-3"><span class="bg-indigo-100 text-indigo-800 text-xs px-2.5 py-1 rounded-lg font-bold">${item.type}</span></td>
+                        <td class="p-3 text-slate-600">${item.action}</td>
+                        <td class="p-3 text-center no-print">
+                            <button onclick="deleteBehavior(${i})" class="text-rose-500 hover:text-rose-700"><i class="fa-solid fa-trash"></i></button>
+                        </td>
+                    </tr>`).join('');
+
+            // Docs
+            document.getElementById('list-docs').innerHTML = (!d.docs || d.docs.length === 0)
+                ? `<p class="text-slate-400 text-sm col-span-2 text-center py-4">لا توجد مستندات محفوظة بالأرشيف</p>`
+                : d.docs.map((item, i) => `
+                    <div class="border border-slate-200 p-4 rounded-2xl flex items-center justify-between bg-slate-50">
+                        <div class="flex items-center space-x-3 space-x-reverse overflow-hidden">
+                            <i class="fa-solid fa-file-pdf text-purple-600 text-2xl"></i>
+                            <div class="truncate">
+                                <p class="font-bold text-sm text-slate-800 truncate">${item.title}</p>
+                                <p class="text-[10px] text-slate-400">${item.date}</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <a href="${item.url}" download="${item.title}" class="text-indigo-600 hover:text-indigo-800 text-sm font-bold"><i class="fa-solid fa-download"></i></a>
+                            <button onclick="deleteDoc(${i})" class="text-rose-500 hover:text-rose-700 text-sm"><i class="fa-solid fa-trash"></i></button>
+                        </div>
+                    </div>`).join('');
+
+            // Tasks
+            document.getElementById('list-tasks').innerHTML = (!d.tasks || d.tasks.length === 0)
+                ? `<p class="text-slate-400 text-center py-4">لا توجد مهام حالية</p>`
+                : d.tasks.map((item, i) => `
+                    <div class="flex items-center justify-between p-3 rounded-xl border border-slate-100 ${item.done ? 'bg-slate-50 opacity-60' : 'bg-white'}">
+                        <div class="flex items-center space-x-3 space-x-reverse">
+                            <input type="checkbox" ${item.done ? 'checked' : ''} onchange="toggleTask(${i})" class="w-5 h-5 text-indigo-600 rounded">
+                            <span class="${item.done ? 'line-through text-slate-400' : 'text-slate-700 font-bold'}">${item.title}</span>
+                        </div>
+                        <button onclick="deleteTask(${i})" class="text-rose-500 hover:text-rose-700 text-sm"><i class="fa-solid fa-trash"></i></button>
+                    </div>`).join('');
+
+            // Counters
+            document.getElementById('stat-absent').innerText = (d.behavior || []).filter(b => b.type.includes('غياب')).length;
+            document.getElementById('stat-subs').innerText = (d.subs || []).length;
+            document.getElementById('stat-visits').innerText = (d.visits || []).length;
+            document.getElementById('stat-docs').innerText = (d.docs || []).length;
+        }
+
+        // Form Submit Handlers
+        document.getElementById('form-substitute').addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (!authenticate()) return;
+            if(!window.appData.subs) window.appData.subs = [];
+            window.appData.subs.push({
+                absent: document.getElementById('absent-teacher').value,
+                sub: document.getElementById('sub-teacher').value,
+                class: document.getElementById('sub-class').value,
+                period: document.getElementById('sub-period').value
+            });
+            window.saveToCloud();
+            e.target.reset();
+        });
+
+        document.getElementById('form-supervision').addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (!authenticate()) return;
+            if(!window.appData.sup) window.appData.sup = [];
+            window.appData.sup.push({
+                teacher: document.getElementById('sup-teacher').value,
+                place: document.getElementById('sup-place').value
+            });
+            window.saveToCloud();
+            e.target.reset();
+        });
+
+        document.getElementById('form-visit').addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (!authenticate()) return;
+            if(!window.appData.visits) window.appData.visits = [];
+            window.appData.visits.push({
+                teacher: document.getElementById('visit-teacher').value,
+                subject: document.getElementById('visit-subject').value,
+                rating: document.getElementById('visit-rating').value,
+                notes: document.getElementById('visit-notes').value
+            });
+            window.saveToCloud();
+            e.target.reset();
+        });
+
+        document.getElementById('form-behavior').addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (!authenticate()) return;
+            if(!window.appData.behavior) window.appData.behavior = [];
+            window.appData.behavior.push({
+                student: document.getElementById('student-name').value,
+                class: document.getElementById('student-class').value,
+                type: document.getElementById('case-type').value,
+                action: document.getElementById('action-taken').value || 'لا يوجد'
+            });
+            window.saveToCloud();
+            e.target.reset();
+        });
+
+        document.getElementById('form-doc').addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (!authenticate()) return;
+            const fileInput = document.getElementById('doc-file');
+            const file = fileInput.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                if(!window.appData.docs) window.appData.docs = [];
+                window.appData.docs.push({
+                    title: document.getElementById('doc-title').value,
+                    url: evt.target.result,
+                    date: new Date().toLocaleDateString('ar-EG')
+                });
+                window.saveToCloud();
+                e.target.reset();
+            };
+            reader.readAsDataURL(file);
+        });
+
+        document.getElementById('form-task').addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (!authenticate()) return;
+            if(!window.appData.tasks) window.appData.tasks = [];
+            window.appData.tasks.push({ title: document.getElementById('task-title').value, done: false });
+            window.saveToCloud();
+            e.target.reset();
+        });
+
+        // Deletion Functions
+        function deleteSub(i) { if(authenticate()) { window.appData.subs.splice(i,1); window.saveToCloud(); }}
+        function deleteSup(i) { if(authenticate()) { window.appData.sup.splice(i,1); window.saveToCloud(); }}
+        function deleteVisit(i) { if(authenticate()) { window.appData.visits.splice(i,1); window.saveToCloud(); }}
+        function deleteBehavior(i) { if(authenticate()) { window.appData.behavior.splice(i,1); window.saveToCloud(); }}
+        function deleteDoc(i) { if(authenticate()) { window.appData.docs.splice(i,1); window.saveToCloud(); }}
+        function deleteTask(i) { if(authenticate()) { window.appData.tasks.splice(i,1); window.saveToCloud(); }}
+        function toggleTask(i) { window.appData.tasks[i].done = !window.appData.tasks[i].done; window.saveToCloud(); }
+
+        // Start Cloud Sync on Load
+        document.addEventListener('DOMContentLoaded', loadDataFromCloud);
+    </script>
+</body>
+</html>
