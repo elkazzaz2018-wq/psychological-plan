@@ -8,6 +8,8 @@
     :root {
       --primary: #4f46e5;
       --primary-hover: #4338ca;
+      --danger: #ef4444;
+      --danger-hover: #dc2626;
       --bg: #f8fafc;
       --card: #ffffff;
       --text: #1e293b;
@@ -21,7 +23,7 @@
       padding: 20px;
     }
     .container {
-      max-width: 900px;
+      max-width: 950px;
       margin: 0 auto;
     }
     .card {
@@ -31,7 +33,13 @@
       box-shadow: 0 1px 3px rgba(0,0,0,0.1);
       margin-bottom: 20px;
     }
-    h2 { margin-top: 0; color: var(--primary); }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    h2 { margin: 0; color: var(--primary); font-size: 1.3rem; }
     .form-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -49,6 +57,15 @@
       border: 1px solid var(--border);
       border-radius: 6px;
       outline: none;
+      font-size: 14px;
+    }
+    input:focus, select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.1);
+    }
+    .actions-group {
+      display: flex;
+      gap: 10px;
     }
     button {
       background: var(--primary);
@@ -58,22 +75,39 @@
       border-radius: 6px;
       cursor: pointer;
       font-weight: 600;
-      width: 100%;
       transition: background 0.2s;
+      font-size: 14px;
     }
     button:hover { background: var(--primary-hover); }
     button:disabled { opacity: 0.6; cursor: not-allowed; }
+    .btn-print {
+      background: #059669;
+    }
+    .btn-print:hover {
+      background: #047857;
+    }
+    .btn-delete {
+      background: #fee2e2;
+      color: var(--danger);
+      padding: 6px 12px;
+      font-size: 12px;
+      border-radius: 4px;
+    }
+    .btn-delete:hover {
+      background: #fca5a5;
+    }
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 16px;
+      margin-top: 10px;
     }
     th, td {
       border: 1px solid var(--border);
-      padding: 10px;
+      padding: 12px;
       text-align: right;
+      font-size: 14px;
     }
-    th { background: #f1f5f9; }
+    th { background: #f1f5f9; font-weight: 700; }
     .status {
       margin-top: 10px;
       font-size: 14px;
@@ -81,15 +115,24 @@
     }
     .status.success { color: #16a34a; }
     .status.error { color: #dc2626; }
+
+    /* تنسيقات الطباعة */
+    @media print {
+      body { background: white; padding: 0; }
+      .no-print { display: none !important; }
+      .card { box-shadow: none; padding: 0; border: none; }
+      th, td { border: 1px solid #000; }
+      .btn-delete { display: none; }
+    }
   </style>
 </head>
 <body>
 
 <div class="container">
   <!-- نموذج تسجيل الحصة -->
-  <div class="card">
-    <h2>تسجيل حصة احتياطية</h2>
-    <form id="subForm">
+  <div class="card no-print">
+    <h2>☁️ تسجيل حصة احتياطية جديدة</h2>
+    <form id="subForm" style="margin-top: 16px;">
       <div class="form-grid">
         <div class="form-group">
           <label>المعلم الغائب</label>
@@ -116,14 +159,17 @@
           </select>
         </div>
       </div>
-      <button type="submit" id="saveBtn">☁️ حفظ وتحديث سحابي</button>
+      <button type="submit" id="saveBtn">حفظ وتحديث سحابي</button>
       <div id="statusMsg" class="status"></div>
     </form>
   </div>
 
   <!-- جدول الحصص المسجلة -->
   <div class="card">
-    <h2>الحصص الاحتياطية المسجلة</h2>
+    <div class="card-header">
+      <h2>📋 سجل الحصص الاحتياطية</h2>
+      <button onclick="window.print()" class="btn-print no-print">🖨️ طباعة السجل</button>
+    </div>
     <table>
       <thead>
         <tr>
@@ -132,11 +178,12 @@
           <th>الفصل</th>
           <th>الحصة</th>
           <th>التاريخ</th>
+          <th class="no-print" style="width: 80px; text-align: center;">إجراء</th>
         </tr>
       </thead>
       <tbody id="recordsTable">
         <tr>
-          <td colspan="5" style="text-align: center;">جاري تحميل البيانات من السحابة...</td>
+          <td colspan="6" style="text-align: center;">جاري تحميل البيانات من السحابة...</td>
         </tr>
       </tbody>
     </table>
@@ -144,10 +191,9 @@
 </div>
 
 <script>
-  // الإعدادات الخاصة بـ JSONBin.io
-  // تنبيه: تأكد من كتابة BIN_ID الخاص بك إذا كان مختلفاً
-  const BIN_ID = "66xxxxxx01a052xxxxxxxx"; 
-  const MASTER_KEY = "6aa17373ffd5d16053f2232a";
+  // بيانات الربط السحابي الخاصة بك
+  const BIN_ID = "6aa17373ffd5d16053f2232a"; 
+  const MASTER_KEY = "$2a$10$U1s8.ywSeF2F03hGxdnBupy6OizBVc3x.LhGexSy353/GgxyZ6vZ.";
 
   const form = document.getElementById('subForm');
   const saveBtn = document.getElementById('saveBtn');
@@ -156,7 +202,7 @@
 
   let recordsData = [];
 
-  // 1. جلب البيانات من السحابة عند تحميل الصفحة
+  // 1. جلب البيانات تلقائياً من السحابة عند تحميل الصفحة
   async function loadDataFromCloud() {
     try {
       showStatus("جاري جلب البيانات من السحابة...", "");
@@ -175,30 +221,33 @@
       showStatus("تم تحميل البيانات بنجاح", "success");
     } catch (err) {
       console.error(err);
-      recordsTable.innerHTML = `<tr><td colspan="5" style="text-align: center; color: red;">تعذر الاتصال بالسحابة. تأكد من صحة BIN_ID والاتصال.</td></tr>`;
+      recordsTable.innerHTML = `<tr><td colspan="6" style="text-align: center; color: red;">تعذر الاتصال بالسحابة. تحقق من الاتصال بالإنترنت.</td></tr>`;
       showStatus("تعذر جلب البيانات من السحابة", "error");
     }
   }
 
-  // 2. عرض البيانات في الجدول
+  // 2. عرض البيانات وتوليد صفوف الجدول
   function renderTable() {
     if (recordsData.length === 0) {
-      recordsTable.innerHTML = `<tr><td colspan="5" style="text-align: center;">لا توجد حصص احتياطية مسجلة</td></tr>`;
+      recordsTable.innerHTML = `<tr><td colspan="6" style="text-align: center;">لا توجد حصص احتياطية مسجلة</td></tr>`;
       return;
     }
 
-    recordsTable.innerHTML = recordsData.map(item => `
+    recordsTable.innerHTML = recordsData.map((item, index) => `
       <tr>
         <td>${item.absentTeacher}</td>
         <td>${item.subTeacher}</td>
         <td>${item.className}</td>
         <td>${item.period}</td>
         <td>${item.date}</td>
+        <td class="no-print" style="text-align: center;">
+          <button class="btn-delete" onclick="deleteRecord(${index})">حذف</button>
+        </td>
       </tr>
     `).join('');
   }
 
-  // 3. حفظ حصة جديدة وتحديث السحابة
+  // 3. إضافة حصة جديدة وحفظها في السحابة
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
@@ -215,6 +264,36 @@
     saveBtn.disabled = true;
     showStatus("جاري الحفظ السحابي...", "");
 
+    if (await updateCloudData()) {
+      showStatus("تم الحفظ والتحديث السحابي بنجاح!", "success");
+      renderTable();
+      form.reset();
+    } else {
+      recordsData.pop(); // التراجع عن الإضافة المحلية في حالة الفشل
+      showStatus("تعذر الحفظ السحابي، تحقق من الاتصال بالإنترنت.", "error");
+    }
+    
+    saveBtn.disabled = false;
+  });
+
+  // 4. حذف عنصر وتحديث السحابة
+  async function deleteRecord(index) {
+    if (!confirm("هل أنت تأكد من رغبتك في حذف هذه الحصة؟")) return;
+
+    const removed = recordsData.splice(index, 1);
+    showStatus("جاري تحديث السحابة بعد الحذف...", "");
+
+    if (await updateCloudData()) {
+      showStatus("تم الحذف وتحديث السحابة بنجاح", "success");
+      renderTable();
+    } else {
+      recordsData.splice(index, 0, removed[0]); // استعادة العنصر في حالة الفشل
+      showStatus("تعذر الحذف سحابياً، حاول مجدداً", "error");
+    }
+  }
+
+  // 5. دالة الاتصال بالسحابة لإرسال التعديلات (PUT)
+  async function updateCloudData() {
     try {
       const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
         method: 'PUT',
@@ -224,27 +303,19 @@
         },
         body: JSON.stringify(recordsData)
       });
-
-      if (!res.ok) throw new Error("فشل الحفظ");
-
-      showStatus("تم الحفظ والتحديث السحابي بنجاح!", "success");
-      renderTable();
-      form.reset();
+      return res.ok;
     } catch (err) {
       console.error(err);
-      showStatus("تعذر الحفظ السحابي، تحقق من الاتصال بالإنترنت.", "error");
-      recordsData.pop(); // التراجع في حالة الخلل
-    } finally {
-      saveBtn.disabled = false;
+      return false;
     }
-  });
+  }
 
   function showStatus(text, type) {
     statusMsg.textContent = text;
     statusMsg.className = `status ${type}`;
   }
 
-  // تشغيل الجلب عند البدء
+  // بدء تشغيل البرنامج عند تحقّق تحميل الصفحة
   loadDataFromCloud();
 </script>
 
