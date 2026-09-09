@@ -39,15 +39,8 @@
       border-radius: 16px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
-    .header h1 {
-      margin: 0 0 8px 0;
-      font-size: 1.8rem;
-    }
-    .header p {
-      margin: 0;
-      opacity: 0.9;
-      font-size: 1.1rem;
-    }
+    .header h1 { margin: 0 0 8px 0; font-size: 1.8rem; }
+    .header p { margin: 0; opacity: 0.9; font-size: 1.1rem; }
     .principal-badge {
       display: inline-block;
       background: #fef3c7;
@@ -312,7 +305,7 @@
             </select>
           </div>
         </div>
-        <button type="submit" id="saveSubBtn">⚡ تسجيل التكليف وحفظه</button>
+        <button type="submit" id="saveSubBtn">⚡ تسجيل التكليف وحفظه فوراً</button>
       </form>
     </div>
 
@@ -366,7 +359,7 @@
             </select>
           </div>
         </div>
-        <button type="submit">📌 تسجيل السجل</button>
+        <button type="submit">📌 تسجيل السجل وحفظه</button>
       </form>
     </div>
 
@@ -504,7 +497,7 @@
     </div>
   </div>
 
-  <!-- 5. قسم الزيارات الصفية والتكليفات (جديد) -->
+  <!-- 5. قسم الزيارات الصفية والتكليفات -->
   <div id="visitTab" class="tab-content">
     <div class="card no-print">
       <h2>📑 تسجيل زيارة صفية / تكليف إداري</h2>
@@ -532,7 +525,7 @@
             </select>
           </div>
         </div>
-        <button type="submit">📝 حفظ الزارة</button>
+        <button type="submit">📝 حفظ الزيارة</button>
       </form>
     </div>
 
@@ -672,6 +665,7 @@
 </div>
 
 <script>
+  const STORAGE_KEY = "AMIRA_SHALABY_SCHOOL_DATA_V2";
   const BIN_ID = "6aa17373ffd5d16053f2232a"; 
   const MASTER_KEY = "$2a$10$U1s8.ywSeF2F03hGxdnBupy6OizBVc3x.LhGexSy353/GgxyZ6vZ.";
 
@@ -716,9 +710,23 @@
     }
   }
 
+  // تحميل البيانات (محلياً أولاً لضمان عدم الضياع، ثم سحابياً)
   async function loadAllData() {
+    // 1. تحميل التخزين المحلي فوراً
+    const localSaved = localStorage.getItem(STORAGE_KEY);
+    if (localSaved) {
+      try {
+        appData = JSON.parse(localSaved);
+        renderAllTables();
+        updateStats();
+      } catch (e) {
+        console.error("Local load error", e);
+      }
+    }
+
+    // 2. المحاولة من السحابة
     try {
-      showStatus("جاري مزامنة بيانات منظومة الأستاذة أميرة مع السحابة...", "");
+      showStatus("جاري مزامنة بيانات منظومة المدرسة...", "");
       const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
         method: 'GET',
         headers: { 'X-Master-Key': MASTER_KEY }
@@ -727,26 +735,45 @@
       if (res.ok) {
         const result = await res.json();
         const record = result.record || {};
-        appData.subs = record.subs || record.records || [];
-        appData.teachers = record.teachers || [];
-        appData.duties = record.duties || [];
-        appData.students = record.students || [];
-        appData.visits = record.visits || [];
-        appData.documents = record.documents || [];
-
-        renderAllTables();
-        updateStats();
-        showStatus("تم مزامنة منظومة مدرسة كدوة الكريون بنجاح", "success");
+        if (record.subs || record.teachers || record.duties) {
+          appData.subs = record.subs || [];
+          appData.teachers = record.teachers || [];
+          appData.duties = record.duties || [];
+          appData.students = record.students || [];
+          appData.visits = record.visits || [];
+          appData.documents = record.documents || [];
+          
+          // حفظ النسخة السحابية محلياً
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
+          renderAllTables();
+          updateStats();
+        }
+        showStatus("تم مزامنة بيانات مدرسة كدوة الكريون وحفظها محلياً وسحابياً", "success");
+      } else {
+        showStatus("تم اعتماد الحفظ المحلي للبيانات بنجاح", "success");
       }
     } catch (err) {
-      showStatus(`خطأ اتصال بالسحابة: ${err.message}`, "error");
+      showStatus("تم اعتماد الحفظ المحلي (يعمل بدون إنترنت)", "success");
     }
   }
 
-  async function saveToCloud() {
+  // حفظ البيانات محلياً + سحابياً مع إعادة التحديث اللحظي للتقارير
+  async function saveToDataStore() {
+    // حفظ محلي فوري مضمون 100%
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
+    
+    // تحديث الشاشات والتقارير فورا
+    renderAllTables();
+    updateStats();
+    if (document.getElementById('archiveTab').classList.contains('active')) {
+      renderArchiveTable();
+    }
+
+    showStatus("تم الحفظ فوراً على الجهاز!", "success");
+
+    // إرسال سحابي خلفي
     try {
-      showStatus("جاري الحفظ بالسحابة...", "");
-      const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+      await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -755,14 +782,8 @@
         },
         body: JSON.stringify(appData)
       });
-
-      if (res.ok) {
-        showStatus("تم حفظ البيانات بنجاح!", "success");
-        renderAllTables();
-        updateStats();
-      }
     } catch (err) {
-      showStatus(`فشل عملية الحفظ: ${err.message}`, "error");
+      console.log("Cloud sync failed, saved locally", err);
     }
   }
 
@@ -965,7 +986,7 @@
     `).join('');
   }
 
-  // Forms submit event handlers
+  // Form handling
   document.getElementById('subForm').addEventListener('submit', (e) => {
     e.preventDefault();
     appData.subs.push({
@@ -977,7 +998,7 @@
       date: new Date().toLocaleDateString('ar-EG')
     });
     e.target.reset();
-    saveToCloud();
+    saveToDataStore();
   });
 
   document.getElementById('teacherForm').addEventListener('submit', (e) => {
@@ -989,7 +1010,7 @@
       date: new Date().toLocaleDateString('ar-EG')
     });
     e.target.reset();
-    saveToCloud();
+    saveToDataStore();
   });
 
   document.getElementById('dutyForm').addEventListener('submit', (e) => {
@@ -1001,7 +1022,7 @@
       date: new Date().toLocaleDateString('ar-EG')
     });
     e.target.reset();
-    saveToCloud();
+    saveToDataStore();
   });
 
   document.getElementById('studentForm').addEventListener('submit', (e) => {
@@ -1014,7 +1035,7 @@
       date: new Date().toLocaleDateString('ar-EG')
     });
     e.target.reset();
-    saveToCloud();
+    saveToDataStore();
   });
 
   document.getElementById('visitForm').addEventListener('submit', (e) => {
@@ -1027,7 +1048,7 @@
       date: new Date().toLocaleDateString('ar-EG')
     });
     e.target.reset();
-    saveToCloud();
+    saveToDataStore();
   });
 
   document.getElementById('uploadForm').addEventListener('submit', (e) => {
@@ -1042,10 +1063,10 @@
     e.target.reset();
     selectedFileData = null;
     document.getElementById('fileLabel').textContent = "اضغط هنا لتحديد الملف من جهازك (PNG, JPG, PDF)";
-    saveToCloud();
+    saveToDataStore();
   });
 
-  // Excel Export
+  // Export to Excel / CSV
   function exportToCSV(type) {
     let rows = [];
     let filename = `مدرسة_كدية_الكريون_${type}_${new Date().toISOString().slice(0,10)}.csv`;
@@ -1096,10 +1117,7 @@
   function deleteItem(type, index) {
     if (confirm("هل أنت متأكد من مسح هذا السجل؟")) {
       appData[type].splice(index, 1);
-      saveToCloud();
-      if (document.getElementById('archiveTab').classList.contains('active')) {
-        renderArchiveTable();
-      }
+      saveToDataStore();
     }
   }
 
