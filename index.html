@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>منظومة الوكيل الذكي - الأستاذة أميرة علي شلبي</title>
+  <title>منظومة الوكيل الذكي - مدرسة كدوه الكريون ابتدائي</title>
   <style>
     :root {
       --primary: #1e3a8a;
@@ -25,7 +25,7 @@
       padding: 20px;
     }
     .container {
-      max-width: 1280px;
+      max-width: 1300px;
       margin: 0 auto;
     }
     
@@ -167,7 +167,6 @@
     .btn-upload { background: #7c3aed; }
     .btn-wa { background: #25d366; color: white; padding: 5px 10px; font-size: 13px; border-radius: 6px; border: none; cursor: pointer; }
     .btn-delete { background: #fee2e2; color: var(--danger); padding: 5px 10px; font-size: 13px; border-radius: 6px; border: none; cursor: pointer; }
-    .btn-view { background: #e0e7ff; color: #3730a3; padding: 5px 10px; font-size: 13px; border-radius: 6px; text-decoration: none; display: inline-block; }
 
     /* Tables */
     table {
@@ -177,9 +176,9 @@
     }
     th, td {
       border: 1px solid var(--border);
-      padding: 12px;
+      padding: 10px 12px;
       text-align: right;
-      font-size: 14px;
+      font-size: 13px;
     }
     th { background: #f1f5f9; font-weight: 700; color: #1e293b; }
     tr:nth-child(even) { background-color: #f8fafc; }
@@ -187,13 +186,11 @@
     .file-drop-zone {
       border: 2px dashed var(--primary);
       border-radius: 10px;
-      padding: 24px;
+      padding: 20px;
       text-align: center;
       background: #eff6ff;
       cursor: pointer;
-      transition: background 0.2s;
     }
-    .file-drop-zone:hover { background: #dbeafe; }
 
     .status { margin-top: 12px; font-size: 14px; font-weight: bold; padding: 10px; border-radius: 8px; display: none; }
     .status.success { background: #dcfce7; color: var(--success); display: block; }
@@ -206,20 +203,20 @@
       .no-print, .tabs { display: none !important; }
       .tab-content { display: block !important; }
       .card { box-shadow: none; padding: 0; border: none; }
-      th, td { border: 1px solid #000; padding: 8px; }
+      th, td { border: 1px solid #000; padding: 6px; font-size: 11px; }
       .print-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
         border-bottom: 2px solid #000;
-        padding-bottom: 12px;
-        margin-bottom: 20px;
+        padding-bottom: 10px;
+        margin-bottom: 15px;
       }
       .print-footer {
         display: flex;
         justify-content: space-between;
-        margin-top: 50px;
-        padding-top: 20px;
+        margin-top: 40px;
+        padding-top: 15px;
         font-weight: bold;
       }
     }
@@ -231,39 +228,39 @@
   <!-- ترويسة الطباعة الرسمية -->
   <div class="print-header">
     <div>
-      <h3>محافظة البحيرة - مديرية التربية والتعليم</h3>
-      <h4>مدرسة: كدوة الكريون للتعليم الأساسي</h4>
-      <p>مكتب وكيل المدرسة: الأستاذة / أميرة علي شلبي</p>
+      <h3>محافظة البحيرة - مديرية التربية والتعليم - إدارة مركز كفر الدوار</h3>
+      <h4>مدرسة: كدوه الكريون ابتدائي</h4>
+      <p>مكتب وكيل المدرسة: الأستاذة / أميرة علي إبراهيم شلبي</p>
     </div>
     <div style="text-align: left;">
       <p>التاريخ: <span id="printDate"></span></p>
-      <p>نوع السجل: تقرير إداري معتمد</p>
+      <p>سجل إداري رسمي معتمد</p>
     </div>
   </div>
 
   <!-- الترويسة الرئيسية للنظام -->
   <div class="header no-print">
     <h1>🏛️ منظومة الوكيل الذكي الشاملة</h1>
-    <p>مدرسة كدوة الكريون للتعليم الأساسي</p>
-    <div class="principal-badge">👩‍💼 إعداد وإشراف: الأستاذة / أميرة علي شلبي (وكيل المدرسة)</div>
+    <p>مدرسة كدوه الكريون ابتدائي - إدارة مركز كفر الدوار التعليمية</p>
+    <div class="principal-badge">👩‍💼 إدارة وإشراف: الأستاذة / أميرة علي إبراهيم شلبي (وكيل المدرسة)</div>
   </div>
 
   <!-- تبويبات النظام -->
   <div class="tabs no-print">
     <button class="tab-btn active" onclick="switchTab(event, 'subTab')">📌 الحصص الاحتياطية</button>
+    <button class="tab-btn" onclick="switchTab(event, 'staffDirectoryTab')">👥 قاعدة بيانات العاملين (25)</button>
     <button class="tab-btn" onclick="switchTab(event, 'teacherTab')">👨‍🏫 غياب وتأخير المعلمين</button>
     <button class="tab-btn" onclick="switchTab(event, 'dutyTab')">🛡️ الإشراف اليومي والفسحة</button>
-    <button class="tab-btn" onclick="switchTab(event, 'studentTab')">👨‍🎓 متابعة انضباط الطلاب</button>
-    <button class="tab-btn" onclick="switchTab(event, 'visitTab')">📑 الزيارات الصفية والتكليفات</button>
-    <button class="tab-btn" onclick="switchTab(event, 'uploadTab')">📤 مرفقات ومستندات الوكيل</button>
-    <button class="tab-btn" onclick="switchTab(event, 'archiveTab')">📊 الأرشيف والتصدير لـ Excel</button>
+    <button class="tab-btn" onclick="switchTab(event, 'studentTab')">👨‍🎓 متابعة الطلاب والسلوك</button>
+    <button class="tab-btn" onclick="switchTab(event, 'visitTab')">📑 الزيارات الصفية والتوجيه</button>
+    <button class="tab-btn" onclick="switchTab(event, 'uploadTab')">📤 أرشيف والمستندات الرقمي</button>
   </div>
 
   <!-- 1. قسم الحصص الاحتياطية -->
   <div id="subTab" class="tab-content active">
     <div class="stats-grid no-print">
       <div class="stat-card">
-        <div>إجمالي الاحتياطي اليوم</div>
+        <div>إجمالي الاحتياطي المسجل اليوم</div>
         <div class="val" id="todaySubCount">0</div>
       </div>
       <div class="stat-card">
@@ -278,11 +275,11 @@
         <div class="form-grid">
           <div class="form-group">
             <label>اسم المعلم الغائب</label>
-            <input type="text" id="absentTeacher" required placeholder="اسم المعلم الغائب">
+            <select id="absentTeacherSelect" required></select>
           </div>
           <div class="form-group">
             <label>المعلم المكلف (الاحتياطي)</label>
-            <input type="text" id="subTeacher" required placeholder="اسم المعلم البديل">
+            <select id="subTeacherSelect" required></select>
           </div>
           <div class="form-group">
             <label>رقم هاتف المكلف (لواتساب)</label>
@@ -301,7 +298,6 @@
               <option value="الحصة الرابعة">الحصة الرابعة</option>
               <option value="الحصة الخامسة">الحصة الخامسة</option>
               <option value="الحصة السادسة">الحصة السادسة</option>
-              <option value="الحصة السابعة">الحصة السابعة</option>
             </select>
           </div>
         </div>
@@ -311,7 +307,7 @@
 
     <div class="card">
       <div class="card-header">
-        <h2>📋 دفتر تكليفات الحصص الاحتياطية بمدرسة كدوة الكريون</h2>
+        <h2>📋 دفتر تكليفات الحصص الاحتياطية - مدرسة كدوه الكريون</h2>
         <div class="no-print">
           <button onclick="exportToCSV('subs')" class="btn-excel">📊 تصدير Excel</button>
           <button onclick="window.print()" class="btn-print">🖨️ طباعة السجل</button>
@@ -333,19 +329,42 @@
     </div>
   </div>
 
-  <!-- 2. قسم غياب المعلمين -->
+  <!-- 2. دليل بيانات العاملين بالمدرسة -->
+  <div id="staffDirectoryTab" class="tab-content">
+    <div class="card">
+      <div class="card-header">
+        <h2>👥 قاعدة بيانات العاملين الرسمية بالمدرسة (من واقع كشوف الوزارة)</h2>
+        <div class="no-print">
+          <input type="text" id="staffSearch" placeholder="🔍 بحث باسم المعلم، الكود، الوظيفة، المادة..." oninput="renderStaffTable()" style="padding: 8px; width: 260px;">
+          <button onclick="window.print()" class="btn-print">🖨️ طباعة القائمة</button>
+        </div>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>م</th>
+            <th>الاسم رباعي</th>
+            <th>كود المعلم</th>
+            <th>الوظيفة الكادر / الحالية</th>
+            <th>مادة التدريس</th>
+            <th>المؤهل الدراسي</th>
+            <th>الدرجة المالية</th>
+          </tr>
+        </thead>
+        <tbody id="staffDirectoryTable"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 3. قسم غياب المعلمين -->
   <div id="teacherTab" class="tab-content">
     <div class="card no-print">
       <h2>🚨 تسجيل غياب / عذر معلم</h2>
       <form id="teacherForm" style="margin-top: 16px;">
         <div class="form-grid">
           <div class="form-group">
-            <label>اسم المعلم</label>
-            <input type="text" id="tName" required placeholder="الاسم ثلاثي">
-          </div>
-          <div class="form-group">
-            <label>المادة / التخصص</label>
-            <input type="text" id="tSubject" required placeholder="مثال: لغة عربية / علوم">
+            <label>اختر المعلم</label>
+            <select id="tNameSelect" required></select>
           </div>
           <div class="form-group">
             <label>نوع الإجازة / العذر</label>
@@ -355,7 +374,7 @@
               <option value="مرضي">إجازة مرضية</option>
               <option value="غياب بدون إذن">غياب بدون إذن</option>
               <option value="تأخير صباحي">تأخير صباحي</option>
-              <option value="خط سير / مامورية">خط سير / مأمورية</option>
+              <option value="خط سير / مأمورية">خط سير / مأمورية</option>
             </select>
           </div>
         </div>
@@ -365,7 +384,7 @@
 
     <div class="card">
       <div class="card-header">
-        <h2>📑 دفتر متابعة حضور وغياب هيئة التدريس</h2>
+        <h2>📑 دفتر متابعة حضور وغياب هيئة التدريس والعاملين</h2>
         <div class="no-print">
           <button onclick="exportToCSV('teachers')" class="btn-excel">📊 تصدير Excel</button>
         </div>
@@ -374,7 +393,7 @@
         <thead>
           <tr>
             <th>اسم المعلم</th>
-            <th>المادة</th>
+            <th>المادة / الوظيفة</th>
             <th>نوع العذر/الغياب</th>
             <th>التاريخ</th>
             <th class="no-print">إجراء</th>
@@ -385,7 +404,7 @@
     </div>
   </div>
 
-  <!-- 3. قسم الإشراف اليومي -->
+  <!-- 4. قسم الإشراف اليومي -->
   <div id="dutyTab" class="tab-content">
     <div class="card no-print">
       <h2>🛡️ توزيع الإشراف اليومي والفسحة المدرسية</h2>
@@ -393,7 +412,7 @@
         <div class="form-grid">
           <div class="form-group">
             <label>المعلم المشرف</label>
-            <input type="text" id="dTeacher" required placeholder="اسم المشرف">
+            <select id="dTeacherSelect" required></select>
           </div>
           <div class="form-group">
             <label>موقع الإشراف</label>
@@ -401,9 +420,9 @@
               <option value="الفناء المدرسي">الفناء المدرسي</option>
               <option value="الدور الأرضي">الدور الأرضي</option>
               <option value="الدور الأول علوي">الدور الأول علوي</option>
-              <option value="الدور الثاني علوي">الدور الثاني علوي</option>
               <option value="البوابة الرئيسية">البوابة الرئيسية</option>
               <option value="المقصف / الكانتين">المقصف / الكانتين</option>
+              <option value="السلم الرئيسي">السلم الرئيسي</option>
             </select>
           </div>
           <div class="form-group">
@@ -421,7 +440,7 @@
 
     <div class="card">
       <div class="card-header">
-        <h2>📋 جدول الإشراف اليومي - مدرسة كدوة الكريون</h2>
+        <h2>📋 جدول الإشراف اليومي - مدرسة كدوه الكريون</h2>
         <div class="no-print">
           <button onclick="exportToCSV('duties')" class="btn-excel">📊 تصدير Excel</button>
         </div>
@@ -441,7 +460,7 @@
     </div>
   </div>
 
-  <!-- 4. قسم الطلاب والسلوك -->
+  <!-- 5. قسم الطلاب والسلوك -->
   <div id="studentTab" class="tab-content">
     <div class="card no-print">
       <h2>👨‍🎓 تسجيل انضباط / غياب / سلوك طالب</h2>
@@ -467,7 +486,7 @@
           </div>
           <div class="form-group">
             <label>الإجراء المتخذ من الوكيل</label>
-            <input type="text" id="sAction" placeholder="مثال: إخطار ولي الأمر / أخذ إقرار">
+            <input type="text" id="sAction" placeholder="مثال: إخطار ولي الأمر / إقرار">
           </div>
         </div>
         <button type="submit">⚠️ تسجيل الحالة</button>
@@ -497,31 +516,31 @@
     </div>
   </div>
 
-  <!-- 5. قسم الزيارات الصفية -->
+  <!-- 6. قسم الزيارات الصفية -->
   <div id="visitTab" class="tab-content">
     <div class="card no-print">
-      <h2>📑 تسجيل زيارة صفية / تكليف إداري</h2>
+      <h2>📑 تسجيل زيارة صفية / توجيه فني للوكيل</h2>
       <form id="visitForm" style="margin-top: 16px;">
         <div class="form-grid">
           <div class="form-group">
             <label>اسم المعلم المزار</label>
-            <input type="text" id="vTeacher" required placeholder="اسم المعلم">
+            <select id="vTeacherSelect" required></select>
           </div>
           <div class="form-group">
-            <label>المادة والصف</label>
-            <input type="text" id="vSubjectClass" required placeholder="مثال: رياضيات - 4/2">
+            <label>الصف والمادة</label>
+            <input type="text" id="vSubjectClass" required placeholder="مثال: علوم - 4/2">
           </div>
           <div class="form-group">
-            <label>موضوع الدرس / التكليف</label>
-            <input type="text" id="vTopic" placeholder="موضوع الدرس">
+            <label>موضوع الدرس</label>
+            <input type="text" id="vTopic" placeholder="عنوان الدرس">
           </div>
           <div class="form-group">
-            <label>التقييم / الملاحظات</label>
+            <label>التقييم والملاحظات</label>
             <select id="vRating">
-              <option value="ممتاز - ملتزم بخطة الدرس">ممتاز - ملتزم بخطة الدرس</option>
+              <option value="ممتاز - ملتزم بخطة الدرس والتفاعل">ممتاز - ملتزم بخطة الدرس والتفاعل</option>
               <option value="جيد جداً - يحتاج لتفعيل الوسائل">جيد جداً - يحتاج لتفعيل الوسائل</option>
               <option value="جيد - توجيه بمتابعة كراسات الطلاب">جيد - توجيه بمتابعة كراسات الطلاب</option>
-              <option value="توجيه إداري">توجيه إداري مباشر</option>
+              <option value="توجيه إداري وفني مباشر">توجيه إداري وفني مباشر</option>
             </select>
           </div>
         </div>
@@ -552,15 +571,15 @@
     </div>
   </div>
 
-  <!-- 6. قسم رفع المستندات -->
+  <!-- 7. قسم المستندات -->
   <div id="uploadTab" class="tab-content">
     <div class="card no-print">
-      <h2>📤 رفع مستند أو تقرير رسمي خاص بالوكيل</h2>
+      <h2>📤 حفظ وثيقة أو تقرير رسمي للوكيل</h2>
       <form id="uploadForm" style="margin-top: 16px;">
         <div class="form-grid">
           <div class="form-group">
             <label>عنوان المستند</label>
-            <input type="text" id="docTitle" placeholder="مثال: قرار تكليف إشراف / كشف إجازات" required>
+            <input type="text" id="docTitle" placeholder="مثال: خطة الإشراف / نشرة إجازات" required>
           </div>
           <div class="form-group">
             <label>تصنيف المستند</label>
@@ -568,31 +587,21 @@
               <option value="قرارات وتكليفات">قرارات وتكليفات</option>
               <option value="إجازات وأعذار">إجازات وأعذار معلمين</option>
               <option value="تقارير انضباط طلاب">تقارير انضباط طلاب</option>
-              <option value="نشرات وزارية وإدارية">نشرات وزارية وإدارية</option>
-              <option value="مستندات أخرى">مستندات أخرى</option>
+              <option value="نشرات وزارية">نشرات وزارية وإدارية</option>
             </select>
           </div>
           <div class="form-group">
-            <label>ملاحظات إضافية</label>
-            <input type="text" id="docNotes" placeholder="أية تفاصيل إضافية...">
+            <label>تفاصيل / ملاحظات</label>
+            <input type="text" id="docNotes" placeholder="أية ملاحظات تفصيلية...">
           </div>
         </div>
-
-        <div class="form-group" style="margin-bottom: 16px;">
-          <label>اختر الملف (صورة أو PDF)</label>
-          <div class="file-drop-zone" onclick="document.getElementById('docFile').click()">
-            📄 <span id="fileLabel">اضغط هنا لتحديد الملف من جهازك (PNG, JPG, PDF)</span>
-            <input type="file" id="docFile" accept="image/*,.pdf" style="display: none;" onchange="handleFileSelect(event)">
-          </div>
-        </div>
-
-        <button type="submit" class="btn-upload">🚀 رفع وحفظ المستند</button>
+        <button type="submit" class="btn-upload">💾 حفظ الوثيقة في الأرشيف</button>
       </form>
     </div>
 
     <div class="card">
       <div class="card-header">
-        <h2>📂 الأرشيف الرقمي للمستندات المرفوعة</h2>
+        <h2>📂 الأرشيف الرقمي لمستندات وتقارير الوكيل</h2>
       </div>
       <table>
         <thead>
@@ -600,7 +609,7 @@
             <th>اسم المستند</th>
             <th>التصنيف</th>
             <th>الملاحظات</th>
-            <th>تاريخ الرفع</th>
+            <th>تاريخ التسجيل</th>
             <th class="no-print">إجراءات</th>
           </tr>
         </thead>
@@ -609,63 +618,47 @@
     </div>
   </div>
 
-  <!-- 7. قسم الأرشيف الشامل -->
-  <div id="archiveTab" class="tab-content">
-    <div class="card">
-      <div class="card-header">
-        <h2>📊 الأرشيف العام والتصدير الشامل</h2>
-        <div class="no-print" style="display: flex; gap: 8px;">
-          <button onclick="exportAllToCSV()" class="btn-excel">📥 تصدير الكل لـ Excel</button>
-          <button onclick="window.print()" class="btn-print">🖨️ طباعة الأرشيف</button>
-        </div>
-      </div>
-
-      <div class="form-grid no-print" style="margin-bottom: 20px;">
-        <div class="form-group">
-          <label>🔍 بحث في كافة الأرشيف</label>
-          <input type="text" id="archiveSearch" placeholder="ابحث باسم المعلم، الطالب، الفصل..." oninput="renderArchiveTable()">
-        </div>
-        <div class="form-group">
-          <label>📁 تصفية حسب القسم</label>
-          <select id="archiveFilter" onchange="renderArchiveTable()">
-            <option value="all">كل السجلات</option>
-            <option value="subs">الحصص الاحتياطية</option>
-            <option value="teachers">غياب وتأخير المعلمين</option>
-            <option value="duties">الإشراف اليومي</option>
-            <option value="students">متابعة الطلاب</option>
-            <option value="visits">الزيارات الصفية</option>
-            <option value="documents">المستندات المرفوعة</option>
-          </select>
-        </div>
-      </div>
-
-      <table>
-        <thead>
-          <tr>
-            <th>نوع المستند/السجل</th>
-            <th>البيانات الأساسية</th>
-            <th>التفاصيل/الموقع/الحصة</th>
-            <th>التاريخ</th>
-            <th class="no-print">إجراء</th>
-          </tr>
-        </thead>
-        <tbody id="archiveTable"></tbody>
-      </table>
-    </div>
-  </div>
-
   <div id="statusMsg" class="status"></div>
 
   <!-- ترويسة التواقيع المعتمدة عند الطباعة -->
   <div class="print-footer">
-    <div>مسؤول الإحصاء / السجلات: ....................</div>
+    <div>مسؤول الإحصاء بالمدرسة: ....................</div>
     <div>وكيل المدرسة: الأستاذة / أميرة علي شلبي</div>
     <div>مدير المدرسة: ....................</div>
   </div>
 </div>
 
 <script>
-  const STORAGE_KEY = "AMIRA_SHALABY_SCHOOL_DATA_V3";
+  // 1. قاعدة بيانات كشوف هيئة التدريس الرسمية من ملف PDF
+  const officialStaffList = [
+    { m: 1, name: "ابتسام اسماعيل عبد الحميد ابراهيم", code: "474196", cadre: "معلم أول أ", subject: "لغة عربية ودين", qual: "ليسانس اداب وتربية", degree: "معلم أول أ" },
+    { m: 2, name: "ابراهيم مختار حسن حجاج", code: "3413154", cadre: "غير مخاطب حالياً", subject: "محو أميه", qual: "محو أميه", degree: "بدون درجة (عامل مؤقت)" },
+    { m: 3, name: "ازهار سعد محمد شحاته زيد", code: "2512221", cadre: "أخصائي تكنولوجيا أول", subject: "تكنولوجيا التعليم", qual: "ليسانس دراسات اسلامية + دبلومة", degree: "أخصائي تكنولوجيا أول" },
+    { m: 4, name: "اسراء رجب بدوى عبد الله", code: "2773388", cadre: "معلم أول", subject: "لغة إنجليزية", qual: "ليسانس اداب + دبلومة تربوية", degree: "معلم أول" },
+    { m: 5, name: "اسماء احمد محمد عطا غانم", code: "3702328", cadre: "غير مخاطب حالياً", subject: "علوم", qual: "بكالوريوس علوم وتربية", degree: "معلم مساعد" },
+    { m: 6, name: "اسماء نبيل محمد عبدربه", code: "3477528", cadre: "غير مخاطب حالياً", subject: "لغة إنجليزية", qual: "بكالوريوس تربية", degree: "معلم بالحصة" },
+    { m: 7, name: "اشرف نبيل محمد على", code: "474584", cadre: "معلم خبير", subject: "رياضيات", qual: "بكالوريوس علوم وتربية", degree: "معلم خبير" },
+    { m: 8, name: "أميرة علي إبراهيم شلبي", code: "476216", cadre: "معلم خبير - وكيل مدرسة", subject: "علوم", qual: "دبلومة مهنية في التربية", degree: "معلم خبير - وكيل مدرسة" },
+    { m: 9, name: "ايمان احمد عبد الفتاح محمود", code: "2632803", cadre: "معلم أول", subject: "مدرس فصل", qual: "ليسانس اداب وتربية - تعليم أساسي", degree: "معلم أول" },
+    { m: 10, name: "بركات حسن ابراهيم فرج", code: "2042786", cadre: "معلم خبير", subject: "لغة عربية ودين", qual: "ليسانس دراسات اسلامية + دبلوم عام", degree: "معلم خبير" },
+    { m: 11, name: "تهاني فؤاد عبد العزيز محمد", code: "2832805", cadre: "معلم أول", subject: "لغة عربية ودين", qual: "ليسانس لغة عربية أزهر", degree: "معلم أول" },
+    { m: 12, name: "حنان محمد علي العبد", code: "475426", cadre: "معلم", subject: "مدرس فصل", qual: "ليسانس تربية", degree: "معلم" },
+    { m: 13, name: "رافت نصر ابراهيم قنبر", code: "474807", cadre: "معلم خبير", subject: "مجال صناعي", qual: "دبلوم التلمذة الصناعية", degree: "معلم خبير" },
+    { m: 14, name: "سلامه رمضان احمد ابو حسن", code: "2917590", cadre: "غير مخاطب حالياً", subject: "خدمات", qual: "محو أميه", degree: "عامل خدمات متعاقد" },
+    { m: 15, name: "شاهيناز السيد عبد الصبور راغب", code: "479083", cadre: "معلم أول أ", subject: "مدرس فصل", qual: "ليسانس اداب + دبلومة تربوية", degree: "معلم أول أ" },
+    { m: 16, name: "شيرين محمد عبد الحليم صالح", code: "475425", cadre: "معلم أول", subject: "اقتصاد منزلي", qual: "دبلوم صناعة ثانوى", degree: "معلم أول" },
+    { m: 17, name: "صبحي حامد علي محمد سيد احمد نعام", code: "1756870", cadre: "معلم أول", subject: "علوم", qual: "بكالوريوس تربية", degree: "معلم أول" },
+    { m: 18, name: "عبير عطية عبد الجواد رشوان", code: "3436183", cadre: "معلم", subject: "علوم", qual: "بكالوريوس علوم وتربية", degree: "معلم" },
+    { m: 19, name: "عصام الدين جلال الدين مرسى محمد", code: "474607", cadre: "أخصائي اجتماعي أول أ", subject: "لغة إنجليزية", qual: "دبلوم عام في التربية", degree: "أخصائي اجتماعي أول أ" },
+    { m: 20, name: "منة الله عادل عيد سليمان", code: "3613593", cadre: "غير مخاطب حالياً", subject: "لغة عربية ودين", qual: "ليسانس اداب", degree: "معلم بالحصة" },
+    { m: 21, name: "نبيله الصاوي احمد حمدان", code: "3119705", cadre: "معلم", subject: "لغة عربية ودين", qual: "ليسانس تربية", degree: "معلم" },
+    { m: 22, name: "نورهان احمد شحاته محمود شعبان", code: "3436182", cadre: "معلم", subject: "دراسات إجتماعية", qual: "ليسانس اداب وتربية", degree: "معلم" },
+    { m: 23, name: "وفاء رجب سعد احمد", code: "2207204", cadre: "معلم أول أ", subject: "لغة إنجليزية", qual: "بكالوريوس تربية", degree: "معلم أول أ" },
+    { m: 24, name: "وفاء كامل بسيوني ابراهيم", code: "3616956", cadre: "غير مخاطب حالياً", subject: "لغة عربية ودين", qual: "الاجازة العالية في العلوم", degree: "معلم بالحصة" },
+    { m: 25, name: "ياسمين كمال راغب محمد المنقل", code: "2204171", cadre: "معلم أول أ", subject: "لغة انجليزية", qual: "ليسانس اداب", degree: "معلم أول أ" }
+  ];
+
+  const STORAGE_KEY = "KADWA_ELKREON_SCHOOL_APP_V4";
 
   let appData = {
     subs: [],
@@ -676,9 +669,24 @@
     documents: []
   };
 
-  let selectedFileData = null;
-
   document.getElementById('printDate').textContent = new Date().toLocaleDateString('ar-EG');
+
+  // تعبئة القوائم المنسدلة بأسماء معلّمي المدرسة
+  function populateTeacherDropdowns() {
+    const dropdownIds = ['absentTeacherSelect', 'subTeacherSelect', 'tNameSelect', 'dTeacherSelect', 'vTeacherSelect'];
+    
+    dropdownIds.forEach(id => {
+      const select = document.getElementById(id);
+      if(!select) return;
+      select.innerHTML = '<option value="">-- اختر من القائمة --</option>';
+      officialStaffList.forEach(st => {
+        const option = document.createElement('option');
+        option.value = st.name;
+        option.textContent = `${st.name} (${st.subject})`;
+        select.appendChild(option);
+      });
+    });
+  }
 
   function switchTab(evt, tabId) {
     document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
@@ -686,29 +694,32 @@
     
     evt.currentTarget.classList.add('active');
     document.getElementById(tabId).classList.add('active');
-
-    if (tabId === 'archiveTab') {
-      renderArchiveTable();
-    }
   }
 
-  function handleFileSelect(evt) {
-    const file = evt.target.files[0];
-    if (file) {
-      document.getElementById('fileLabel').textContent = `الملف المختار: ${file.name} (${(file.size / 1024).toFixed(1)} KB)`;
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        selectedFileData = {
-          name: file.name,
-          type: file.type,
-          data: e.target.result
-        };
-      };
-      reader.readAsDataURL(file);
-    }
+  function renderStaffTable() {
+    const search = document.getElementById('staffSearch').value.toLowerCase();
+    const tbody = document.getElementById('staffDirectoryTable');
+    
+    const filtered = officialStaffList.filter(s => 
+      s.name.toLowerCase().includes(search) ||
+      s.code.includes(search) ||
+      s.subject.toLowerCase().includes(search) ||
+      s.cadre.toLowerCase().includes(search)
+    );
+
+    tbody.innerHTML = filtered.map(st => `
+      <tr>
+        <td>${st.m}</td>
+        <td><strong>${st.name}</strong></td>
+        <td><code>${st.code}</code></td>
+        <td>${st.cadre}</td>
+        <td>${st.subject}</td>
+        <td>${st.qual}</td>
+        <td>${st.degree}</td>
+      </tr>
+    `).join('');
   }
 
-  // تحميل البيانات المحفوظة
   function loadAllData() {
     const localSaved = localStorage.getItem(STORAGE_KEY);
     if (localSaved) {
@@ -720,28 +731,22 @@
     }
     renderAllTables();
     updateStats();
-    showStatus("تم تحميل كافّة سجلات المنظومة بنجاح", "success");
   }
 
-  // حفظ فوري مضمون دون أخطاء Load failed
   function saveDataStore() {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
       renderAllTables();
       updateStats();
-      if (document.getElementById('archiveTab').classList.contains('active')) {
-        renderArchiveTable();
-      }
       showStatus("تم حفظ البيانات بنجاح في المنظومة!", "success");
     } catch (e) {
-      showStatus("تنبيه: حجم المستندات المرفوعة كبير جداً، يفضل إرفاق ملفات بأحجام أصغر.", "error");
+      showStatus("خطأ أثناء حفظ البيانات محلياً.", "error");
     }
   }
 
   function renderAllTables() {
-    // 1. الاحتياطي
-    const subBody = document.getElementById('subTable');
-    subBody.innerHTML = appData.subs.length === 0 ? `<tr><td colspan="6" style="text-align:center;">لا توجد تكليفات احتياطية</td></tr>` :
+    // الاحتياطي
+    document.getElementById('subTable').innerHTML = appData.subs.length === 0 ? `<tr><td colspan="6" style="text-align:center;">لا توجد تكليفات احتبيطية مسجلة</td></tr>` :
     appData.subs.map((item, index) => `
       <tr>
         <td>${item.absentTeacher}</td>
@@ -756,9 +761,8 @@
       </tr>
     `).join('');
 
-    // 2. المعلمين
-    const tBody = document.getElementById('teacherTable');
-    tBody.innerHTML = appData.teachers.length === 0 ? `<tr><td colspan="5" style="text-align:center;">لا توجد حالات مسجلة اليوم</td></tr>` :
+    // غياب المعلمين
+    document.getElementById('teacherTable').innerHTML = appData.teachers.length === 0 ? `<tr><td colspan="5" style="text-align:center;">لا يوجد غياب مسجل اليوم</td></tr>` :
     appData.teachers.map((item, index) => `
       <tr>
         <td>${item.name}</td>
@@ -769,9 +773,8 @@
       </tr>
     `).join('');
 
-    // 3. الإشراف
-    const dBody = document.getElementById('dutyTable');
-    dBody.innerHTML = appData.duties.length === 0 ? `<tr><td colspan="5" style="text-align:center;">لا يوجد جدول إشراف مسجل</td></tr>` :
+    // الإشراف
+    document.getElementById('dutyTable').innerHTML = appData.duties.length === 0 ? `<tr><td colspan="5" style="text-align:center;">لا يوجد إشراف مسجل</td></tr>` :
     appData.duties.map((item, index) => `
       <tr>
         <td>${item.teacher}</td>
@@ -782,9 +785,8 @@
       </tr>
     `).join('');
 
-    // 4. الطلاب
-    const sBody = document.getElementById('studentTable');
-    sBody.innerHTML = appData.students.length === 0 ? `<tr><td colspan="6" style="text-align:center;">لا توجد ملاحظات مسجلة</td></tr>` :
+    // الطلاب
+    document.getElementById('studentTable').innerHTML = appData.students.length === 0 ? `<tr><td colspan="6" style="text-align:center;">لا توجد ملاحظات سلوكية مسجلة</td></tr>` :
     appData.students.map((item, index) => `
       <tr>
         <td>${item.name}</td>
@@ -796,9 +798,8 @@
       </tr>
     `).join('');
 
-    // 5. الزيارات الصفية
-    const vBody = document.getElementById('visitTable');
-    vBody.innerHTML = appData.visits.length === 0 ? `<tr><td colspan="6" style="text-align:center;">لا توجد زيارات مسجلة حتى الآن</td></tr>` :
+    // الزيارات الصفية
+    document.getElementById('visitTable').innerHTML = appData.visits.length === 0 ? `<tr><td colspan="6" style="text-align:center;">لا توجد زيارات صفية مسجلة</td></tr>` :
     appData.visits.map((item, index) => `
       <tr>
         <td>${item.teacher}</td>
@@ -810,139 +811,25 @@
       </tr>
     `).join('');
 
-    // 6. المستندات
-    const docBody = document.getElementById('documentsTable');
-    docBody.innerHTML = appData.documents.length === 0 ? `<tr><td colspan="5" style="text-align:center;">لا توجد مستندات مرفوعة حتى الآن</td></tr>` :
+    // المستندات
+    document.getElementById('documentsTable').innerHTML = appData.documents.length === 0 ? `<tr><td colspan="5" style="text-align:center;">لا توجد مستندات مسجلة بالأرشيف</td></tr>` :
     appData.documents.map((item, index) => `
       <tr>
         <td><strong>📄 ${item.title}</strong></td>
         <td>${item.category}</td>
         <td>${item.notes || '-'}</td>
         <td>${item.date}</td>
-        <td class="no-print">
-          ${item.fileData ? `<a href="${item.fileData.data}" download="${item.fileData.name}" class="btn-view">📥 تنزيل</a>` : '<span style="color:#aaa;">بدون ملف</span>'}
-          <button class="btn-delete" onclick="deleteItem('documents', ${index})">🗑️ مسح</button>
-        </td>
+        <td class="no-print"><button class="btn-delete" onclick="deleteItem('documents', ${index})">🗑️ مسح</button></td>
       </tr>
     `).join('');
   }
 
-  function renderArchiveTable() {
-    const search = document.getElementById('archiveSearch').value.toLowerCase();
-    const filter = document.getElementById('archiveFilter').value;
-    const body = document.getElementById('archiveTable');
-    
-    let combined = [];
-
-    if (filter === 'all' || filter === 'subs') {
-      appData.subs.forEach((item, index) => {
-        combined.push({
-          type: 'حصص احتياطية',
-          key: 'subs',
-          origIndex: index,
-          mainInfo: `غائب: ${item.absentTeacher} | مكلف: ${item.subTeacher}`,
-          detail: `فصل: ${item.className} - ${item.period}`,
-          date: item.date
-        });
-      });
-    }
-
-    if (filter === 'all' || filter === 'teachers') {
-      appData.teachers.forEach((item, index) => {
-        combined.push({
-          type: 'غياب معلم',
-          key: 'teachers',
-          origIndex: index,
-          mainInfo: `المعلم: ${item.name}`,
-          detail: `المادة: ${item.subject} (${item.reason})`,
-          date: item.date
-        });
-      });
-    }
-
-    if (filter === 'all' || filter === 'duties') {
-      appData.duties.forEach((item, index) => {
-        combined.push({
-          type: 'إشراف يومي',
-          key: 'duties',
-          origIndex: index,
-          mainInfo: `المشرف: ${item.teacher}`,
-          detail: `الموقع: ${item.location} - ${item.shift}`,
-          date: item.date
-        });
-      });
-    }
-
-    if (filter === 'all' || filter === 'students') {
-      appData.students.forEach((item, index) => {
-        combined.push({
-          type: 'متابعة طالب',
-          key: 'students',
-          origIndex: index,
-          mainInfo: `الطالب: ${item.name} (${item.className})`,
-          detail: `ملاحظة: ${item.type} | إجراء: ${item.action || 'لا يوجد'}`,
-          date: item.date
-        });
-      });
-    }
-
-    if (filter === 'all' || filter === 'visits') {
-      appData.visits.forEach((item, index) => {
-        combined.push({
-          type: 'زيارة صفية',
-          key: 'visits',
-          origIndex: index,
-          mainInfo: `المعلم: ${item.teacher} (${item.subjectClass})`,
-          detail: `تقييم: ${item.rating}`,
-          date: item.date
-        });
-      });
-    }
-
-    if (filter === 'all' || filter === 'documents') {
-      appData.documents.forEach((item, index) => {
-        combined.push({
-          type: 'مستند مرفوع',
-          key: 'documents',
-          origIndex: index,
-          mainInfo: `المستند: ${item.title}`,
-          detail: `تصنيف: ${item.category} | ${item.notes || ''}`,
-          date: item.date
-        });
-      });
-    }
-
-    const filtered = combined.filter(row => 
-      row.type.toLowerCase().includes(search) ||
-      row.mainInfo.toLowerCase().includes(search) ||
-      row.detail.toLowerCase().includes(search) ||
-      row.date.toLowerCase().includes(search)
-    );
-
-    if (filtered.length === 0) {
-      body.innerHTML = `<tr><td colspan="5" style="text-align:center;">لا توجد مستندات تطابق البحث</td></tr>`;
-      return;
-    }
-
-    body.innerHTML = filtered.map(row => `
-      <tr>
-        <td><strong>${row.type}</strong></td>
-        <td>${row.mainInfo}</td>
-        <td>${row.detail}</td>
-        <td>${row.date}</td>
-        <td class="no-print">
-          <button class="btn-delete" onclick="deleteItem('${row.key}', ${row.origIndex})">🗑️ مسح</button>
-        </td>
-      </tr>
-    `).join('');
-  }
-
-  // نماذج الإدخال
+  // أحداث الإدخال
   document.getElementById('subForm').addEventListener('submit', (e) => {
     e.preventDefault();
     appData.subs.push({
-      absentTeacher: document.getElementById('absentTeacher').value.trim(),
-      subTeacher: document.getElementById('subTeacher').value.trim(),
+      absentTeacher: document.getElementById('absentTeacherSelect').value,
+      subTeacher: document.getElementById('subTeacherSelect').value,
       subPhone: document.getElementById('subPhone').value.trim(),
       className: document.getElementById('className').value.trim(),
       period: document.getElementById('period').value,
@@ -954,9 +841,11 @@
 
   document.getElementById('teacherForm').addEventListener('submit', (e) => {
     e.preventDefault();
+    const name = document.getElementById('tNameSelect').value;
+    const staffObj = officialStaffList.find(s => s.name === name);
     appData.teachers.push({
-      name: document.getElementById('tName').value.trim(),
-      subject: document.getElementById('tSubject').value.trim(),
+      name: name,
+      subject: staffObj ? staffObj.subject : '-',
       reason: document.getElementById('tReason').value,
       date: new Date().toLocaleDateString('ar-EG')
     });
@@ -967,7 +856,7 @@
   document.getElementById('dutyForm').addEventListener('submit', (e) => {
     e.preventDefault();
     appData.duties.push({
-      teacher: document.getElementById('dTeacher').value.trim(),
+      teacher: document.getElementById('dTeacherSelect').value,
       location: document.getElementById('dLocation').value,
       shift: document.getElementById('dShift').value,
       date: new Date().toLocaleDateString('ar-EG')
@@ -992,7 +881,7 @@
   document.getElementById('visitForm').addEventListener('submit', (e) => {
     e.preventDefault();
     appData.visits.push({
-      teacher: document.getElementById('vTeacher').value.trim(),
+      teacher: document.getElementById('vTeacherSelect').value,
       subjectClass: document.getElementById('vSubjectClass').value.trim(),
       topic: document.getElementById('vTopic').value.trim(),
       rating: document.getElementById('vRating').value,
@@ -1008,19 +897,15 @@
       title: document.getElementById('docTitle').value.trim(),
       category: document.getElementById('docCategory').value,
       notes: document.getElementById('docNotes').value.trim(),
-      fileData: selectedFileData,
       date: new Date().toLocaleDateString('ar-EG')
     });
     e.target.reset();
-    selectedFileData = null;
-    document.getElementById('fileLabel').textContent = "اضغط هنا لتحديد الملف من جهازك (PNG, JPG, PDF)";
     saveDataStore();
   });
 
-  // Export to Excel / CSV
   function exportToCSV(type) {
     let rows = [];
-    let filename = `مدرسة_كدية_الكريون_${type}_${new Date().toISOString().slice(0,10)}.csv`;
+    let filename = `مدرسة_كدوه_الكريون_${type}_${new Date().toISOString().slice(0,10)}.csv`;
 
     if (type === 'subs') {
       rows.push(["المعلم الغائب", "المعلم المكلف", "الهاتف", "الفصل", "الحصة", "التاريخ"]);
@@ -1039,29 +924,11 @@
       appData.visits.forEach(i => rows.push([i.teacher, i.subjectClass, i.topic || '', i.rating, i.date]));
     }
 
-    downloadCSV(rows, filename);
-  }
-
-  function exportAllToCSV() {
-    let rows = [["قسم المستند", "بيانات العنصر 1", "بيانات العنصر 2", "التفاصيل / الملاحظات", "التاريخ"]];
-    
-    appData.subs.forEach(i => rows.push(["حصص احتياطية", i.absentTeacher, i.subTeacher, `${i.className} - ${i.period}`, i.date]));
-    appData.teachers.forEach(i => rows.push(["غياب معلم", i.name, i.subject, i.reason, i.date]));
-    appData.duties.forEach(i => rows.push(["إشراف يومي", i.teacher, i.location, i.shift, i.date]));
-    appData.students.forEach(i => rows.push(["متابعة طالب", i.name, i.className, `${i.type} - ${i.action || ''}`, i.date]));
-    appData.visits.forEach(i => rows.push(["زيارات صفية", i.teacher, i.subjectClass, `${i.topic || ''} (${i.rating})`, i.date]));
-    appData.documents.forEach(i => rows.push(["مستند مرفوع", i.title, i.category, i.notes || '', i.date]));
-
-    downloadCSV(rows, `أرشيف_الأستاذة_أميرة_على_شلبي_مدرسة_كدوة_الكريون_${new Date().toISOString().slice(0,10)}.csv`);
-  }
-
-  function downloadCSV(rows, filename) {
     let csvContent = "\uFEFF" + rows.map(e => e.map(val => `"${val}"`).join(",")).join("\n");
     let blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     let link = document.createElement("a");
-    let url = URL.createObjectURL(blob);
-    link.setAttribute("href", url);
-    link.setAttribute("download", filename);
+    link.href = URL.createObjectURL(blob);
+    link.download = filename;
     link.click();
   }
 
@@ -1093,7 +960,7 @@
   }
 
   function sendWhatsApp(phone, teacher, className, period) {
-    const text = `الأستاذ/ة ${teacher} المحترم/ة،\nتحية طيبة وبعد،،\nيرجى العلم بأنه تم تكليفكم بحصة احتياطية بمدرسة كدوة الكريون:\n📍 الفصل: ${className}\n⏰ ${period}\nشاكرين تعاونكم - مكتب وكيل المدرسة الأستاذة / أميرة علي شلبي.`;
+    const text = `الأستاذ/ة ${teacher} المحترم/ة،\nتحية طيبة وبعد،،\nيرجى العلم بأنه تم تكليفكم بحصة احتياطية بمدرسة كدوه الكريون:\n📍 الفصل: ${className}\n⏰ ${period}\nشاكرين تعاونكم - مكتب وكيل المدرسة الأستاذة / أميرة علي إبراهيم شلبي.`;
     let url = `https://wa.me/`;
     if (phone) {
       const cleanPhone = phone.replace(/[^0-9]/g, '');
@@ -1109,6 +976,9 @@
     statusMsg.className = `status ${type}`;
   }
 
+  // التشغيل الأولي
+  populateTeacherDropdowns();
+  renderStaffTable();
   loadAllData();
 </script>
 
