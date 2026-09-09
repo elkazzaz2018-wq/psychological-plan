@@ -3,9 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>الخطة الشاملة والبرنامج الزمني للتربية النفسية 2026 - 2027</title>
+    <title>البرنامج التفاعلي المطور للتربية النفسية 2026 - 2027</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Firebase SDK (للتخزين السحابي) -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0fdf4; }
         .slide { display: none; }
@@ -25,6 +30,14 @@
             outline: 2px solid #86efac;
             outline-offset: -12px;
             position: relative;
+        }
+
+        .edit-mode-active [contenteditable="true"] {
+            outline: 2px dashed #16a34a !important;
+            background-color: #f0fdf4 !important;
+            padding: 2px 4px;
+            border-radius: 6px;
+            cursor: text;
         }
 
         @media print {
@@ -55,62 +68,54 @@
                 <button onclick="showSlide(6)" class="tab-btn px-3 py-1.5 rounded-xl border border-green-700 font-bold text-green-800 text-xs md:text-sm whitespace-nowrap transition-all shadow-sm">مارس</button>
                 <button onclick="showSlide(7)" class="tab-btn px-3 py-1.5 rounded-xl border border-green-700 font-bold text-green-800 text-xs md:text-sm whitespace-nowrap transition-all shadow-sm">أبريل/مايو</button>
                 <button onclick="showSlide(8)" class="tab-btn px-3 py-1.5 rounded-xl border border-green-700 font-bold text-green-800 text-xs md:text-sm whitespace-nowrap transition-all shadow-sm">تحضير معتمد 📝</button>
-                <button onclick="showSlide(9)" class="tab-btn px-3 py-1.5 rounded-xl border border-green-700 font-bold text-green-800 text-xs md:text-sm whitespace-nowrap transition-all shadow-sm">المتفوقون 🌟</button>
-                <button onclick="showSlide(10)" class="tab-btn px-3 py-1.5 rounded-xl border border-green-700 font-bold text-green-800 text-xs md:text-sm whitespace-nowrap transition-all shadow-sm">المتأخرون 📈</button>
-                <button onclick="showSlide(11)" class="tab-btn px-3 py-1.5 rounded-xl border border-green-700 font-bold text-green-800 text-xs md:text-sm whitespace-nowrap transition-all shadow-sm">الموهوبون 🎨</button>
-                <button onclick="showSlide(12)" class="tab-btn px-3 py-1.5 rounded-xl border border-green-700 font-bold text-green-800 text-xs md:text-sm whitespace-nowrap transition-all shadow-sm">برنامج الدمج 🤝</button>
             </div>
 
-            <!-- أدوات التفاعل الإضافية -->
-            <div class="flex items-center gap-2 w-full md:w-auto justify-end">
-                <!-- شريط البحث الفوري -->
-                <input type="text" id="searchInput" onkeyup="filterContent()" placeholder="🔍 بحث في الخطة..." class="px-3 py-1 text-xs md:text-sm border border-green-400 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-600 bg-green-50/50 w-36 md:w-44">
+            <!-- أدوات التعديل والحفظ السحابي -->
+            <div class="flex items-center gap-1.5 w-full md:w-auto justify-end flex-wrap">
+                <span id="syncStatus" class="text-xs font-bold text-green-700 bg-green-100 px-2 py-1 rounded-lg">☁️ جاري المزامنة...</span>
                 
-                <!-- زر التحكم بالخط -->
-                <button onclick="changeFontSize(1)" class="bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold px-2 py-1 rounded-lg text-xs" title="تكبير الخط">A+</button>
-                <button onclick="changeFontSize(-1)" class="bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold px-2 py-1 rounded-lg text-xs" title="تصغير الخط">A-</button>
+                <button id="editToggleBtn" onclick="toggleEditMode()" class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-1 px-2.5 rounded-xl text-xs shadow-md transition">✏️ تعديل</button>
+                <button id="saveBtn" onclick="saveToCloud()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-1 px-2.5 rounded-xl text-xs shadow-md transition hidden">☁️ حفظ في السحاب</button>
                 
-                <!-- زر الطباعة والتصدير -->
-                <button onclick="window.print()" class="bg-red-700 hover:bg-red-800 text-white font-bold py-1 px-3 rounded-xl text-xs md:text-sm whitespace-nowrap shadow-md transition flex items-center gap-1">
-                    <span>🖨️ PDF</span>
-                </button>
+                <input type="text" id="searchInput" onkeyup="filterContent()" placeholder="🔍 بحث..." class="px-2 py-1 text-xs border border-green-400 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-600 bg-green-50/50 w-24 md:w-32">
+                <button onclick="window.print()" class="bg-red-700 hover:bg-red-800 text-white font-bold py-1 px-3 rounded-xl text-xs shadow-md transition">🖨️ PDF</button>
             </div>
         </div>
     </nav>
 
-    <!-- المنطقة الرئيسية للعرص -->
+    <!-- المنطقة الرئيسية -->
     <main class="flex-grow flex items-center justify-center p-3 md:p-6" id="mainContent">
-        <div class="w-full max-w-5xl bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl border-2 border-green-500/30 p-5 md:p-8 min-h-[620px] flex flex-col justify-between transition-all">
+        <div class="w-full max-w-5xl bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl border-2 border-green-500/30 p-5 md:p-8 min-h-[620px] flex flex-col justify-between transition-all" id="editableArea">
 
             <!-- الشريحة 0: الغلاف -->
             <div class="slide active cover-frame p-6 md:p-10 rounded-2xl bg-gradient-to-b from-white via-green-50/20 to-emerald-50/40 text-center my-auto space-y-6">
                 <div class="flex justify-between items-center text-xs md:text-sm font-bold text-green-900 border-b-2 border-green-600 pb-3">
-                    <div>وزارة التربية والتعليم والتعليم الفني</div>
-                    <div>مديرية التربية والتعليم</div>
-                    <div>توجيه التربية النفسية</div>
+                    <div class="editable">وزارة التربية والتعليم والتعليم الفني</div>
+                    <div class="editable">مديرية التربية والتعليم</div>
+                    <div class="editable">توجيه التربية النفسية</div>
                 </div>
 
                 <div class="space-y-3 my-6">
-                    <div class="inline-block bg-green-700 text-white text-xs md:text-sm font-extrabold px-6 py-1.5 rounded-full shadow-md">البرنامج التفاعلي المعتمد</div>
-                    <h1 class="text-3xl md:text-5xl font-black text-green-900 leading-tight">الخطة والبرنامج الزمني للتربية النفسية</h1>
-                    <h2 class="text-xl md:text-2xl font-bold text-gray-700">للعام الدراسي 2026 / 2027 م</h2>
+                    <div class="inline-block bg-green-700 text-white text-xs md:text-sm font-extrabold px-6 py-1.5 rounded-full shadow-md editable">البرنامج التفاعلي المعتمد</div>
+                    <h1 class="text-3xl md:text-5xl font-black text-green-900 leading-tight editable">الخطة والبرنامج الزمني للتربية النفسية</h1>
+                    <h2 class="text-xl md:text-2xl font-bold text-gray-700 editable">للعام الدراسي 2026 / 2027 م</h2>
                     <div class="w-40 h-1.5 bg-gradient-to-r from-green-400 via-green-600 to-green-800 mx-auto rounded-full my-2"></div>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-3xl mx-auto text-right bg-white/80 p-4 rounded-2xl border border-green-200 shadow-sm text-xs md:text-sm">
                     <div class="space-y-1">
                         <p class="font-bold text-green-900">إعداد الأخصائي النفسي:</p>
-                        <p class="text-gray-800 font-extrabold text-sm md:text-base border-r-4 border-green-600 pr-2">أ/ محمد عبدالوهاب القزاز</p>
+                        <p class="text-gray-800 font-extrabold text-sm md:text-base border-r-4 border-green-600 pr-2 editable">أ/ محمد عبدالوهاب القزاز</p>
                     </div>
                     <div class="space-y-1">
                         <p class="font-bold text-green-900">تحت إشراف وتوجيه الكرام:</p>
-                        <p class="text-gray-800 font-bold border-r-4 border-emerald-600 pr-2">أ/ هويدا الجوجري</p>
-                        <p class="text-gray-800 font-bold border-r-4 border-emerald-600 pr-2">أ/ منير أبو المجد</p>
+                        <p class="text-gray-800 font-bold border-r-4 border-emerald-600 pr-2 editable">أ/ هويدا الجوجري</p>
+                        <p class="text-gray-800 font-bold border-r-4 border-emerald-600 pr-2 editable">أ/ منير أبو المجد</p>
                     </div>
                 </div>
 
                 <div class="pt-4 no-print flex justify-center gap-3">
-                    <button onclick="nextSlide()" class="bg-gradient-to-r from-green-600 to-emerald-800 hover:from-green-700 hover:to-emerald-900 text-white font-black text-base md:text-lg py-3 px-10 rounded-2xl shadow-xl hover:scale-105 active:scale-95 transition-all">
+                    <button onclick="nextSlide()" class="bg-gradient-to-r from-green-600 to-emerald-800 hover:from-green-700 hover:to-emerald-900 text-white font-black text-base md:text-lg py-3 px-10 rounded-2xl shadow-xl hover:scale-105 transition-all">
                         بدء العرض التفاعلي 👈
                     </button>
                 </div>
@@ -119,327 +124,71 @@
             <!-- الشريحة 1: سبتمبر -->
             <div class="slide space-y-4">
                 <div class="flex justify-between items-center border-b-2 border-green-500 pb-2">
-                    <h2 class="text-xl md:text-2xl font-bold text-green-800">خطة شهر سبتمبر - سجل الازدهار النفسي</h2>
-                    <span class="bg-green-100 text-green-800 text-xs px-3 py-1 rounded-full font-bold shadow-sm">التهيئة والاستقبال</span>
+                    <h2 class="text-xl md:text-2xl font-bold text-green-800 editable">خطة شهر سبتمبر - سجل الازدهار النفسي</h2>
+                    <span class="bg-green-100 text-green-800 text-xs px-3 py-1 rounded-full font-bold shadow-sm editable">التهيئة والاستقبال</span>
                 </div>
-                <div onclick="openDetailedModal('أنا أستحق أن أكون سعيداً', 'تعزيز تقدير الذات والتفكير الإيجابي وبناء مفهوم الذات المرتفع لدى الطلاب.', 'الحوار والمناقشة، إعادة البناء المعرفي، العصف الذهني، التعزيز الإيجابي.', '1. تمهيد: مناقشة مفهوم السعادة الذاتية. 2. نشاط شجرة الإنجازات: يكتب كل طالب 3 إنجازات يفخر بها. 3. مناقشة أثر الأفكار الإيجابية على الصحة النفسية.', 'كتابة قائمة يومية بـ 3 نعم يُحمد الله عليها قبل النوم.')" class="p-4 bg-gradient-to-br from-green-50 to-emerald-100/60 rounded-2xl border border-green-300 shadow-sm cursor-pointer hover:border-green-600 hover:shadow-md transition-all">
+                <div onclick="openDetailedModal('أنا أستحق أن أكون سعيداً', 'تعزيز تقدير الذات والتفكير الإيجابي وبناء مفهوم الذات المرتفع لدى الطلاب.', 'الحوار والمناقشة، إعادة البناء المعرفي، العصف الذهني، التعزيز الإيجابي.', '1. تمهيد: مناقشة مفهوم السعادة الذاتية. 2. نشاط شجرة الإنجازات. 3. مناقشة أثر الأفكار الإيجابية.', 'كتابة قائمة يومية بـ 3 نعم يُحمد الله عليها.')" class="p-4 bg-gradient-to-br from-green-50 to-emerald-100/60 rounded-2xl border border-green-300 shadow-sm cursor-pointer hover:border-green-600 transition-all">
                     <div class="flex justify-between items-start">
                         <div>
-                            <span class="text-xs font-bold text-green-700 bg-green-200 px-2 py-0.5 rounded">الجلسة الإرشادية الشهريّة المعتمدة (اضغط للتفاصيل الكاملة)</span>
-                            <h3 class="font-bold text-green-900 text-lg mt-1">العنوان: أنا أستحق أن أكون سعيداً</h3>
+                            <span class="text-xs font-bold text-green-700 bg-green-200 px-2 py-0.5 rounded">الجلسة الإرشادية الشهريّة المعتمدة</span>
+                            <h3 class="font-bold text-green-900 text-lg mt-1 editable">العنوان: أنا أستحق أن أكون سعيداً</h3>
                         </div>
-                        <span class="text-green-700 font-bold text-xl">🔍</span>
+                        <span class="text-green-700 font-bold text-xl">🔍🎨</span>
                     </div>
-                    <p class="text-gray-700 text-xs md:text-sm mt-2"><strong>الهدف:</strong> بناء التفكير الإيجابي وتنمية تقدير الذات لمواجهة ضغوط بداية العام الدراسي.</p>
-                </div>
-                <div class="space-y-2 text-xs md:text-sm">
-                    <h4 class="font-bold text-green-900">المهام التنفيذية للشهر:</h4>
-                    <ul class="list-disc list-inside space-y-2 text-gray-700 leading-relaxed bg-gray-50 p-3 rounded-xl border border-gray-200">
-                        <li>إجراء توعوية شاملة بمهام الأخصائي النفسي والفرق بينه وبين الأخصائي الاجتماعي والطبيب النفسي.</li>
-                        <li>الإعلان عن تشكيل جماعة التربية النفسية وتحديد مجالات النشاط واللجان الفرعية.</li>
-                        <li>حصر الفئات الخاصة (متفوقين، متأخرين، موهوبين، دمج) وتجهيز السجلات الفردية والجماعية.</li>
-                        <li>تفعيل صندوق الاستشارات واستقبال الحالات الفردية التي تحتاج رعاية نفسية خاصة.</li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- الشريحة 2: أكتوبر -->
-            <div class="slide space-y-4">
-                <div class="flex justify-between items-center border-b-2 border-green-500 pb-2">
-                    <h2 class="text-xl md:text-2xl font-bold text-green-800">خطة شهر أكتوبر - سجل الازدهار النفسي</h2>
-                    <span class="bg-green-100 text-green-800 text-xs px-3 py-1 rounded-full font-bold shadow-sm">التوعية والصحة النفسية</span>
-                </div>
-                <div onclick="openDetailedModal('إدارة المشاعر والتعبير التوكيدي', 'تدريب الطلاب على التعرف الصحيح على المشاعر وتسميتها وإدارتها بفعالية.', 'التعبير الانفعالي، نمذجة السلوك، لعب الأدوار، تنظيم التنفس.', '1. تمرين عجلة المشاعر للتعرف على الشعور الحالي. 2. نمذجة كيفية التعبير عن الغضب بطريقة حازمة وغير عدوانية. 3. تطبيق تمرين الاسترخاء التنفسي (4-7-8).', 'تطبيق مفكرة المشاعر لمدة أسبوع وتسجيل الاستجابات الانفعالية.')" class="p-4 bg-gradient-to-br from-green-50 to-emerald-100/60 rounded-2xl border border-green-300 shadow-sm cursor-pointer hover:border-green-600 hover:shadow-md transition-all">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <span class="text-xs font-bold text-green-700 bg-green-200 px-2 py-0.5 rounded">الجلسة الإرشادية الشهريّة المعتمدة (اضغط للتفاصيل الكاملة)</span>
-                            <h3 class="font-bold text-green-900 text-lg mt-1">العنوان: إدارة المشاعر والتعبير التوكيدي</h3>
-                        </div>
-                        <span class="text-green-700 font-bold text-xl">🔍</span>
-                    </div>
-                    <p class="text-gray-700 text-xs md:text-sm mt-2"><strong>الهدف:</strong> خفض الانفعالات الحادة واكتساب مهارة التعبير الحازم عن النفس.</p>
-                </div>
-                <div class="space-y-2 text-xs md:text-sm">
-                    <h4 class="font-bold text-green-900">المهام التنفيذية للشهر:</h4>
-                    <ul class="list-disc list-inside space-y-2 text-gray-700 leading-relaxed bg-gray-50 p-3 rounded-xl border border-gray-200">
-                        <li>تفعيل اليوم العالمي للصحة النفسية (10 أكتوبر) عبر الإذاعة المدرسية والمعارض وإعداد مجلات الحائط.</li>
-                        <li>إطلاق مبادرة "بدايتنا صحة نفسية" بالتعاون مع معلمي الأنشطة والفصل.</li>
-                        <li>البدء الفعلي في تنفيذ الجلسات الإرشادية التخصصية المعتمدة لبرامج الفئات الخاصة.</li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- الشريحة 3: نوفمبر -->
-            <div class="slide space-y-4">
-                <div class="flex justify-between items-center border-b-2 border-green-500 pb-2">
-                    <h2 class="text-xl md:text-2xl font-bold text-green-800">خطة شهر نوفمبر - سجل الازدهار النفسي</h2>
-                    <span class="bg-green-100 text-green-800 text-xs px-3 py-1 rounded-full font-bold shadow-sm">المهارات الحياتية</span>
-                </div>
-                <div onclick="openDetailedModal('قوة التفكير الإيجابي وإعادة التأطير', 'تعديل الأفكار التلقائية السلبية واستبدالها بنظرة معرفية مرنة وبناءة.', 'إعادة التأطير المعرفي، العصف الذهني، تحليل المواقف.', '1. عرض شريط فيديو قصير عن التفكير المزدوج. 2. نشاط نظارة الفكرة: النظر للموقف الصعب من زوايا مختلفة. 3. تدريب استبدال كلمة (صعب) بـ (يتطلب جهداً).', 'تدوين ثلاثة أفكار سلبية واجهت الطالب وتفنيدها منطقياً.')" class="p-4 bg-gradient-to-br from-green-50 to-emerald-100/60 rounded-2xl border border-green-300 shadow-sm cursor-pointer hover:border-green-600 hover:shadow-md transition-all">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <span class="text-xs font-bold text-green-700 bg-green-200 px-2 py-0.5 rounded">الجلسة الإرشادية الشهريّة المعتمدة (اضغط للتفاصيل الكاملة)</span>
-                            <h3 class="font-bold text-green-900 text-lg mt-1">العنوان: قوة التفكير الإيجابي وإعادة التأطير</h3>
-                        </div>
-                        <span class="text-green-700 font-bold text-xl">🔍</span>
-                    </div>
-                    <p class="text-gray-700 text-xs md:text-sm mt-2"><strong>الهدف:</strong> تطوير المرونة المعرفية ومواجهة النظرة التشاؤمية تجاه الدراسة.</p>
-                </div>
-                <div class="space-y-2 text-xs md:text-sm">
-                    <h4 class="font-bold text-green-900">المهام التنفيذية للشهر:</h4>
-                    <ul class="list-disc list-inside space-y-2 text-gray-700 leading-relaxed bg-gray-50 p-3 rounded-xl border border-gray-200">
-                        <li>استمرار تنفيذ جلسات البرامج المعتمدة (متفوقين، متأخرين، موهوبين، دمج) وفق الجداول الزمنيّة.</li>
-                        <li>تفعيل برنامج الوقاية من التدخين والإدمان "فواصل" والتوعية بمخاطر الشاشات.</li>
-                        <li>متابعة حالات تعديل السلوك الفردية وإجراء المقابلات الإرشادية مع أولياء الأمور.</li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- الشريحة 4: ديسمبر -->
-            <div class="slide space-y-4">
-                <div class="flex justify-between items-center border-b-2 border-green-500 pb-2">
-                    <h2 class="text-xl md:text-2xl font-bold text-green-800">خطة شهر ديسمبر - سجل الازدهار النفسي</h2>
-                    <span class="bg-green-100 text-green-800 text-xs px-3 py-1 rounded-full font-bold shadow-sm">الاستعداد والتهيئة للاختبارات</span>
-                </div>
-                <div onclick="openDetailedModal('الامتحانات بثقة وهدوء', 'خفض مستوى قلق الامتحان واكتساب مهارات التنظيم والتركيز أثناء الاستذكار.', 'الاسترخاء العضلي والتنفسي، جدولة المهام، الإزالة التنافسية للقلق.', '1. شرح قانون القلق والتحصيل (منحنى يركيز-دودسون). 2. تطبيق جلسة استرخاء تنفسي جماعية. 3. إعداد مصفوفة أولوية الاستذكار وتحضير الجدول الموزان.', 'تطبيق تقنية بومودورو (25 دقيقة ذاكرة + 5 دقائق راحة) وتسجيل الإنجاز.')" class="p-4 bg-gradient-to-br from-green-50 to-emerald-100/60 rounded-2xl border border-green-300 shadow-sm cursor-pointer hover:border-green-600 hover:shadow-md transition-all">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <span class="text-xs font-bold text-green-700 bg-green-200 px-2 py-0.5 rounded">الجلسة الإرشادية الشهريّة المعتمدة (اضغط للتفاصيل الكاملة)</span>
-                            <h3 class="font-bold text-green-900 text-lg mt-1">العنوان: الامتحانات بثقة وهدوء</h3>
-                        </div>
-                        <span class="text-green-700 font-bold text-xl">🔍</span>
-                    </div>
-                    <p class="text-gray-700 text-xs md:text-sm mt-2"><strong>الهدف:</strong> إدارة ضغوط الامتحانات واكتساب عادات المذاكرة الذكية.</p>
-                </div>
-                <div class="space-y-2 text-xs md:text-sm">
-                    <h4 class="font-bold text-green-900">المهام التنفيذية للشهر:</h4>
-                    <ul class="list-disc list-inside space-y-2 text-gray-700 leading-relaxed bg-gray-50 p-3 rounded-xl border border-gray-200">
-                        <li>تنفيذ ورش عمل وقائية مكثفة للحد من قلق الامتحان لجميع الفصول.</li>
-                        <li>تقديم جلسات دعم نفسي واستثنائي لطلاب الدمج والمتأخرين دراسياً قبل امتحانات الفصل الأول.</li>
-                        <li>فحص وتقييم مؤشرات الانجاز للبرامج التنموية المنفذة خلال النصف الأول.</li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- الشريحة 5: يناير وفبراير -->
-            <div class="slide space-y-4">
-                <div class="flex justify-between items-center border-b-2 border-green-500 pb-2">
-                    <h2 class="text-xl md:text-2xl font-bold text-green-800">خطة شهري يناير وفبراير - سجل الازدهار النفسي</h2>
-                    <span class="bg-green-100 text-green-800 text-xs px-3 py-1 rounded-full font-bold shadow-sm">التقييم وانطلاقة الفصل الثاني</span>
-                </div>
-                <div onclick="openDetailedModal('التعامل مع الضغوط والتكيّف', 'إكساب الطالب مهارة التعرف على مصادر الضغوط وتطبيق استراتيجيات المواجهة الفعالة.', 'حل المشكلات، التعبير الكتابي، تنظيم الأولويات.', '1. مناقشة أنواع الضغوط (أكاديمية، أسرية، اجتماعية). 2. تطبيق نموذج حل المشكلات في 5 خطوات. 3. تدريب تفريغ الضغوط عبر الكتابة الحرة.', 'إعداد خطة توازن أسبوعية تشمل المذاكرة، الرياضة، والراحة النفسية.')" class="p-4 bg-gradient-to-br from-green-50 to-emerald-100/60 rounded-2xl border border-green-300 shadow-sm cursor-pointer hover:border-green-600 hover:shadow-md transition-all">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <span class="text-xs font-bold text-green-700 bg-green-200 px-2 py-0.5 rounded">الجلسة الإرشادية الشهريّة المعتمدة (اضغط للتفاصيل الكاملة)</span>
-                            <h3 class="font-bold text-green-900 text-lg mt-1">العنوان: التعامل مع الضغوط والتكيّف</h3>
-                        </div>
-                        <span class="text-green-700 font-bold text-xl">🔍</span>
-                    </div>
-                    <p class="text-gray-700 text-xs md:text-sm mt-2"><strong>الهدف:</strong> استعادة التوازن النفسي والتهيؤ الذهني للفصل الدراسي الثاني.</p>
-                </div>
-                <div class="space-y-2 text-xs md:text-sm">
-                    <h4 class="font-bold text-green-900">المهام التنفيذية للشهرين:</h4>
-                    <ul class="list-disc list-inside space-y-2 text-gray-700 leading-relaxed bg-gray-50 p-3 rounded-xl border border-gray-200">
-                        <li>متابعة سير لجنة التهيئة النفسية أثناء اختبارات الفصل الدراسي الأول.</li>
-                        <li>إعداد التقرير التقييمي النصف سنوي وإرساله للتوجيه الفني للتربية النفسية.</li>
-                        <li>استقبال الطلاب الجدد وحصر أي حالات طارئة تحتاج إلى تدخل إرشادي مع بداية الترم الثاني.</li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- الشريحة 6: مارس -->
-            <div class="slide space-y-4">
-                <div class="flex justify-between items-center border-b-2 border-green-500 pb-2">
-                    <h2 class="text-xl md:text-2xl font-bold text-green-800">خطة شهر مارس - سجل الازدهار النفسي</h2>
-                    <span class="bg-green-100 text-green-800 text-xs px-3 py-1 rounded-full font-bold shadow-sm">النمو والانضباط السلوكي</span>
-                </div>
-                <div onclick="openDetailedModal('الثقة بالنفس والتواصل التوكيدي', 'تنمية مهارة التوكيدية والقدرة على رفض الضغوط السلبية بدون خجل أو عدوانية.', 'التوكيد الذاتي، لعب الأدوار، النمذجة الإيجابية.', '1. الفرق بين السلوك الخجول، العدواني، والتوكيدي. 2. تطبيق أسلوب (الشريط المكسور) لرفض السلوكيات الخاطئة. 3. تدريبات لغة الجسد الواثقة.', 'تطبيق مهارة رفض طلب غير مناسب بثقة ولباقة وتسجيل الموقف.')" class="p-4 bg-gradient-to-br from-green-50 to-emerald-100/60 rounded-2xl border border-green-300 shadow-sm cursor-pointer hover:border-green-600 hover:shadow-md transition-all">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <span class="text-xs font-bold text-green-700 bg-green-200 px-2 py-0.5 rounded">الجلسة الإرشادية الشهريّة المعتمدة (اضغط للتفاصيل الكاملة)</span>
-                            <h3 class="font-bold text-green-900 text-lg mt-1">العنوان: الثقة بالنفس والتواصل التوكيدي</h3>
-                        </div>
-                        <span class="text-green-700 font-bold text-xl">🔍</span>
-                    </div>
-                    <p class="text-gray-700 text-xs md:text-sm mt-2"><strong>الهدف:</strong> بناء الحصانة النفسية لمواجهة ضغوط الأقران والتنمر.</p>
-                </div>
-                <div class="space-y-2 text-xs md:text-sm">
-                    <h4 class="font-bold text-green-900">المهام التنفيذية للشهر:</h4>
-                    <ul class="list-disc list-inside space-y-2 text-gray-700 leading-relaxed bg-gray-50 p-3 rounded-xl border border-gray-200">
-                        <li>تفعيل جلسات التوعية بأهمية الأسرة والتوافق الأسري ونبذ العنف المدرسى.</li>
-                        <li>استكمال برنامج الموهوبين والمتفوقين وتنفيذ المعارض والتطبيقات الميدانية.</li>
-                        <li>إجراء ندوات توعوية حول حماية النفس والوقاية من السلوكيات الخطرة.</li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- الشريحة 7: أبريل ومايو -->
-            <div class="slide space-y-4">
-                <div class="flex justify-between items-center border-b-2 border-green-500 pb-2">
-                    <h2 class="text-xl md:text-2xl font-bold text-green-800">خطة شهري أبريل ومايو - سجل الازدهار النفسي</h2>
-                    <span class="bg-green-100 text-green-800 text-xs px-3 py-1 rounded-full font-bold shadow-sm">الختام والحصاد السنوي</span>
-                </div>
-                <div onclick="openDetailedModal('أنا مسؤول عن قراراتي ومستقبلي', 'تعزيز المبادرة وتحمل المسؤولية الذاتية تجاه القرارات المصيرية والتعليمية.', 'شجرة القرارات، تحليل النتائج، لعب الأدوار.', '1. مناقشة مفهوم المسؤولية الشخصية. 2. نشاط تحليل البدائل والنتائج المترتبة على كل قرار. 3. كتابة وثيقة التعهد الذاتي بتحقيق الأهداف.', 'رسم رؤية شخصية مكتوبة للعام الدراسي القادم.')" class="p-4 bg-gradient-to-br from-green-50 to-emerald-100/60 rounded-2xl border border-green-300 shadow-sm cursor-pointer hover:border-green-600 hover:shadow-md transition-all">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <span class="text-xs font-bold text-green-700 bg-green-200 px-2 py-0.5 rounded">الجلسة الإرشادية الشهريّة المعتمدة (اضغط للتفاصيل الكاملة)</span>
-                            <h3 class="font-bold text-green-900 text-lg mt-1">العنوان: أنا مسؤول عن قراراتي ومستقبلي</h3>
-                        </div>
-                        <span class="text-green-700 font-bold text-xl">🔍</span>
-                    </div>
-                    <p class="text-gray-700 text-xs md:text-sm mt-2"><strong>الهدف:</strong> بناء الاستقلالية والتحضير النفسي للانتقال للمرحلة التالية.</p>
-                </div>
-                <div class="space-y-2 text-xs md:text-sm">
-                    <h4 class="font-bold text-green-900">المهام التنفيذية للشهرين:</h4>
-                    <ul class="list-disc list-inside space-y-2 text-gray-700 leading-relaxed bg-gray-50 p-3 rounded-xl border border-gray-200">
-                        <li>توفير التهيئة النفسية النهائية قبل اختبارات نهاية العام وخفض القلق.</li>
-                        <li>إعداد التقرير السنوي الشامل لما تم إنجازه في البرامج الفردية والجماعية.</li>
-                        <li>تسليم كافة السجلات المكتملة للتوجيه الفني مع توصيات العام القادم.</li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- الشريحة 8: تحضير الجلسة المعتمد -->
-            <div class="slide space-y-4">
-                <div class="flex justify-between items-center border-b-2 border-green-500 pb-2">
-                    <h2 class="text-xl md:text-2xl font-bold text-green-800">نموذج تحضير جلسة إرشادية نفسية معتمدة 📝</h2>
-                    <span class="bg-green-700 text-white text-xs px-3 py-1 rounded-full font-bold shadow-sm">نموذج توثيق معتمد</span>
-                </div>
-
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-2 text-xs md:text-sm">
-                    <div class="p-2.5 bg-green-50 border border-green-200 rounded-xl"><span class="font-bold text-green-800 block">عنوان الجلسة:</span> تقدير الذات والتوكيد</div>
-                    <div class="p-2.5 bg-green-50 border border-green-200 rounded-xl"><span class="font-bold text-green-800 block">الفئة المستهدفة:</span> طلاب المرحلة الثانوية</div>
-                    <div class="p-2.5 bg-green-50 border border-green-200 rounded-xl"><span class="font-bold text-green-800 block">زمن الجلسة:</span> 45 دقيقة</div>
-                    <div class="p-2.5 bg-green-50 border border-green-200 rounded-xl"><span class="font-bold text-green-800 block">مكان التنفيذ:</span> غرفة التربية النفسية</div>
-                </div>
-
-                <div class="space-y-2.5 text-xs md:text-sm">
-                    <div class="p-3 bg-white border-r-4 border-green-600 shadow-sm rounded-lg">
-                        <h3 class="font-bold text-green-900 text-sm md:text-base">1. الأهداف الإجرائية للجلسة:</h3>
-                        <p class="text-gray-700 mt-1">• أن يحدد الطالب نقطتي قوة في شخصيته بدقة. • أن يطبق فنية إعادة البناء المعرفي على موقف سلبي شخصي.</p>
-                    </div>
-
-                    <div class="p-3 bg-white border-r-4 border-green-600 shadow-sm rounded-lg">
-                        <h3 class="font-bold text-green-900 text-sm md:text-base">2. الفنيات والأساليب الإرشادية:</h3>
-                        <p class="text-gray-700 mt-1">• المناقشة والحوار • النمذجة السلوكية • إعادة التشكيل المعرفي • الواجب المنزلي.</p>
-                    </div>
-
-                    <div class="p-3 bg-white border-r-4 border-green-600 shadow-sm rounded-lg">
-                        <h3 class="font-bold text-green-900 text-sm md:text-base">3. مراحل وسير الجلسة:</h3>
-                        <div class="text-gray-700 space-y-1 mt-1">
-                            <p><strong class="text-green-800">• المرحلة التمهيدية (7 دقائق):</strong> كسر الجليد ومراجعة الواجب السابق وتحديد هدف اليوم.</p>
-                            <p><strong class="text-green-800">• مرحلة العمل والأنشطة (28 دقيقة):</strong> تنفيذ تمرين استكشاف الذات ومناقشة التشوهات المعرفية.</p>
-                            <p><strong class="text-green-800">• المرحلة الختامية (10 دقائق):</strong> تلخيص المخرجات وتكليف الطلاب بالواجب المنزلي والتغذية الراجعة.</p>
-                        </div>
-                    </div>
-
-                    <div class="p-3 bg-white border-r-4 border-green-600 shadow-sm rounded-lg">
-                        <h3 class="font-bold text-green-900 text-sm md:text-base">4. أدوات التقييم والمتابعة:</h3>
-                        <p class="text-gray-700 mt-1">• بطاقة الملاحظة السلوكية المباشرة • استمارة التقييم الذاتي الموزعة نهاية الجلسة.</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- الشريحة 9: المتفوقون -->
-            <div class="slide space-y-4">
-                <div class="flex justify-between items-center border-b-2 border-green-500 pb-1">
-                    <h2 class="text-xl md:text-2xl font-bold text-green-800">برنامج المتفوقين المعتمد: "الفائقون... نحو التميز" 🌟</h2>
-                    <span class="text-xs text-green-700 font-semibold no-print">👈 اضغط على أي جلسة لعرض الشرح الشامل</span>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5 text-xs md:text-sm">
-                    <div onclick="openDetailedModal('1. أعرف قدراتي وميولي', 'اكتشاف الميول العلمية والقدرات الخاصة واستثمارها بكفاءة.', 'اختبار الميول، التحليل الذاتي رباعي الأبعاد SWOT.', '1. تطبيق استمارة الميول. 2. تحديد نقاط القوة والفرص المستقبلية. 3. مناقشة كيفية الاستفادة منها.', 'إعداد ملف إنجاز شخصي يحتوي أبرز النجاحات.')" class="p-3 border rounded-xl bg-green-50 border-green-300 hover:bg-green-100 cursor-pointer transition shadow-sm"><strong class="text-green-900 block text-base">1. أعرف قدراتي:</strong> تحديد نقاط القوة والميول الأكاديمية.</div>
-                    <div onclick="openDetailedModal('2. العقل المبدع والابتكار', 'تنمية مهارات التفكير غير التقليدي وتحليل المشكلات بمرونة.', 'العصف الذهني، استراتيجية SCAMPER.', '1. طرح مشكلة بيئية. 2. تطبيق خطوات التفكير الابتكاري لحلها. 3. تقييم الأفكار المطروحة.', 'تطوير فكرة أداة أو تطبيق يخدم المدرسة.')" class="p-3 border rounded-xl bg-green-50 border-green-300 hover:bg-green-100 cursor-pointer transition shadow-sm"><strong class="text-green-900 block text-base">2. العقل المبدع:</strong> مهارات التفكير التباعدي والابتكار.</div>
-                    <div onclick="openDetailedModal('3. قائد المستقبل والمبادرة', 'غرس المهارات القيادية وحسن اتخاذ القرار والمبادرة.', 'لعب الأدوار، النمذجة القيادية.', '1. محاكاة قيادة فريق عمل. 2. مناقشة صفات القائد الإيجابي. 3. توزيع أدوار ميدانية.', 'إدارة نشاط أو ورشة عمل صغيرة للزملاء.')" class="p-3 border rounded-xl bg-green-50 border-green-300 hover:bg-green-100 cursor-pointer transition shadow-sm"><strong class="text-green-900 block text-base">3. قائد المستقبل:</strong> تنمية الذكاء القيادي والمبادرة.</div>
-                    <div onclick="openDetailedModal('4. التخطيط وإدارة الوقت', 'إتقان استراتيجيات إدارة الوقت والتخطيط للأهداف الأكاديمية العالية.', 'مصفوفة إيزنهاور للأولويات.', '1. تصنيف المهام إلى (مهم/عاجل). 2. رسم جدول المذاكرة المتوازن. 3. تجنب التسويف.', 'التزام بتطبيق جدول الأولويات لمدة أسبوع كامل.')" class="p-3 border rounded-xl bg-green-50 border-green-300 hover:bg-green-100 cursor-pointer transition shadow-sm"><strong class="text-green-900 block text-base">4. إدارة الوقت:</strong> مصفوفة الأولويات والتخطيط.</div>
-                </div>
-            </div>
-
-            <!-- الشريحة 10: المتأخرون دراسياً -->
-            <div class="slide space-y-4">
-                <div class="flex justify-between items-center border-b-2 border-green-500 pb-1">
-                    <h2 class="text-xl md:text-2xl font-bold text-green-800">برنامج المتأخرين دراسياً: "خطوة نحو التفوق" 📈</h2>
-                    <span class="text-xs text-amber-700 font-semibold no-print">👈 اضغط على أي جلسة لعرض الشرح الشامل</span>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5 text-xs md:text-sm">
-                    <div onclick="openDetailedModal('1. بداية جديدة وبناء الثقة', 'كسر حاجز الشعور بالفشل وتحديد الأسباب الحقيقية للتأخر الدراسي.', 'المقابلة الداعمة، استبيان تشخيص الأسباب.', '1. تطبيق استبيان أسباب التأخر. 2. مناقشة أن الفشل هو خطوة للتعلم. 3. وضع اهداف صغيرة سهلة التحقيق.', 'تحديد مادة دراسية واحدة للبدء بتحسين درجتها.')" class="p-3 border rounded-xl bg-amber-50 border-amber-300 hover:bg-amber-100 cursor-pointer transition shadow-sm"><strong class="text-amber-900 block text-base">1. بداية جديدة:</strong> بناء الثقة وتحديد أسباب التأخر.</div>
-                    <div onclick="openDetailedModal('2. أتعلم بذكاء ولا تحفظ فقط', 'تدريب الطالب على مهارات التلخيص واستخراج الأفكار الرئيسية.', 'خرائط المفاهيم، التظليل الذكي.', '1. إحضار درس من المنهج. 2. تدريب عملي على تحويل الفقرات إلى خريطة ذهنية بسيطة.', 'تحويل درس كامل إلى خريطة مفاهيم ملونة.')" class="p-3 border rounded-xl bg-amber-50 border-amber-300 hover:bg-amber-100 cursor-pointer transition shadow-sm"><strong class="text-amber-900 block text-base">2. أتعلم بذكاء:</strong> استراتيجيات الخرائط الذهنية والتلخيص.</div>
-                    <div onclick="openDetailedModal('3. ركز تنجح (تنمية الانتباه)', 'التغلب على التشتت الذهني وزيادة مدة التركيز أثناء المذاكرة.', 'تمارين التركيز البصري، إبعاد المشتتات.', '1. تحديد المشتتات الداخلية والخارجية. 2. تطبيق تمرين التركيز بالنقطة. 3. تنظيم بيئة الاستذكار.', 'تهيئة مكان المذاكرة بالبيت وإزالة المشتتات منه.')" class="p-3 border rounded-xl bg-amber-50 border-amber-300 hover:bg-amber-100 cursor-pointer transition shadow-sm"><strong class="text-amber-900 block text-base">3. ركز تنجح:</strong> زيادة التركيز والتغلب على التشتت.</div>
-                    <div onclick="openDetailedModal('4. الدافعية نحو الإنجاز', 'ربط التعليم بأهداف حياتية ومهنية ملموسة لزيادة الرغبة في الاستذكار.', 'المقابلة الدافعية، شجرة الأحلام.', '1. رسم شجرة الهدف المهني المستقبلي. 2. مناقشة العلاقة بين المذاكرة اليومية وتحقيق الهدف.', 'تعليق صورة الهدف المستقبلي أمام مكتب المذاكرة.')" class="p-3 border rounded-xl bg-amber-50 border-amber-300 hover:bg-amber-100 cursor-pointer transition shadow-sm"><strong class="text-amber-900 block text-base">4. الدافعية للتعلم:</strong> بناء الشغف وربط التعليم بالهدف.</div>
-                </div>
-            </div>
-
-            <!-- الشريحة 11: الموهوبون -->
-            <div class="slide space-y-4">
-                <div class="flex justify-between items-center border-b-2 border-green-500 pb-1">
-                    <h2 class="text-xl md:text-2xl font-bold text-green-800">برنامج الموهوبين المعتمد: "موهبتي... نحو الإنجاز" 🎨</h2>
-                    <span class="text-xs text-blue-700 font-semibold no-print">👈 اضغط على أي جلسة لعرض الشرح الشامل</span>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5 text-xs md:text-sm">
-                    <div onclick="openDetailedModal('1. اكتشف موهبتك وأبرزها', 'استكشاف وتحديد مجال الموهبة الفعلي (أدبي، فني، علمي، قيادي).', 'مقاييس الموهبة، العروض المباشرة.', '1. تقديم كل طالب لعرض مصغر عن موهبته. 2. تقديم تغذية راجعة داعمة من الأخصائي.', 'إعداد نموذج عملي أو نتاج لموهبته للعرض.')" class="p-3 border rounded-xl bg-blue-50 border-blue-300 hover:bg-blue-100 cursor-pointer transition shadow-sm"><strong class="text-blue-900 block text-base">1. اكتشف موهبتك:</strong> تحديد نوع الموهبة وإبرازها.</div>
-                    <div onclick="openDetailedModal('2. تحويل الموهبة لمشروع', 'إكساب الطالب مهارة التخطيط والتنفيذ لتطوير موهبته إلى إنتاج ملموس.', 'التخطيط التنفيذي، إدارة المشاريع المصغرة.', '1. وضع خطة زمنية لتطوير الموهبة. 2. تحديد المستلزمات المطلوبة وكيفية توفيرها.', 'البدء بتنفيذ المشروع المعتمد للموهبة.')" class="p-3 border rounded-xl bg-blue-50 border-blue-300 hover:bg-blue-100 cursor-pointer transition shadow-sm"><strong class="text-blue-900 block text-base">2. الموهبة لمشروع:</strong> التخطيط وتحويل الفكرة لمنتج.</div>
-                </div>
-            </div>
-
-            <!-- الشريحة 12: برنامج الدمج -->
-            <div class="slide space-y-4">
-                <div class="flex justify-between items-center border-b-2 border-green-500 pb-1">
-                    <h2 class="text-xl md:text-2xl font-bold text-green-800">برنامج لطلبة الدمج: "معاً نتعلم.. معاً ننجح" 🤝</h2>
-                    <span class="text-xs text-purple-700 font-semibold no-print">👈 اضغط على أي جلسة لعرض الشرح الشامل</span>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5 text-xs md:text-sm">
-                    <div onclick="openDetailedModal('1. أنا مميز ومقبول', 'تعزيز تقبل الذات والشعور بالأمان والانتماء للمجتمع المدرسي.', 'التعزيز الإيجابي المباشر، اللعب التفاعلي.', '1. نشاط بصمة التميز. 2. الاستماع لأفكار الطالب وتشجيعه. 3. توزيع وسام التميز.', 'مشاركة صورة عن إنجازه مع الأسرة.')" class="p-3 border rounded-xl bg-purple-50 border-purple-300 hover:bg-purple-100 cursor-pointer transition shadow-sm"><strong class="text-purple-900 block text-base">1. أنا مميز:</strong> تعزيز تقبل الذات والانتماء.</div>
-                    <div onclick="openDetailedModal('2. التعبير عن الاحتياج والطلب', 'تدريب الطالب على طلب المساعدة والتعبير عن مشاعره بأسلوب مقبول.', 'لعب الأدوار، البطاقات المصورة.', '1. استخدام كروت المشاعر المصورة. 2. التدريب على عبارة (أحتاج مساعدة من فضلك).', 'تطبيق مهارة طلب المساعدة بالفصل عند الحاجة.')" class="p-3 border rounded-xl bg-purple-50 border-purple-300 hover:bg-purple-100 cursor-pointer transition shadow-sm"><strong class="text-purple-900 block text-base">2. التعبير والطلب:</strong> تدريب على مهارات التواصل الأساسية.</div>
+                    <p class="text-gray-700 text-xs md:text-sm mt-2"><strong>الهدف:</strong> <span class="editable">بناء التفكير الإيجابي وتنمية تقدير الذات لمواجهة ضغوط بداية العام الدراسي.</span></p>
                 </div>
             </div>
 
             <!-- أزرار التنقل السفلية -->
             <div class="flex justify-between items-center pt-3 border-t border-gray-200 mt-3 no-print">
-                <button onclick="prevSlide()" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-5 rounded-xl transition text-xs md:text-sm shadow-sm active:scale-95">السابق</button>
-                <span id="slide-number" class="text-xs md:text-sm font-bold text-green-800 bg-green-100 px-3 py-1 rounded-full">1 / 13</span>
-                <button onclick="nextSlide()" class="bg-green-700 hover:bg-green-800 text-white font-bold py-2 px-5 rounded-xl transition text-xs md:text-sm shadow-md active:scale-95">التالي</button>
+                <button onclick="prevSlide()" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-5 rounded-xl transition text-xs md:text-sm shadow-sm">السابق</button>
+                <span id="slide-number" class="text-xs md:text-sm font-bold text-green-800 bg-green-100 px-3 py-1 rounded-full">1 / 9</span>
+                <button onclick="nextSlide()" class="bg-green-700 hover:bg-green-800 text-white font-bold py-2 px-5 rounded-xl transition text-xs md:text-sm shadow-md">التالي</button>
             </div>
 
         </div>
     </main>
 
-    <!-- النافذة المنبثقة التفاعلية التفصيلية للمحتوى والجلسات -->
-    <div id="sessionModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3 no-print">
-        <div class="bg-white rounded-3xl p-5 md:p-6 max-w-xl w-full shadow-2xl border-2 border-green-600 relative space-y-3 my-auto max-h-[90vh] overflow-y-auto">
-            <button onclick="closeModal()" class="absolute top-4 left-4 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-full w-8 h-8 flex items-center justify-center font-bold text-lg transition">&times;</button>
-            
-            <h3 id="modalTitle" class="text-lg md:text-xl font-bold text-green-900 border-b-2 border-green-500 pb-2 pl-8">عنوان الجلسة المعتمدة</h3>
-            
-            <div class="space-y-2.5 text-xs md:text-sm">
-                <div class="bg-green-50 p-2.5 rounded-xl border border-green-200">
-                    <span class="font-bold text-green-900 block">🎯 الهدف التفصيلي من الجلسة:</span>
-                    <p id="modalGoal" class="mt-0.5 text-gray-800 leading-relaxed"></p>
-                </div>
-
-                <div class="bg-blue-50 p-2.5 rounded-xl border border-blue-200">
-                    <span class="font-bold text-blue-900 block">🛠️ الفنيات والأساليب الإرشادية المستخدمة:</span>
-                    <p id="modalTech" class="mt-0.5 text-gray-800 leading-relaxed"></p>
-                </div>
-
-                <div class="bg-amber-50 p-2.5 rounded-xl border border-amber-200">
-                    <span class="font-bold text-amber-900 block">📌 مراحل التنفيذ والأنشطة العملية:</span>
-                    <p id="modalPlan" class="mt-0.5 text-gray-800 leading-relaxed space-y-1"></p>
-                </div>
-
-                <div class="bg-purple-50 p-2.5 rounded-xl border border-purple-200">
-                    <span class="font-bold text-purple-900 block">🏠 الواجب المنزلي والتطبيق العلمي:</span>
-                    <p id="modalHomework" class="mt-0.5 text-gray-800 leading-relaxed"></p>
-                </div>
-            </div>
-
-            <button onclick="closeModal()" class="w-full bg-green-700 hover:bg-green-800 text-white font-bold py-2 rounded-xl transition text-xs md:text-sm shadow-md mt-2">إغلاق النافذة التفصيلية</button>
-        </div>
-    </div>
-
     <script>
+        // --- تهيئة Firebase (قاعدة بيانات سحابية مجانية ومفتوحة) ---
+        const firebaseConfig = {
+            databaseURL: "https://psychological-plan-default-rtdb.firebaseio.com/" // رابط مجاني للتخزين الفوري
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
         let currentSlide = 0;
         const slides = document.querySelectorAll('.slide');
         const tabs = document.querySelectorAll('.tab-btn');
         const slideNumber = document.getElementById('slide-number');
+        const syncStatus = document.getElementById('syncStatus');
+
+        // جلب البيانات تلقائياً من السحاب عند فتح الصفحة
+        window.onload = function() {
+            db.ref('planContent').on('value', (snapshot) => {
+                const data = snapshot.val();
+                if (data) {
+                    document.getElementById('editableArea').innerHTML = data;
+                    syncStatus.innerText = "☁️ متزامن مع السحاب";
+                    syncStatus.className = "text-xs font-bold text-emerald-800 bg-emerald-100 px-2 py-1 rounded-lg";
+                } else {
+                    syncStatus.innerText = "☁️ جاهز للتعديل";
+                }
+            });
+        };
+
+        // حفظ التعديلات في السحاب
+        function saveToCloud() {
+            syncStatus.innerText = "⏳ جاري الحفظ...";
+            const content = document.getElementById('editableArea').innerHTML;
+            
+            db.ref('planContent').set(content).then(() => {
+                alert('☁️ تم حفظ التعديلات بنجاح في السحاب! ستظهر عبر جميع الأجهزة.');
+                toggleEditMode();
+            }).catch((error) => {
+                alert('❌ حدث خطأ في الحفظ السحابي: ' + error.message);
+            });
+        }
 
         function showSlide(index) {
             slides[currentSlide].classList.remove('active');
@@ -450,10 +199,7 @@
             if (currentSlide < 0) currentSlide = slides.length - 1;
 
             slides[currentSlide].classList.add('active');
-            if(tabs[currentSlide]) {
-                tabs[currentSlide].classList.add('active');
-                tabs[currentSlide].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-            }
+            if(tabs[currentSlide]) tabs[currentSlide].classList.add('active');
 
             slideNumber.innerText = (currentSlide + 1) + " / " + slides.length;
         }
@@ -461,51 +207,27 @@
         function nextSlide() { showSlide(currentSlide + 1); }
         function prevSlide() { showSlide(currentSlide - 1); }
 
-        // فتح النافذة المنبثقة التفصيلية بالكامل
-        function openDetailedModal(title, goal, tech, plan, homework) {
-            document.getElementById('modalTitle').innerText = title;
-            document.getElementById('modalGoal').innerText = goal;
-            document.getElementById('modalTech').innerText = tech;
-            document.getElementById('modalPlan').innerText = plan;
-            document.getElementById('modalHomework').innerText = homework || "متابعة تطبيق المهارة المكتسبة داخل الفصل والمنزل.";
-            
-            document.getElementById('sessionModal').classList.remove('hidden');
+        let isEditMode = false;
+        function toggleEditMode() {
+            isEditMode = !isEditMode;
+            const editableElements = document.querySelectorAll('#editableArea .editable');
+            const editBtn = document.getElementById('editToggleBtn');
+            const saveBtn = document.getElementById('saveBtn');
+
+            editableElements.forEach(el => { el.contentEditable = isEditMode; });
+
+            if (isEditMode) {
+                document.body.classList.add('edit-mode-active');
+                editBtn.innerText = "❌ إلغاء";
+                editBtn.classList.replace('bg-amber-600', 'bg-red-600');
+                saveBtn.classList.remove('hidden');
+            } else {
+                document.body.classList.remove('edit-mode-active');
+                editBtn.innerText = "✏️ تعديل";
+                editBtn.classList.replace('bg-red-600', 'bg-amber-600');
+                saveBtn.classList.add('hidden');
+            }
         }
-
-        function closeModal() {
-            document.getElementById('sessionModal').classList.add('hidden');
-        }
-
-        // خاصية تغيير حجم الخط
-        let currentFontSize = 100;
-        function changeFontSize(delta) {
-            currentFontSize += delta * 5;
-            if(currentFontSize < 85) currentFontSize = 85;
-            if(currentFontSize > 125) currentFontSize = 125;
-            document.getElementById('mainContent').style.fontSize = currentFontSize + '%';
-        }
-
-        // خاصية البحث الفوري في الصفحة
-        function filterContent() {
-            let input = document.getElementById('searchInput').value.toLowerCase();
-            slides.forEach((slide, idx) => {
-                let text = slide.innerText.toLowerCase();
-                if (input !== "" && text.includes(input)) {
-                    showSlide(idx);
-                }
-            });
-        }
-
-        // إغلاق بالحاويات ولوحة المفاتيح
-        document.getElementById('sessionModal').addEventListener('click', function(e) {
-            if (e.target === this) closeModal();
-        });
-
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'ArrowLeft') nextSlide();
-            if (e.key === 'ArrowRight') prevSlide();
-            if (e.key === 'Escape') closeModal();
-        });
     </script>
 </body>
 </html>
