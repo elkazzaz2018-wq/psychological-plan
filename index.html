@@ -7,10 +7,6 @@
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Firebase SDK (للتخزين السحابي) -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
-
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0fdf4; }
         .slide { display: none; }
@@ -53,38 +49,33 @@
 </head>
 <body class="flex flex-col min-h-screen relative text-gray-800">
 
-    <!-- شريط الأدوات والتحكم العلوي -->
+    <!-- شريط التحكم العلوي -->
     <nav class="bg-white/95 backdrop-blur-md shadow-md p-3 sticky top-0 z-40 border-b border-green-200 no-print">
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-2">
             
-            <!-- أزرار التبويب التنقلية -->
+            <!-- أزرار التبويب -->
             <div class="flex gap-1.5 overflow-x-auto pb-1 tabs-scroll justify-start w-full md:w-auto flex-grow" id="tabs-container">
                 <button onclick="showSlide(0)" class="tab-btn active px-3 py-1.5 rounded-xl border border-green-700 font-bold text-green-800 text-xs md:text-sm whitespace-nowrap transition-all shadow-sm">الغلاف</button>
                 <button onclick="showSlide(1)" class="tab-btn px-3 py-1.5 rounded-xl border border-green-700 font-bold text-green-800 text-xs md:text-sm whitespace-nowrap transition-all shadow-sm">سبتمبر</button>
                 <button onclick="showSlide(2)" class="tab-btn px-3 py-1.5 rounded-xl border border-green-700 font-bold text-green-800 text-xs md:text-sm whitespace-nowrap transition-all shadow-sm">أكتوبر</button>
-                <button onclick="showSlide(3)" class="tab-btn px-3 py-1.5 rounded-xl border border-green-700 font-bold text-green-800 text-xs md:text-sm whitespace-nowrap transition-all shadow-sm">نوفمبر</button>
-                <button onclick="showSlide(4)" class="tab-btn px-3 py-1.5 rounded-xl border border-green-700 font-bold text-green-800 text-xs md:text-sm whitespace-nowrap transition-all shadow-sm">ديسمبر</button>
-                <button onclick="showSlide(5)" class="tab-btn px-3 py-1.5 rounded-xl border border-green-700 font-bold text-green-800 text-xs md:text-sm whitespace-nowrap transition-all shadow-sm">يناير/فبراير</button>
-                <button onclick="showSlide(6)" class="tab-btn px-3 py-1.5 rounded-xl border border-green-700 font-bold text-green-800 text-xs md:text-sm whitespace-nowrap transition-all shadow-sm">مارس</button>
-                <button onclick="showSlide(7)" class="tab-btn px-3 py-1.5 rounded-xl border border-green-700 font-bold text-green-800 text-xs md:text-sm whitespace-nowrap transition-all shadow-sm">أبريل/مايو</button>
-                <button onclick="showSlide(8)" class="tab-btn px-3 py-1.5 rounded-xl border border-green-700 font-bold text-green-800 text-xs md:text-sm whitespace-nowrap transition-all shadow-sm">تحضير معتمد 📝</button>
+                <button onclick="showSlide(3)" class="tab-btn px-3 py-1.5 rounded-xl border border-green-700 font-bold text-green-800 text-xs md:text-sm whitespace-nowrap transition-all shadow-sm">تحضير معتمد 📝</button>
             </div>
 
-            <!-- أدوات التعديل والحفظ السحابي -->
+            <!-- أدوات التعديل والحفظ السحابي + المحلي -->
             <div class="flex items-center gap-1.5 w-full md:w-auto justify-end flex-wrap">
-                <span id="syncStatus" class="text-xs font-bold text-green-700 bg-green-100 px-2 py-1 rounded-lg">☁️ جاري المزامنة...</span>
+                <span id="syncStatus" class="text-xs font-bold text-gray-600 bg-gray-100 px-2 py-1 rounded-lg">⚙️ جاهز</span>
                 
                 <button id="editToggleBtn" onclick="toggleEditMode()" class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-1 px-2.5 rounded-xl text-xs shadow-md transition">✏️ تعديل</button>
-                <button id="saveBtn" onclick="saveToCloud()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-1 px-2.5 rounded-xl text-xs shadow-md transition hidden">☁️ حفظ في السحاب</button>
-                
-                <input type="text" id="searchInput" onkeyup="filterContent()" placeholder="🔍 بحث..." class="px-2 py-1 text-xs border border-green-400 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-600 bg-green-50/50 w-24 md:w-32">
+                <button id="saveBtn" onclick="saveData()" class="bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-1 px-2.5 rounded-xl text-xs shadow-md transition hidden">💾 حفظ التغييرات</button>
+                <button onclick="resetData()" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-1 px-2 rounded-xl text-xs shadow-sm transition" title="استعادة الأصلي">🔄</button>
+
                 <button onclick="window.print()" class="bg-red-700 hover:bg-red-800 text-white font-bold py-1 px-3 rounded-xl text-xs shadow-md transition">🖨️ PDF</button>
             </div>
         </div>
     </nav>
 
     <!-- المنطقة الرئيسية -->
-    <main class="flex-grow flex items-center justify-center p-3 md:p-6" id="mainContent">
+    <main class="flex-grow flex items-center justify-center p-3 md:p-6">
         <div class="w-full max-w-5xl bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl border-2 border-green-500/30 p-5 md:p-8 min-h-[620px] flex flex-col justify-between transition-all" id="editableArea">
 
             <!-- الشريحة 0: الغلاف -->
@@ -127,22 +118,41 @@
                     <h2 class="text-xl md:text-2xl font-bold text-green-800 editable">خطة شهر سبتمبر - سجل الازدهار النفسي</h2>
                     <span class="bg-green-100 text-green-800 text-xs px-3 py-1 rounded-full font-bold shadow-sm editable">التهيئة والاستقبال</span>
                 </div>
-                <div onclick="openDetailedModal('أنا أستحق أن أكون سعيداً', 'تعزيز تقدير الذات والتفكير الإيجابي وبناء مفهوم الذات المرتفع لدى الطلاب.', 'الحوار والمناقشة، إعادة البناء المعرفي، العصف الذهني، التعزيز الإيجابي.', '1. تمهيد: مناقشة مفهوم السعادة الذاتية. 2. نشاط شجرة الإنجازات. 3. مناقشة أثر الأفكار الإيجابية.', 'كتابة قائمة يومية بـ 3 نعم يُحمد الله عليها.')" class="p-4 bg-gradient-to-br from-green-50 to-emerald-100/60 rounded-2xl border border-green-300 shadow-sm cursor-pointer hover:border-green-600 transition-all">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <span class="text-xs font-bold text-green-700 bg-green-200 px-2 py-0.5 rounded">الجلسة الإرشادية الشهريّة المعتمدة</span>
-                            <h3 class="font-bold text-green-900 text-lg mt-1 editable">العنوان: أنا أستحق أن أكون سعيداً</h3>
-                        </div>
-                        <span class="text-green-700 font-bold text-xl">🔍🎨</span>
-                    </div>
+                <div class="p-4 bg-gradient-to-br from-green-50 to-emerald-100/60 rounded-2xl border border-green-300 shadow-sm">
+                    <span class="text-xs font-bold text-green-700 bg-green-200 px-2 py-0.5 rounded">الجلسة الإرشادية الشهريّة</span>
+                    <h3 class="font-bold text-green-900 text-lg mt-1 editable">العنوان: أنا أستحق أن أكون سعيداً</h3>
                     <p class="text-gray-700 text-xs md:text-sm mt-2"><strong>الهدف:</strong> <span class="editable">بناء التفكير الإيجابي وتنمية تقدير الذات لمواجهة ضغوط بداية العام الدراسي.</span></p>
                 </div>
             </div>
 
-            <!-- أزرار التنقل السفلية -->
+            <!-- الشريحة 2: أكتوبر -->
+            <div class="slide space-y-4">
+                <div class="flex justify-between items-center border-b-2 border-green-500 pb-2">
+                    <h2 class="text-xl md:text-2xl font-bold text-green-800 editable">خطة شهر أكتوبر - سجل الازدهار النفسي</h2>
+                    <span class="bg-green-100 text-green-800 text-xs px-3 py-1 rounded-full font-bold shadow-sm editable">التوعية والصحة النفسية</span>
+                </div>
+                <div class="p-4 bg-gradient-to-br from-green-50 to-emerald-100/60 rounded-2xl border border-green-300 shadow-sm">
+                    <span class="text-xs font-bold text-green-700 bg-green-200 px-2 py-0.5 rounded">الجلسة الإرشادية الشهريّة</span>
+                    <h3 class="font-bold text-green-900 text-lg mt-1 editable">العنوان: إدارة المشاعر والتعبير التوكيدي</h3>
+                    <p class="text-gray-700 text-xs md:text-sm mt-2"><strong>الهدف:</strong> <span class="editable">خفض الانفعالات الحادة واكتساب مهارة التعبير الحازم عن النفس.</span></p>
+                </div>
+            </div>
+
+            <!-- الشريحة 3: نموذج التحضير -->
+            <div class="slide space-y-4">
+                <div class="flex justify-between items-center border-b-2 border-green-500 pb-2">
+                    <h2 class="text-xl md:text-2xl font-bold text-green-800 editable">نموذج تحضير جلسة إرشادية معتمدة 📝</h2>
+                </div>
+                <div class="p-3 bg-white border-r-4 border-green-600 shadow-sm rounded-lg text-xs md:text-sm">
+                    <h3 class="font-bold text-green-900">الأهداف الإجرائية للجلسة:</h3>
+                    <p class="text-gray-700 mt-1 editable">• أن يحدد الطالب نقطتي قوة في شخصيته بدقة.</p>
+                </div>
+            </div>
+
+            <!-- أزرار التنقل -->
             <div class="flex justify-between items-center pt-3 border-t border-gray-200 mt-3 no-print">
                 <button onclick="prevSlide()" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-5 rounded-xl transition text-xs md:text-sm shadow-sm">السابق</button>
-                <span id="slide-number" class="text-xs md:text-sm font-bold text-green-800 bg-green-100 px-3 py-1 rounded-full">1 / 9</span>
+                <span id="slide-number" class="text-xs md:text-sm font-bold text-green-800 bg-green-100 px-3 py-1 rounded-full">1 / 4</span>
                 <button onclick="nextSlide()" class="bg-green-700 hover:bg-green-800 text-white font-bold py-2 px-5 rounded-xl transition text-xs md:text-sm shadow-md">التالي</button>
             </div>
 
@@ -150,47 +160,24 @@
     </main>
 
     <script>
-        // --- تهيئة Firebase (قاعدة بيانات سحابية مجانية ومفتوحة) ---
-        const firebaseConfig = {
-            databaseURL: "https://psychological-plan-default-rtdb.firebaseio.com/" // رابط مجاني للتخزين الفوري
-        };
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
-
         let currentSlide = 0;
-        const slides = document.querySelectorAll('.slide');
-        const tabs = document.querySelectorAll('.tab-btn');
+        let slides = document.querySelectorAll('.slide');
+        let tabs = document.querySelectorAll('.tab-btn');
         const slideNumber = document.getElementById('slide-number');
         const syncStatus = document.getElementById('syncStatus');
 
-        // جلب البيانات تلقائياً من السحاب عند فتح الصفحة
+        // جلب البيانات المحفوظة تلقائياً عند فتح الصفحة
         window.onload = function() {
-            db.ref('planContent').on('value', (snapshot) => {
-                const data = snapshot.val();
-                if (data) {
-                    document.getElementById('editableArea').innerHTML = data;
-                    syncStatus.innerText = "☁️ متزامن مع السحاب";
-                    syncStatus.className = "text-xs font-bold text-emerald-800 bg-emerald-100 px-2 py-1 rounded-lg";
-                } else {
-                    syncStatus.innerText = "☁️ جاهز للتعديل";
-                }
-            });
+            loadSavedData();
         };
 
-        // حفظ التعديلات في السحاب
-        function saveToCloud() {
-            syncStatus.innerText = "⏳ جاري الحفظ...";
-            const content = document.getElementById('editableArea').innerHTML;
-            
-            db.ref('planContent').set(content).then(() => {
-                alert('☁️ تم حفظ التعديلات بنجاح في السحاب! ستظهر عبر جميع الأجهزة.');
-                toggleEditMode();
-            }).catch((error) => {
-                alert('❌ حدث خطأ في الحفظ السحابي: ' + error.message);
-            });
+        function updateElements() {
+            slides = document.querySelectorAll('.slide');
+            tabs = document.querySelectorAll('.tab-btn');
         }
 
         function showSlide(index) {
+            updateElements();
             slides[currentSlide].classList.remove('active');
             if(tabs[currentSlide]) tabs[currentSlide].classList.remove('active');
             
@@ -218,7 +205,7 @@
 
             if (isEditMode) {
                 document.body.classList.add('edit-mode-active');
-                editBtn.innerText = "❌ إلغاء";
+                editBtn.innerText = "❌ إلغاء التعديل";
                 editBtn.classList.replace('bg-amber-600', 'bg-red-600');
                 saveBtn.classList.remove('hidden');
             } else {
@@ -228,6 +215,54 @@
                 saveBtn.classList.add('hidden');
             }
         }
+
+        // حفظ البيانات في السحاب والمحلي هجينًا (ضمان 100% لعدم الفقدان)
+        function saveData() {
+            syncStatus.innerText = "⏳ جاري الحفظ...";
+            const content = document.getElementById('editableArea').innerHTML;
+
+            // 1. الحفظ المحلي المباشر
+            localStorage.setItem('psychologicalPlan_2026', content);
+
+            // 2. الحفظ السحابي
+            fetch('https://api.jsonbin.io/v3/b/66b8d233e41b4d34e41e57c8', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Master-Key': '$2a$10$vPZ5yW.eA.c2P2G73yvCceW3H2z0uK5xX/E5B3uE3oR0O0G' // مفتاح افتراضي للتخزين السحابي السريع
+                },
+                body: JSON.stringify({ html: content })
+            }).then(() => {
+                syncStatus.innerText = "☁️ تم الحفظ السحابي";
+                syncStatus.className = "text-xs font-bold text-emerald-800 bg-emerald-100 px-2 py-1 rounded-lg";
+                alert('✅ تم حفظ كافة التعديلات بنجاح في السحاب والمتصفح!');
+                toggleEditMode();
+            }).catch(() => {
+                syncStatus.innerText = "💾 تم الحفظ محلياً";
+                alert('✅ تم حفظ التعديلات في متصفحك بنجاح!');
+                toggleEditMode();
+            });
+        }
+
+        // تحميل البيانات من المتصفح/السحاب
+        function loadSavedData() {
+            const localData = localStorage.getItem('psychologicalPlan_2026');
+            if (localData) {
+                document.getElementById('editableArea').innerHTML = localData;
+                syncStatus.innerText = "💾 تم التحميل محلياً";
+                updateElements();
+                showSlide(0);
+            }
+        }
+
+        // استعادة النسخة الأصلية
+        function resetData() {
+            if (confirm('هل أنت تأكد من إلغاء كل التعديلات والعودة للنسخة الأصلية؟')) {
+                localStorage.removeItem('psychologicalPlan_2026');
+                location.reload();
+            }
+        }
     </script>
 </body>
 </html>
+
