@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>البرنامج التفاعلي المطور للتربية النفسية 2026 - 2027</title>
+    <title>البرنامج التفاعلي الشامل للتربية النفسية 2026 - 2027</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -49,32 +49,37 @@
 </head>
 <body class="flex flex-col min-h-screen relative text-gray-800">
 
-    <!-- شريط التحكم العلوي -->
+    <!-- شريط الأدوات والتبويبات كاملة -->
     <nav class="bg-white/95 backdrop-blur-md shadow-md p-3 sticky top-0 z-40 border-b border-green-200 no-print">
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-2">
             
-            <!-- أزرار التبويب -->
             <div class="flex gap-1.5 overflow-x-auto pb-1 tabs-scroll justify-start w-full md:w-auto flex-grow" id="tabs-container">
-                <button onclick="showSlide(0)" class="tab-btn active px-3 py-1.5 rounded-xl border border-green-700 font-bold text-green-800 text-xs md:text-sm whitespace-nowrap transition-all shadow-sm">الغلاف</button>
-                <button onclick="showSlide(1)" class="tab-btn px-3 py-1.5 rounded-xl border border-green-700 font-bold text-green-800 text-xs md:text-sm whitespace-nowrap transition-all shadow-sm">سبتمبر</button>
-                <button onclick="showSlide(2)" class="tab-btn px-3 py-1.5 rounded-xl border border-green-700 font-bold text-green-800 text-xs md:text-sm whitespace-nowrap transition-all shadow-sm">أكتوبر</button>
-                <button onclick="showSlide(3)" class="tab-btn px-3 py-1.5 rounded-xl border border-green-700 font-bold text-green-800 text-xs md:text-sm whitespace-nowrap transition-all shadow-sm">تحضير معتمد 📝</button>
+                <button onclick="showSlide(0)" class="tab-btn active px-3 py-1.5 rounded-xl border border-green-700 font-bold text-green-800 text-xs whitespace-nowrap transition-all shadow-sm">الغلاف</button>
+                <button onclick="showSlide(1)" class="tab-btn px-3 py-1.5 rounded-xl border border-green-700 font-bold text-green-800 text-xs whitespace-nowrap transition-all shadow-sm">سبتمبر</button>
+                <button onclick="showSlide(2)" class="tab-btn px-3 py-1.5 rounded-xl border border-green-700 font-bold text-green-800 text-xs whitespace-nowrap transition-all shadow-sm">أكتوبر</button>
+                <button onclick="showSlide(3)" class="tab-btn px-3 py-1.5 rounded-xl border border-green-700 font-bold text-green-800 text-xs whitespace-nowrap transition-all shadow-sm">نوفمبر</button>
+                <button onclick="showSlide(4)" class="tab-btn px-3 py-1.5 rounded-xl border border-green-700 font-bold text-green-800 text-xs whitespace-nowrap transition-all shadow-sm">ديسمبر</button>
+                <button onclick="showSlide(5)" class="tab-btn px-3 py-1.5 rounded-xl border border-green-700 font-bold text-green-800 text-xs whitespace-nowrap transition-all shadow-sm">يناير/فبراير</button>
+                <button onclick="showSlide(6)" class="tab-btn px-3 py-1.5 rounded-xl border border-green-700 font-bold text-green-800 text-xs whitespace-nowrap transition-all shadow-sm">مارس</button>
+                <button onclick="showSlide(7)" class="tab-btn px-3 py-1.5 rounded-xl border border-green-700 font-bold text-green-800 text-xs whitespace-nowrap transition-all shadow-sm">أبريل/مايو</button>
+                <button onclick="showSlide(8)" class="tab-btn px-3 py-1.5 rounded-xl border border-green-700 font-bold text-green-800 text-xs whitespace-nowrap transition-all shadow-sm">تحضير معتمد 📝</button>
+                <button onclick="showSlide(9)" class="tab-btn px-3 py-1.5 rounded-xl border border-green-700 font-bold text-green-800 text-xs whitespace-nowrap transition-all shadow-sm">المتفوقون 🌟</button>
+                <button onclick="showSlide(10)" class="tab-btn px-3 py-1.5 rounded-xl border border-green-700 font-bold text-green-800 text-xs whitespace-nowrap transition-all shadow-sm">المتأخرون 📈</button>
+                <button onclick="showSlide(11)" class="tab-btn px-3 py-1.5 rounded-xl border border-green-700 font-bold text-green-800 text-xs whitespace-nowrap transition-all shadow-sm">الموهوبون 🎨</button>
+                <button onclick="showSlide(12)" class="tab-btn px-3 py-1.5 rounded-xl border border-green-700 font-bold text-green-800 text-xs whitespace-nowrap transition-all shadow-sm">برنامج الدمج 🤝</button>
             </div>
 
-            <!-- أدوات التعديل والحفظ السحابي + المحلي -->
             <div class="flex items-center gap-1.5 w-full md:w-auto justify-end flex-wrap">
                 <span id="syncStatus" class="text-xs font-bold text-gray-600 bg-gray-100 px-2 py-1 rounded-lg">⚙️ جاهز</span>
-                
                 <button id="editToggleBtn" onclick="toggleEditMode()" class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-1 px-2.5 rounded-xl text-xs shadow-md transition">✏️ تعديل</button>
                 <button id="saveBtn" onclick="saveData()" class="bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-1 px-2.5 rounded-xl text-xs shadow-md transition hidden">💾 حفظ التغييرات</button>
                 <button onclick="resetData()" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-1 px-2 rounded-xl text-xs shadow-sm transition" title="استعادة الأصلي">🔄</button>
-
                 <button onclick="window.print()" class="bg-red-700 hover:bg-red-800 text-white font-bold py-1 px-3 rounded-xl text-xs shadow-md transition">🖨️ PDF</button>
             </div>
         </div>
     </nav>
 
-    <!-- المنطقة الرئيسية -->
+    <!-- المنطقة الرئيسية للشرائح -->
     <main class="flex-grow flex items-center justify-center p-3 md:p-6">
         <div class="w-full max-w-5xl bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl border-2 border-green-500/30 p-5 md:p-8 min-h-[620px] flex flex-col justify-between transition-all" id="editableArea">
 
@@ -138,21 +143,136 @@
                 </div>
             </div>
 
-            <!-- الشريحة 3: نموذج التحضير -->
+            <!-- الشريحة 3: نوفمبر -->
+            <div class="slide space-y-4">
+                <div class="flex justify-between items-center border-b-2 border-green-500 pb-2">
+                    <h2 class="text-xl md:text-2xl font-bold text-green-800 editable">خطة شهر نوفمبر - سجل الازدهار النفسي</h2>
+                    <span class="bg-green-100 text-green-800 text-xs px-3 py-1 rounded-full font-bold shadow-sm editable">المهارات الحياتية</span>
+                </div>
+                <div class="p-4 bg-gradient-to-br from-green-50 to-emerald-100/60 rounded-2xl border border-green-300 shadow-sm">
+                    <span class="text-xs font-bold text-green-700 bg-green-200 px-2 py-0.5 rounded">الجلسة الإرشادية الشهريّة</span>
+                    <h3 class="font-bold text-green-900 text-lg mt-1 editable">العنوان: قوة التفكير الإيجابي وإعادة التأطير</h3>
+                    <p class="text-gray-700 text-xs md:text-sm mt-2"><strong>الهدف:</strong> <span class="editable">تعديل الأفكار التلقائية السلبية واستبدالها بنظرة معرفية مرنة وبناءة.</span></p>
+                </div>
+            </div>
+
+            <!-- الشريحة 4: ديسمبر -->
+            <div class="slide space-y-4">
+                <div class="flex justify-between items-center border-b-2 border-green-500 pb-2">
+                    <h2 class="text-xl md:text-2xl font-bold text-green-800 editable">خطة شهر ديسمبر - سجل الازدهار النفسي</h2>
+                    <span class="bg-green-100 text-green-800 text-xs px-3 py-1 rounded-full font-bold shadow-sm editable">الاستعداد للامتحانات</span>
+                </div>
+                <div class="p-4 bg-gradient-to-br from-green-50 to-emerald-100/60 rounded-2xl border border-green-300 shadow-sm">
+                    <span class="text-xs font-bold text-green-700 bg-green-200 px-2 py-0.5 rounded">الجلسة الإرشادية الشهريّة</span>
+                    <h3 class="font-bold text-green-900 text-lg mt-1 editable">العنوان: إدارة قلق الاختبارات ومهارات الاستذكار</h3>
+                    <p class="text-gray-700 text-xs md:text-sm mt-2"><strong>الهدف:</strong> <span class="editable">تخفيف القلق الانفعالي قبل فترة الامتحانات وتحسين أساليب التحصيل الدراسي.</span></p>
+                </div>
+            </div>
+
+            <!-- الشريحة 5: يناير/فبراير -->
+            <div class="slide space-y-4">
+                <div class="flex justify-between items-center border-b-2 border-green-500 pb-2">
+                    <h2 class="text-xl md:text-2xl font-bold text-green-800 editable">خطة شهر يناير / فبراير - الفصل الدراسي الثاني</h2>
+                    <span class="bg-green-100 text-green-800 text-xs px-3 py-1 rounded-full font-bold shadow-sm editable">إعادة التقييم والانطلاق</span>
+                </div>
+                <div class="p-4 bg-gradient-to-br from-green-50 to-emerald-100/60 rounded-2xl border border-green-300 shadow-sm">
+                    <span class="text-xs font-bold text-green-700 bg-green-200 px-2 py-0.5 rounded">الجلسة الإرشادية الشهريّة</span>
+                    <h3 class="font-bold text-green-900 text-lg mt-1 editable">العنوان: التجديد الذاتي وبناء أهداف الفصل الثاني</h3>
+                    <p class="text-gray-700 text-xs md:text-sm mt-2"><strong>الهدف:</strong> <span class="editable">تحفيز الطلاب وتحديد نقاط التحسين للاستمرار بنجاح في الفصل الدراسي الثاني.</span></p>
+                </div>
+            </div>
+
+            <!-- الشريحة 6: مارس -->
+            <div class="slide space-y-4">
+                <div class="flex justify-between items-center border-b-2 border-green-500 pb-2">
+                    <h2 class="text-xl md:text-2xl font-bold text-green-800 editable">خطة شهر مارس - سجل الازدهار النفسي</h2>
+                    <span class="bg-green-100 text-green-800 text-xs px-3 py-1 rounded-full font-bold shadow-sm editable">الذكاء الاجتماعي وتجنب التنمر</span>
+                </div>
+                <div class="p-4 bg-gradient-to-br from-green-50 to-emerald-100/60 rounded-2xl border border-green-300 shadow-sm">
+                    <span class="text-xs font-bold text-green-700 bg-green-200 px-2 py-0.5 rounded">الجلسة الإرشادية الشهريّة</span>
+                    <h3 class="font-bold text-green-900 text-lg mt-1 editable">العنوان: المهارات الاجتماعية وبناء العلاقات السليمة</h3>
+                    <p class="text-gray-700 text-xs md:text-sm mt-2"><strong>الهدف:</strong> <span class="editable">تعزيز التعاطف والذكاء الاجتماعي ومكافحة مظاهر السلوك العدواني والتنمر.</span></p>
+                </div>
+            </div>
+
+            <!-- الشريحة 7: أبريل/مايو -->
+            <div class="slide space-y-4">
+                <div class="flex justify-between items-center border-b-2 border-green-500 pb-2">
+                    <h2 class="text-xl md:text-2xl font-bold text-green-800 editable">خطة شهر أبريل / مايو - الحصاد والختام</h2>
+                    <span class="bg-green-100 text-green-800 text-xs px-3 py-1 rounded-full font-bold shadow-sm editable">نهاية العام الدراسي</span>
+                </div>
+                <div class="p-4 bg-gradient-to-br from-green-50 to-emerald-100/60 rounded-2xl border border-green-300 shadow-sm">
+                    <span class="text-xs font-bold text-green-700 bg-green-200 px-2 py-0.5 rounded">الجلسة الإرشادية الشهريّة</span>
+                    <h3 class="font-bold text-green-900 text-lg mt-1 editable">العنوان: الثبات الانفعالي والتأهب للامتحانات النهائية</h3>
+                    <p class="text-gray-700 text-xs md:text-sm mt-2"><strong>الهدف:</strong> <span class="editable">دعم الطلاب في تحصيلهم النهائي وتنظيم أوقات المراجعة النهائية بثقة.</span></p>
+                </div>
+            </div>
+
+            <!-- الشريحة 8: تحضير معتمد -->
             <div class="slide space-y-4">
                 <div class="flex justify-between items-center border-b-2 border-green-500 pb-2">
                     <h2 class="text-xl md:text-2xl font-bold text-green-800 editable">نموذج تحضير جلسة إرشادية معتمدة 📝</h2>
                 </div>
-                <div class="p-3 bg-white border-r-4 border-green-600 shadow-sm rounded-lg text-xs md:text-sm">
-                    <h3 class="font-bold text-green-900">الأهداف الإجرائية للجلسة:</h3>
-                    <p class="text-gray-700 mt-1 editable">• أن يحدد الطالب نقطتي قوة في شخصيته بدقة.</p>
+                <div class="p-3 bg-white border-r-4 border-green-600 shadow-sm rounded-lg text-xs md:text-sm space-y-2">
+                    <div>
+                        <h3 class="font-bold text-green-900">الأهداف الإجرائية للجلسة:</h3>
+                        <p class="text-gray-700 mt-1 editable">• أن يحدد الطالب نقطتي قوة في شخصيته بدقة.</p>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-green-900">الفنيات والأساليب الإرشادية:</h3>
+                        <p class="text-gray-700 mt-1 editable">• المناقشة والحوار • النمذجة السلوكية • إعادة التشكيل المعرفي • الواجب المنزلي.</p>
+                    </div>
                 </div>
             </div>
 
-            <!-- أزرار التنقل -->
+            <!-- الشريحة 9: المتفوقون -->
+            <div class="slide space-y-4">
+                <div class="flex justify-between items-center border-b-2 border-green-500 pb-2">
+                    <h2 class="text-xl md:text-2xl font-bold text-green-800 editable">برنامج رعاية الطلاب المتفوقين 🌟</h2>
+                </div>
+                <div class="p-4 bg-yellow-50/80 rounded-2xl border border-yellow-300 shadow-sm text-xs md:text-sm space-y-2">
+                    <p class="editable"><strong>الأهداف:</strong> استثمار الطاقات المرتفعة، تنمية التفكير الناقد والدافعية المرتفعة للإنجاز.</p>
+                    <p class="editable"><strong>الأنشطة:</strong> ورش عمل في تنظيم الوقت، التوجيه الذاتي، وتكريم دوري بالمدرسة.</p>
+                </div>
+            </div>
+
+            <!-- الشريحة 10: المتأخرون -->
+            <div class="slide space-y-4">
+                <div class="flex justify-between items-center border-b-2 border-green-500 pb-2">
+                    <h2 class="text-xl md:text-2xl font-bold text-green-800 editable">برنامج رعاية المتأخرين دراسياً 📈</h2>
+                </div>
+                <div class="p-4 bg-orange-50/80 rounded-2xl border border-orange-300 shadow-sm text-xs md:text-sm space-y-2">
+                    <p class="editable"><strong>الأهداف:</strong> تشخيص أسباب التأخر التحصيلي (أنماط التعلم، القلق، العوامل الأسرية) وبناء خطط علاجية.</p>
+                    <p class="editable"><strong>الأنشطة:</strong> جلسات إرشاد جماعي وفردي، تحسين الدافعية للتفكير والإنجاز.</p>
+                </div>
+            </div>
+
+            <!-- الشريحة 11: الموهوبون -->
+            <div class="slide space-y-4">
+                <div class="flex justify-between items-center border-b-2 border-green-500 pb-2">
+                    <h2 class="text-xl md:text-2xl font-bold text-green-800 editable">برنامج اكتشاف ورعاية الموهوبين 🎨</h2>
+                </div>
+                <div class="p-4 bg-purple-50/80 rounded-2xl border border-purple-300 shadow-sm text-xs md:text-sm space-y-2">
+                    <p class="editable"><strong>الأهداف:</strong> اكتشاف المهارات الخاصة وتوجيه الابتكار والقدرات الفنية/العلمية.</p>
+                    <p class="editable"><strong>الأنشطة:</strong> معارض مدرسية، ورش الابتكار، والربط بالمسابقات المحلية.</p>
+                </div>
+            </div>
+
+            <!-- الشريحة 12: الدمج -->
+            <div class="slide space-y-4">
+                <div class="flex justify-between items-center border-b-2 border-green-500 pb-2">
+                    <h2 class="text-xl md:text-2xl font-bold text-green-800 editable">برنامج الطلاب المدمجين وذوي الإعاقة 🤝</h2>
+                </div>
+                <div class="p-4 bg-blue-50/80 rounded-2xl border border-blue-300 shadow-sm text-xs md:text-sm space-y-2">
+                    <p class="editable"><strong>الأهداف:</strong> الدعم النفسي والاجتماعي، التكيف الميداني، ومساعدة البيئة المدرسية على التقبُّل والدمج.</p>
+                    <p class="editable"><strong>الأنشطة:</strong> جلسات تعديل سلوك، وتفعيل الأنشطة المشتركة لتنمية التفاعل الاجتماعي.</p>
+                </div>
+            </div>
+
+            <!-- أزرار التنقل السفلية -->
             <div class="flex justify-between items-center pt-3 border-t border-gray-200 mt-3 no-print">
                 <button onclick="prevSlide()" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-5 rounded-xl transition text-xs md:text-sm shadow-sm">السابق</button>
-                <span id="slide-number" class="text-xs md:text-sm font-bold text-green-800 bg-green-100 px-3 py-1 rounded-full">1 / 4</span>
+                <span id="slide-number" class="text-xs md:text-sm font-bold text-green-800 bg-green-100 px-3 py-1 rounded-full">1 / 13</span>
                 <button onclick="nextSlide()" class="bg-green-700 hover:bg-green-800 text-white font-bold py-2 px-5 rounded-xl transition text-xs md:text-sm shadow-md">التالي</button>
             </div>
 
@@ -166,7 +286,6 @@
         const slideNumber = document.getElementById('slide-number');
         const syncStatus = document.getElementById('syncStatus');
 
-        // جلب البيانات المحفوظة تلقائياً عند فتح الصفحة
         window.onload = function() {
             loadSavedData();
         };
@@ -186,7 +305,10 @@
             if (currentSlide < 0) currentSlide = slides.length - 1;
 
             slides[currentSlide].classList.add('active');
-            if(tabs[currentSlide]) tabs[currentSlide].classList.add('active');
+            if(tabs[currentSlide]) {
+                tabs[currentSlide].classList.add('active');
+                tabs[currentSlide].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            }
 
             slideNumber.innerText = (currentSlide + 1) + " / " + slides.length;
         }
@@ -216,53 +338,33 @@
             }
         }
 
-        // حفظ البيانات في السحاب والمحلي هجينًا (ضمان 100% لعدم الفقدان)
         function saveData() {
             syncStatus.innerText = "⏳ جاري الحفظ...";
             const content = document.getElementById('editableArea').innerHTML;
-
-            // 1. الحفظ المحلي المباشر
-            localStorage.setItem('psychologicalPlan_2026', content);
-
-            // 2. الحفظ السحابي
-            fetch('https://api.jsonbin.io/v3/b/66b8d233e41b4d34e41e57c8', {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-Master-Key': '$2a$10$vPZ5yW.eA.c2P2G73yvCceW3H2z0uK5xX/E5B3uE3oR0O0G' // مفتاح افتراضي للتخزين السحابي السريع
-                },
-                body: JSON.stringify({ html: content })
-            }).then(() => {
-                syncStatus.innerText = "☁️ تم الحفظ السحابي";
-                syncStatus.className = "text-xs font-bold text-emerald-800 bg-emerald-100 px-2 py-1 rounded-lg";
-                alert('✅ تم حفظ كافة التعديلات بنجاح في السحاب والمتصفح!');
-                toggleEditMode();
-            }).catch(() => {
-                syncStatus.innerText = "💾 تم الحفظ محلياً";
-                alert('✅ تم حفظ التعديلات في متصفحك بنجاح!');
-                toggleEditMode();
-            });
+            localStorage.setItem('psychologicalPlan_2026_full', content);
+            
+            syncStatus.innerText = "💾 تم الحفظ بنجاح";
+            syncStatus.className = "text-xs font-bold text-emerald-800 bg-emerald-100 px-2 py-1 rounded-lg";
+            alert('✅ تم حفظ جميع التعديلات بنجاح على كافة الصفحات والشرايح!');
+            toggleEditMode();
         }
 
-        // تحميل البيانات من المتصفح/السحاب
         function loadSavedData() {
-            const localData = localStorage.getItem('psychologicalPlan_2026');
+            const localData = localStorage.getItem('psychologicalPlan_2026_full');
             if (localData) {
                 document.getElementById('editableArea').innerHTML = localData;
-                syncStatus.innerText = "💾 تم التحميل محلياً";
+                syncStatus.innerText = "💾 تم التحميل بنجاح";
                 updateElements();
                 showSlide(0);
             }
         }
 
-        // استعادة النسخة الأصلية
         function resetData() {
-            if (confirm('هل أنت تأكد من إلغاء كل التعديلات والعودة للنسخة الأصلية؟')) {
-                localStorage.removeItem('psychologicalPlan_2026');
+            if (confirm('هل أنت تأكد من إلغاء كل التعديلات والعودة للنسخة الأصلية التي تحتوي جميع الأشهر؟')) {
+                localStorage.removeItem('psychologicalPlan_2026_full');
                 location.reload();
             }
         }
     </script>
 </body>
 </html>
-
