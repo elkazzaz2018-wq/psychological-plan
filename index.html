@@ -3,368 +3,407 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>البرنامج التفاعلي الشامل للتربية النفسية 2026 - 2027</title>
-    <!-- Tailwind CSS -->
+    <title>مساعد وكيلة المدرسة الذكي</title>
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Cairo -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0fdf4; }
-        .slide { display: none; }
-        .slide.active { display: block; animation: fadeIn 0.3s ease-in-out; }
-        .tab-btn.active { background-color: #15803d; color: white; border-color: #15803d; transform: scale(1.02); }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(8px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .tabs-scroll::-webkit-scrollbar { height: 6px; }
-        .tabs-scroll::-webkit-scrollbar-thumb { background-color: #16a34a; border-radius: 10px; }
-
-        .cover-frame {
-            border: 8px double #15803d;
-            outline: 2px solid #86efac;
-            outline-offset: -12px;
-            position: relative;
-        }
-
-        .edit-mode-active [contenteditable="true"] {
-            outline: 2px dashed #16a34a !important;
-            background-color: #f0fdf4 !important;
-            padding: 2px 4px;
-            border-radius: 6px;
-            cursor: text;
-        }
-
-        @media print {
-            nav, .no-print, button, input { display: none !important; }
-            body { background-color: white !important; font-size: 12pt; }
-            main { padding: 0 !important; }
-            .slide { display: block !important; page-break-after: always; }
-            .slide:last-child { page-break-after: avoid; }
-            .shadow-2xl, .shadow-md, .shadow-sm { box-shadow: none !important; }
-            .border-2 { border-width: 1px !important; }
-        }
+        body { font-family: 'Cairo', sans-serif; }
     </style>
 </head>
-<body class="flex flex-col min-h-screen relative text-gray-800">
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
 
-    <!-- شريط الأدوات والتبويبات كاملة -->
-    <nav class="bg-white/95 backdrop-blur-md shadow-md p-3 sticky top-0 z-40 border-b border-green-200 no-print">
-        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-2">
-            
-            <div class="flex gap-1.5 overflow-x-auto pb-1 tabs-scroll justify-start w-full md:w-auto flex-grow" id="tabs-container">
-                <button onclick="showSlide(0)" class="tab-btn active px-3 py-1.5 rounded-xl border border-green-700 font-bold text-green-800 text-xs whitespace-nowrap transition-all shadow-sm">الغلاف</button>
-                <button onclick="showSlide(1)" class="tab-btn px-3 py-1.5 rounded-xl border border-green-700 font-bold text-green-800 text-xs whitespace-nowrap transition-all shadow-sm">سبتمبر</button>
-                <button onclick="showSlide(2)" class="tab-btn px-3 py-1.5 rounded-xl border border-green-700 font-bold text-green-800 text-xs whitespace-nowrap transition-all shadow-sm">أكتوبر</button>
-                <button onclick="showSlide(3)" class="tab-btn px-3 py-1.5 rounded-xl border border-green-700 font-bold text-green-800 text-xs whitespace-nowrap transition-all shadow-sm">نوفمبر</button>
-                <button onclick="showSlide(4)" class="tab-btn px-3 py-1.5 rounded-xl border border-green-700 font-bold text-green-800 text-xs whitespace-nowrap transition-all shadow-sm">ديسمبر</button>
-                <button onclick="showSlide(5)" class="tab-btn px-3 py-1.5 rounded-xl border border-green-700 font-bold text-green-800 text-xs whitespace-nowrap transition-all shadow-sm">يناير/فبراير</button>
-                <button onclick="showSlide(6)" class="tab-btn px-3 py-1.5 rounded-xl border border-green-700 font-bold text-green-800 text-xs whitespace-nowrap transition-all shadow-sm">مارس</button>
-                <button onclick="showSlide(7)" class="tab-btn px-3 py-1.5 rounded-xl border border-green-700 font-bold text-green-800 text-xs whitespace-nowrap transition-all shadow-sm">أبريل/مايو</button>
-                <button onclick="showSlide(8)" class="tab-btn px-3 py-1.5 rounded-xl border border-green-700 font-bold text-green-800 text-xs whitespace-nowrap transition-all shadow-sm">تحضير معتمد 📝</button>
-                <button onclick="showSlide(9)" class="tab-btn px-3 py-1.5 rounded-xl border border-green-700 font-bold text-green-800 text-xs whitespace-nowrap transition-all shadow-sm">المتفوقون 🌟</button>
-                <button onclick="showSlide(10)" class="tab-btn px-3 py-1.5 rounded-xl border border-green-700 font-bold text-green-800 text-xs whitespace-nowrap transition-all shadow-sm">المتأخرون 📈</button>
-                <button onclick="showSlide(11)" class="tab-btn px-3 py-1.5 rounded-xl border border-green-700 font-bold text-green-800 text-xs whitespace-nowrap transition-all shadow-sm">الموهوبون 🎨</button>
-                <button onclick="showSlide(12)" class="tab-btn px-3 py-1.5 rounded-xl border border-green-700 font-bold text-green-800 text-xs whitespace-nowrap transition-all shadow-sm">برنامج الدمج 🤝</button>
+    <!-- Header / Navbar -->
+    <header class="bg-indigo-900 text-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-3 space-x-reverse">
+                <div class="bg-indigo-700 p-2.5 rounded-xl">
+                    <i class="fa-solid fa-graduation-cap text-2xl text-amber-400"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold leading-tight">مساعد وكيلة المدرسة</h1>
+                    <p class="text-xs text-indigo-200">منظومة إدارة المتابعة والاحتياطي اليومي</p>
+                </div>
             </div>
-
-            <div class="flex items-center gap-1.5 w-full md:w-auto justify-end flex-wrap">
-                <span id="syncStatus" class="text-xs font-bold text-gray-600 bg-gray-100 px-2 py-1 rounded-lg">⚙️ جاهز</span>
-                <button id="editToggleBtn" onclick="toggleEditMode()" class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-1 px-2.5 rounded-xl text-xs shadow-md transition">✏️ تعديل</button>
-                <button id="saveBtn" onclick="saveData()" class="bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-1 px-2.5 rounded-xl text-xs shadow-md transition hidden">💾 حفظ التغييرات</button>
-                <button onclick="resetData()" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-1 px-2 rounded-xl text-xs shadow-sm transition" title="استعادة الأصلي">🔄</button>
-                <button onclick="window.print()" class="bg-red-700 hover:bg-red-800 text-white font-bold py-1 px-3 rounded-xl text-xs shadow-md transition">🖨️ PDF</button>
+            <div class="text-left hidden sm:block">
+                <p id="current-date" class="text-sm font-semibold text-amber-300"></p>
+                <p class="text-xs text-indigo-200">المرحلة الابتدائية</p>
             </div>
         </div>
-    </nav>
+    </header>
 
-    <!-- المنطقة الرئيسية للشرائح -->
-    <main class="flex-grow flex items-center justify-center p-3 md:p-6">
-        <div class="w-full max-w-5xl bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl border-2 border-green-500/30 p-5 md:p-8 min-h-[620px] flex flex-col justify-between transition-all" id="editableArea">
+    <!-- Main Layout -->
+    <div class="max-w-7xl mx-auto px-4 py-6 flex-1 w-full grid grid-cols-1 md:grid-cols-4 gap-6">
 
-            <!-- الشريحة 0: الغلاف -->
-            <div class="slide active cover-frame p-6 md:p-10 rounded-2xl bg-gradient-to-b from-white via-green-50/20 to-emerald-50/40 text-center my-auto space-y-6">
-                <div class="flex justify-between items-center text-xs md:text-sm font-bold text-green-900 border-b-2 border-green-600 pb-3">
-                    <div class="editable">وزارة التربية والتعليم والتعليم الفني</div>
-                    <div class="editable">مديرية التربية والتعليم</div>
-                    <div class="editable">توجيه التربية النفسية</div>
-                </div>
+        <!-- Sidebar Navigation -->
+        <aside class="md:col-span-1 bg-white rounded-2xl shadow-sm p-4 border border-slate-100 flex flex-col justify-between">
+            <nav class="space-y-2">
+                <button onclick="switchTab('dashboard')" id="btn-dashboard" class="nav-btn w-full flex items-center space-x-3 space-x-reverse px-4 py-3 rounded-xl font-semibold transition text-indigo-900 bg-indigo-50">
+                    <i class="fa-solid fa-chart-pie text-lg"></i>
+                    <span>لوحة التحكم</span>
+                </button>
 
-                <div class="space-y-3 my-6">
-                    <div class="inline-block bg-green-700 text-white text-xs md:text-sm font-extrabold px-6 py-1.5 rounded-full shadow-md editable">البرنامج التفاعلي المعتمد</div>
-                    <h1 class="text-3xl md:text-5xl font-black text-green-900 leading-tight editable">الخطة والبرنامج الزمني للتربية النفسية</h1>
-                    <h2 class="text-xl md:text-2xl font-bold text-gray-700 editable">للعام الدراسي 2026 / 2027 م</h2>
-                    <div class="w-40 h-1.5 bg-gradient-to-r from-green-400 via-green-600 to-green-800 mx-auto rounded-full my-2"></div>
-                </div>
+                <button onclick="switchTab('substitute')" id="btn-substitute" class="nav-btn w-full flex items-center space-x-3 space-x-reverse px-4 py-3 rounded-xl font-semibold text-slate-600 hover:bg-slate-50 transition">
+                    <i class="fa-solid fa-user-clock text-lg"></i>
+                    <span>الحصص الاحتياطية</span>
+                </button>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-3xl mx-auto text-right bg-white/80 p-4 rounded-2xl border border-green-200 shadow-sm text-xs md:text-sm">
-                    <div class="space-y-1">
-                        <p class="font-bold text-green-900">إعداد الأخصائي النفسي:</p>
-                        <p class="text-gray-800 font-extrabold text-sm md:text-base border-r-4 border-green-600 pr-2 editable">أ/ محمد عبدالوهاب القزاز</p>
-                    </div>
-                    <div class="space-y-1">
-                        <p class="font-bold text-green-900">تحت إشراف وتوجيه الكرام:</p>
-                        <p class="text-gray-800 font-bold border-r-4 border-emerald-600 pr-2 editable">أ/ هويدا الجوجري</p>
-                        <p class="text-gray-800 font-bold border-r-4 border-emerald-600 pr-2 editable">أ/ منير أبو المجد</p>
-                    </div>
-                </div>
+                <button onclick="switchTab('behavior')" id="btn-behavior" class="nav-btn w-full flex items-center space-x-3 space-x-reverse px-4 py-3 rounded-xl font-semibold text-slate-600 hover:bg-slate-50 transition">
+                    <i class="fa-solid fa-clipboard-check text-lg"></i>
+                    <span>متابعة السلوك والغياب</span>
+                </button>
 
-                <div class="pt-4 no-print flex justify-center gap-3">
-                    <button onclick="nextSlide()" class="bg-gradient-to-r from-green-600 to-emerald-800 hover:from-green-700 hover:to-emerald-900 text-white font-black text-base md:text-lg py-3 px-10 rounded-2xl shadow-xl hover:scale-105 transition-all">
-                        بدء العرض التفاعلي 👈
-                    </button>
-                </div>
+                <button onclick="switchTab('tasks')" id="btn-tasks" class="nav-btn w-full flex items-center space-x-3 space-x-reverse px-4 py-3 rounded-xl font-semibold text-slate-600 hover:bg-slate-50 transition">
+                    <i class="fa-solid fa-list-check text-lg"></i>
+                    <span>المهام الإدارية اليومية</span>
+                </button>
+            </nav>
+
+            <div class="mt-8 pt-4 border-t border-slate-100 text-center text-xs text-slate-400">
+                <p>تم التطوير بكل حب ❤️</p>
+                <p class="font-bold text-indigo-600 mt-1">نسخة القيادة المتميزة v1.0</p>
             </div>
+        </aside>
 
-            <!-- الشريحة 1: سبتمبر -->
-            <div class="slide space-y-4">
-                <div class="flex justify-between items-center border-b-2 border-green-500 pb-2">
-                    <h2 class="text-xl md:text-2xl font-bold text-green-800 editable">خطة شهر سبتمبر - سجل الازدهار النفسي</h2>
-                    <span class="bg-green-100 text-green-800 text-xs px-3 py-1 rounded-full font-bold shadow-sm editable">التهيئة والاستقبال</span>
-                </div>
-                <div class="p-4 bg-gradient-to-br from-green-50 to-emerald-100/60 rounded-2xl border border-green-300 shadow-sm">
-                    <span class="text-xs font-bold text-green-700 bg-green-200 px-2 py-0.5 rounded">الجلسة الإرشادية الشهريّة</span>
-                    <h3 class="font-bold text-green-900 text-lg mt-1 editable">العنوان: أنا أستحق أن أكون سعيداً</h3>
-                    <p class="text-gray-700 text-xs md:text-sm mt-2"><strong>الهدف:</strong> <span class="editable">بناء التفكير الإيجابي وتنمية تقدير الذات لمواجهة ضغوط بداية العام الدراسي.</span></p>
-                </div>
-            </div>
+        <!-- Main Content Area -->
+        <main class="md:col-span-3 space-y-6">
 
-            <!-- الشريحة 2: أكتوبر -->
-            <div class="slide space-y-4">
-                <div class="flex justify-between items-center border-b-2 border-green-500 pb-2">
-                    <h2 class="text-xl md:text-2xl font-bold text-green-800 editable">خطة شهر أكتوبر - سجل الازدهار النفسي</h2>
-                    <span class="bg-green-100 text-green-800 text-xs px-3 py-1 rounded-full font-bold shadow-sm editable">التوعية والصحة النفسية</span>
-                </div>
-                <div class="p-4 bg-gradient-to-br from-green-50 to-emerald-100/60 rounded-2xl border border-green-300 shadow-sm">
-                    <span class="text-xs font-bold text-green-700 bg-green-200 px-2 py-0.5 rounded">الجلسة الإرشادية الشهريّة</span>
-                    <h3 class="font-bold text-green-900 text-lg mt-1 editable">العنوان: إدارة المشاعر والتعبير التوكيدي</h3>
-                    <p class="text-gray-700 text-xs md:text-sm mt-2"><strong>الهدف:</strong> <span class="editable">خفض الانفعالات الحادة واكتساب مهارة التعبير الحازم عن النفس.</span></p>
-                </div>
-            </div>
-
-            <!-- الشريحة 3: نوفمبر -->
-            <div class="slide space-y-4">
-                <div class="flex justify-between items-center border-b-2 border-green-500 pb-2">
-                    <h2 class="text-xl md:text-2xl font-bold text-green-800 editable">خطة شهر نوفمبر - سجل الازدهار النفسي</h2>
-                    <span class="bg-green-100 text-green-800 text-xs px-3 py-1 rounded-full font-bold shadow-sm editable">المهارات الحياتية</span>
-                </div>
-                <div class="p-4 bg-gradient-to-br from-green-50 to-emerald-100/60 rounded-2xl border border-green-300 shadow-sm">
-                    <span class="text-xs font-bold text-green-700 bg-green-200 px-2 py-0.5 rounded">الجلسة الإرشادية الشهريّة</span>
-                    <h3 class="font-bold text-green-900 text-lg mt-1 editable">العنوان: قوة التفكير الإيجابي وإعادة التأطير</h3>
-                    <p class="text-gray-700 text-xs md:text-sm mt-2"><strong>الهدف:</strong> <span class="editable">تعديل الأفكار التلقائية السلبية واستبدالها بنظرة معرفية مرنة وبناءة.</span></p>
-                </div>
-            </div>
-
-            <!-- الشريحة 4: ديسمبر -->
-            <div class="slide space-y-4">
-                <div class="flex justify-between items-center border-b-2 border-green-500 pb-2">
-                    <h2 class="text-xl md:text-2xl font-bold text-green-800 editable">خطة شهر ديسمبر - سجل الازدهار النفسي</h2>
-                    <span class="bg-green-100 text-green-800 text-xs px-3 py-1 rounded-full font-bold shadow-sm editable">الاستعداد للامتحانات</span>
-                </div>
-                <div class="p-4 bg-gradient-to-br from-green-50 to-emerald-100/60 rounded-2xl border border-green-300 shadow-sm">
-                    <span class="text-xs font-bold text-green-700 bg-green-200 px-2 py-0.5 rounded">الجلسة الإرشادية الشهريّة</span>
-                    <h3 class="font-bold text-green-900 text-lg mt-1 editable">العنوان: إدارة قلق الاختبارات ومهارات الاستذكار</h3>
-                    <p class="text-gray-700 text-xs md:text-sm mt-2"><strong>الهدف:</strong> <span class="editable">تخفيف القلق الانفعالي قبل فترة الامتحانات وتحسين أساليب التحصيل الدراسي.</span></p>
-                </div>
-            </div>
-
-            <!-- الشريحة 5: يناير/فبراير -->
-            <div class="slide space-y-4">
-                <div class="flex justify-between items-center border-b-2 border-green-500 pb-2">
-                    <h2 class="text-xl md:text-2xl font-bold text-green-800 editable">خطة شهر يناير / فبراير - الفصل الدراسي الثاني</h2>
-                    <span class="bg-green-100 text-green-800 text-xs px-3 py-1 rounded-full font-bold shadow-sm editable">إعادة التقييم والانطلاق</span>
-                </div>
-                <div class="p-4 bg-gradient-to-br from-green-50 to-emerald-100/60 rounded-2xl border border-green-300 shadow-sm">
-                    <span class="text-xs font-bold text-green-700 bg-green-200 px-2 py-0.5 rounded">الجلسة الإرشادية الشهريّة</span>
-                    <h3 class="font-bold text-green-900 text-lg mt-1 editable">العنوان: التجديد الذاتي وبناء أهداف الفصل الثاني</h3>
-                    <p class="text-gray-700 text-xs md:text-sm mt-2"><strong>الهدف:</strong> <span class="editable">تحفيز الطلاب وتحديد نقاط التحسين للاستمرار بنجاح في الفصل الدراسي الثاني.</span></p>
-                </div>
-            </div>
-
-            <!-- الشريحة 6: مارس -->
-            <div class="slide space-y-4">
-                <div class="flex justify-between items-center border-b-2 border-green-500 pb-2">
-                    <h2 class="text-xl md:text-2xl font-bold text-green-800 editable">خطة شهر مارس - سجل الازدهار النفسي</h2>
-                    <span class="bg-green-100 text-green-800 text-xs px-3 py-1 rounded-full font-bold shadow-sm editable">الذكاء الاجتماعي وتجنب التنمر</span>
-                </div>
-                <div class="p-4 bg-gradient-to-br from-green-50 to-emerald-100/60 rounded-2xl border border-green-300 shadow-sm">
-                    <span class="text-xs font-bold text-green-700 bg-green-200 px-2 py-0.5 rounded">الجلسة الإرشادية الشهريّة</span>
-                    <h3 class="font-bold text-green-900 text-lg mt-1 editable">العنوان: المهارات الاجتماعية وبناء العلاقات السليمة</h3>
-                    <p class="text-gray-700 text-xs md:text-sm mt-2"><strong>الهدف:</strong> <span class="editable">تعزيز التعاطف والذكاء الاجتماعي ومكافحة مظاهر السلوك العدواني والتنمر.</span></p>
-                </div>
-            </div>
-
-            <!-- الشريحة 7: أبريل/مايو -->
-            <div class="slide space-y-4">
-                <div class="flex justify-between items-center border-b-2 border-green-500 pb-2">
-                    <h2 class="text-xl md:text-2xl font-bold text-green-800 editable">خطة شهر أبريل / مايو - الحصاد والختام</h2>
-                    <span class="bg-green-100 text-green-800 text-xs px-3 py-1 rounded-full font-bold shadow-sm editable">نهاية العام الدراسي</span>
-                </div>
-                <div class="p-4 bg-gradient-to-br from-green-50 to-emerald-100/60 rounded-2xl border border-green-300 shadow-sm">
-                    <span class="text-xs font-bold text-green-700 bg-green-200 px-2 py-0.5 rounded">الجلسة الإرشادية الشهريّة</span>
-                    <h3 class="font-bold text-green-900 text-lg mt-1 editable">العنوان: الثبات الانفعالي والتأهب للامتحانات النهائية</h3>
-                    <p class="text-gray-700 text-xs md:text-sm mt-2"><strong>الهدف:</strong> <span class="editable">دعم الطلاب في تحصيلهم النهائي وتنظيم أوقات المراجعة النهائية بثقة.</span></p>
-                </div>
-            </div>
-
-            <!-- الشريحة 8: تحضير معتمد -->
-            <div class="slide space-y-4">
-                <div class="flex justify-between items-center border-b-2 border-green-500 pb-2">
-                    <h2 class="text-xl md:text-2xl font-bold text-green-800 editable">نموذج تحضير جلسة إرشادية معتمدة 📝</h2>
-                </div>
-                <div class="p-3 bg-white border-r-4 border-green-600 shadow-sm rounded-lg text-xs md:text-sm space-y-2">
+            <!-- 1. DASHBOARD TAB -->
+            <section id="tab-dashboard" class="tab-content space-y-6">
+                <!-- Welcome Banner -->
+                <div class="bg-gradient-to-r from-indigo-600 to-indigo-800 rounded-2xl p-6 text-white shadow-md flex justify-between items-center">
                     <div>
-                        <h3 class="font-bold text-green-900">الأهداف الإجرائية للجلسة:</h3>
-                        <p class="text-gray-700 mt-1 editable">• أن يحدد الطالب نقطتي قوة في شخصيته بدقة.</p>
+                        <h2 class="text-2xl font-extrabold mb-1">أهلاً بكِ أستاذتنا الفاضلة 👋</h2>
+                        <p class="text-indigo-100 text-sm">نتمنى لكِ يوماً دراسياً موفقاً ومثمراً بحُسن إدارتك وتنظيمك.</p>
                     </div>
-                    <div>
-                        <h3 class="font-bold text-green-900">الفنيات والأساليب الإرشادية:</h3>
-                        <p class="text-gray-700 mt-1 editable">• المناقشة والحوار • النمذجة السلوكية • إعادة التشكيل المعرفي • الواجب المنزلي.</p>
+                    <i class="fa-solid fa-award text-5xl text-amber-400 opacity-80 hidden sm:block"></i>
+                </div>
+
+                <!-- Stats Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex items-center space-x-4 space-x-reverse">
+                        <div class="p-3 bg-amber-100 text-amber-600 rounded-xl">
+                            <i class="fa-solid fa-user-xmark text-2xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs text-slate-500 font-semibold">الغائبون اليوم</p>
+                            <p id="stat-absent" class="text-2xl font-bold text-slate-800">0</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex items-center space-x-4 space-x-reverse">
+                        <div class="p-3 bg-indigo-100 text-indigo-600 rounded-xl">
+                            <i class="fa-solid fa-chalkboard-user text-2xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs text-slate-500 font-semibold">الحصص المغطاة</p>
+                            <p id="stat-subs" class="text-2xl font-bold text-slate-800">0</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex items-center space-x-4 space-x-reverse">
+                        <div class="p-3 bg-emerald-100 text-emerald-600 rounded-xl">
+                            <i class="fa-solid fa-tasks text-2xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs text-slate-500 font-semibold">المهام المنجزة</p>
+                            <p id="stat-tasks" class="text-2xl font-bold text-slate-800">0</p>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- الشريحة 9: المتفوقون -->
-            <div class="slide space-y-4">
-                <div class="flex justify-between items-center border-b-2 border-green-500 pb-2">
-                    <h2 class="text-xl md:text-2xl font-bold text-green-800 editable">برنامج رعاية الطلاب المتفوقين 🌟</h2>
+                <!-- Quick Actions / Motivation -->
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
+                    <h3 class="font-bold text-lg text-slate-800 mb-4 flex items-center space-x-2 space-x-reverse">
+                        <i class="fa-solid fa-lightbulb text-amber-500"></i>
+                        <span>توجيه قيادي لليوم</span>
+                    </h3>
+                    <blockquote class="border-r-4 border-indigo-600 pr-4 text-slate-600 italic bg-slate-50 p-4 rounded-l-xl">
+                        "القيادة المدرسية الناجحة لا تعني فقط متابعة النظام، بل صناعة بيئة آمنة ومحفزة لكل من المعلم والتلميذ."
+                    </blockquote>
                 </div>
-                <div class="p-4 bg-yellow-50/80 rounded-2xl border border-yellow-300 shadow-sm text-xs md:text-sm space-y-2">
-                    <p class="editable"><strong>الأهداف:</strong> استثمار الطاقات المرتفعة، تنمية التفكير الناقد والدافعية المرتفعة للإنجاز.</p>
-                    <p class="editable"><strong>الأنشطة:</strong> ورش عمل في تنظيم الوقت، التوجيه الذاتي، وتكريم دوري بالمدرسة.</p>
-                </div>
-            </div>
+            </section>
 
-            <!-- الشريحة 10: المتأخرون -->
-            <div class="slide space-y-4">
-                <div class="flex justify-between items-center border-b-2 border-green-500 pb-2">
-                    <h2 class="text-xl md:text-2xl font-bold text-green-800 editable">برنامج رعاية المتأخرين دراسياً 📈</h2>
+            <!-- 2. SUBSTITUTE TEACHERS TAB -->
+            <section id="tab-substitute" class="tab-content hidden space-y-6">
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
+                    <h3 class="font-bold text-lg text-slate-800 mb-4 flex items-center space-x-2 space-x-reverse">
+                        <i class="fa-solid fa-plus-circle text-indigo-600"></i>
+                        <span>تسجيل توزيع حصة احتياطية</span>
+                    </h3>
+                    <form id="form-substitute" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">اسم المعلم الغائب</label>
+                            <input type="text" id="absent-teacher" required placeholder="أدخل اسم المعلم" class="w-full px-4 py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-indigo-600 text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">المعلم البديل (الاحتياطي)</label>
+                            <input type="text" id="sub-teacher" required placeholder="أدخل اسم البديل" class="w-full px-4 py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-indigo-600 text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">الفصل</label>
+                            <input type="text" id="sub-class" required placeholder="مثال: 3 / 1" class="w-full px-4 py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-indigo-600 text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">رقم الحصة</label>
+                            <select id="sub-period" class="w-full px-4 py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-indigo-600 text-sm">
+                                <option value="الأولى">الحصة الأولى</option>
+                                <option value="الثانية">الحصة الثانية</option>
+                                <option value="الثالثة">الحصة الثالثة</option>
+                                <option value="الرابعة">الحصة الرابعة</option>
+                                <option value="الخامسة">الحصة الخامسة</option>
+                                <option value="السادسة">الحصة السادسة</option>
+                            </select>
+                        </div>
+                        <div class="md:col-span-2">
+                            <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 rounded-xl transition shadow-sm">
+                                حفظ في الجدول اليومي
+                            </button>
+                        </div>
+                    </form>
                 </div>
-                <div class="p-4 bg-orange-50/80 rounded-2xl border border-orange-300 shadow-sm text-xs md:text-sm space-y-2">
-                    <p class="editable"><strong>الأهداف:</strong> تشخيص أسباب التأخر التحصيلي (أنماط التعلم، القلق، العوامل الأسرية) وبناء خطط علاجية.</p>
-                    <p class="editable"><strong>الأنشطة:</strong> جلسات إرشاد جماعي وفردي، تحسين الدافعية للتفكير والإنجاز.</p>
-                </div>
-            </div>
 
-            <!-- الشريحة 11: الموهوبون -->
-            <div class="slide space-y-4">
-                <div class="flex justify-between items-center border-b-2 border-green-500 pb-2">
-                    <h2 class="text-xl md:text-2xl font-bold text-green-800 editable">برنامج اكتشاف ورعاية الموهوبين 🎨</h2>
+                <!-- Table -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                    <div class="p-4 border-b border-slate-100">
+                        <h4 class="font-bold text-slate-800">سجل الاحتياطي لليوم</h4>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm text-right">
+                            <thead class="bg-slate-50 text-slate-600 font-semibold border-b border-slate-100">
+                                <tr>
+                                    <th class="p-3">المعلم الغائب</th>
+                                    <th class="p-3">المعلم البديل</th>
+                                    <th class="p-3">الفصل</th>
+                                    <th class="p-3">الحصة</th>
+                                    <th class="p-3 text-center">إجراء</th>
+                                </tr>
+                            </thead>
+                            <tbody id="list-substitute" class="divide-y divide-slate-100">
+                                <!-- Data inserted dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-                <div class="p-4 bg-purple-50/80 rounded-2xl border border-purple-300 shadow-sm text-xs md:text-sm space-y-2">
-                    <p class="editable"><strong>الأهداف:</strong> اكتشاف المهارات الخاصة وتوجيه الابتكار والقدرات الفنية/العلمية.</p>
-                    <p class="editable"><strong>الأنشطة:</strong> معارض مدرسية، ورش الابتكار، والربط بالمسابقات المحلية.</p>
+            </section>
+
+            <!-- 3. BEHAVIOR & ABSENCE TAB -->
+            <section id="tab-behavior" class="tab-content hidden space-y-6">
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
+                    <h3 class="font-bold text-lg text-slate-800 mb-4 flex items-center space-x-2 space-x-reverse">
+                        <i class="fa-solid fa-user-pen text-indigo-600"></i>
+                        <span>رصد حالة سلوكية / غياب طالب</span>
+                    </h3>
+                    <form id="form-behavior" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">اسم التلميذ / التلميذة</label>
+                            <input type="text" id="student-name" required placeholder="الاسم الرباعي" class="w-full px-4 py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-indigo-600 text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">الصف والفصل</label>
+                            <input type="text" id="student-class" required placeholder="مثال: 4 / 2" class="w-full px-4 py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-indigo-600 text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">نوع الحالة</label>
+                            <select id="case-type" class="w-full px-4 py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-indigo-600 text-sm">
+                                <option value="غياب بدون عذر">غياب بدون عذر</option>
+                                <option value="تأخر عن الصباح">تأخر عن طابور الصباح</option>
+                                <option value="سلوك يحتاج متابعة">سلوك يحتاج توجيه ومتابعة</option>
+                                <option value="تفوق ومبادرة">تفوق وسلوك إيجابي ممتاز</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">الإجراء المتخذ</label>
+                            <input type="text" id="action-taken" placeholder="مثال: التواصل مع ولي الأمر / إخطار" class="w-full px-4 py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-indigo-600 text-sm">
+                        </div>
+                        <div class="md:col-span-2">
+                            <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 rounded-xl transition shadow-sm">
+                                تسجيل الحالة
+                            </button>
+                        </div>
+                    </form>
                 </div>
-            </div>
 
-            <!-- الشريحة 12: الدمج -->
-            <div class="slide space-y-4">
-                <div class="flex justify-between items-center border-b-2 border-green-500 pb-2">
-                    <h2 class="text-xl md:text-2xl font-bold text-green-800 editable">برنامج الطلاب المدمجين وذوي الإعاقة 🤝</h2>
+                <!-- Table -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                    <div class="p-4 border-b border-slate-100">
+                        <h4 class="font-bold text-slate-800">سجل متابعة الطلاب اليومي</h4>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm text-right">
+                            <thead class="bg-slate-50 text-slate-600 font-semibold border-b border-slate-100">
+                                <tr>
+                                    <th class="p-3">اسم التلميذ</th>
+                                    <th class="p-3">الفصل</th>
+                                    <th class="p-3">نوع الحالة</th>
+                                    <th class="p-3">الإجراء المتخذ</th>
+                                    <th class="p-3 text-center">إجراء</th>
+                                </tr>
+                            </thead>
+                            <tbody id="list-behavior" class="divide-y divide-slate-100">
+                                <!-- Data inserted dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-                <div class="p-4 bg-blue-50/80 rounded-2xl border border-blue-300 shadow-sm text-xs md:text-sm space-y-2">
-                    <p class="editable"><strong>الأهداف:</strong> الدعم النفسي والاجتماعي، التكيف الميداني، ومساعدة البيئة المدرسية على التقبُّل والدمج.</p>
-                    <p class="editable"><strong>الأنشطة:</strong> جلسات تعديل سلوك، وتفعيل الأنشطة المشتركة لتنمية التفاعل الاجتماعي.</p>
+            </section>
+
+            <!-- 4. TASKS TAB -->
+            <section id="tab-tasks" class="tab-content hidden space-y-6">
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
+                    <h3 class="font-bold text-lg text-slate-800 mb-4 flex items-center space-x-2 space-x-reverse">
+                        <i class="fa-solid fa-square-plus text-indigo-600"></i>
+                        <span>إضافة مهمة إدارية جديدة</span>
+                    </h3>
+                    <form id="form-task" class="flex gap-2">
+                        <input type="text" id="task-title" required placeholder="مثال: متابعة النظافة العامة، مرورو على الفصول، توقيع دفتر الحضور..." class="flex-1 px-4 py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-indigo-600 text-sm">
+                        <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-2 rounded-xl transition shadow-sm">
+                            إضافة
+                        </button>
+                    </form>
                 </div>
-            </div>
 
-            <!-- أزرار التنقل السفلية -->
-            <div class="flex justify-between items-center pt-3 border-t border-gray-200 mt-3 no-print">
-                <button onclick="prevSlide()" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-5 rounded-xl transition text-xs md:text-sm shadow-sm">السابق</button>
-                <span id="slide-number" class="text-xs md:text-sm font-bold text-green-800 bg-green-100 px-3 py-1 rounded-full">1 / 13</span>
-                <button onclick="nextSlide()" class="bg-green-700 hover:bg-green-800 text-white font-bold py-2 px-5 rounded-xl transition text-xs md:text-sm shadow-md">التالي</button>
-            </div>
+                <!-- Tasks List -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
+                    <h4 class="font-bold text-slate-800 mb-4">قائمة مهام اليوم</h4>
+                    <div id="list-tasks" class="space-y-3">
+                        <!-- Tasks added dynamically -->
+                    </div>
+                </div>
+            </section>
 
-        </div>
-    </main>
+        </main>
+    </div>
 
+    <!-- Application Script -->
     <script>
-        let currentSlide = 0;
-        let slides = document.querySelectorAll('.slide');
-        let tabs = document.querySelectorAll('.tab-btn');
-        const slideNumber = document.getElementById('slide-number');
-        const syncStatus = document.getElementById('syncStatus');
+        // Setup Date
+        document.getElementById('current-date').innerText = new Date().toLocaleDateString('ar-EG', {
+            weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+        });
 
-        window.onload = function() {
-            loadSavedData();
-        };
+        // App State (Persisted in LocalStorage)
+        let subsData = JSON.parse(localStorage.getItem('vp_subs')) || [];
+        let behaviorData = JSON.parse(localStorage.getItem('vp_behavior')) || [];
+        let tasksData = JSON.parse(localStorage.getItem('vp_tasks')) || [];
 
-        function updateElements() {
-            slides = document.querySelectorAll('.slide');
-            tabs = document.querySelectorAll('.tab-btn');
+        // Tab Navigation
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.nav-btn').forEach(el => {
+                el.classList.remove('bg-indigo-50', 'text-indigo-900');
+                el.classList.add('text-slate-600');
+            });
+
+            document.getElementById(`tab-${tabName}`).classList.remove('hidden');
+            const activeBtn = document.getElementById(`btn-${tabName}`);
+            activeBtn.classList.add('bg-indigo-50', 'text-indigo-900');
+            activeBtn.classList.remove('text-slate-600');
         }
 
-        function showSlide(index) {
-            updateElements();
-            slides[currentSlide].classList.remove('active');
-            if(tabs[currentSlide]) tabs[currentSlide].classList.remove('active');
-            
-            currentSlide = index;
-            if (currentSlide >= slides.length) currentSlide = 0;
-            if (currentSlide < 0) currentSlide = slides.length - 1;
+        // Render UI
+        function renderAll() {
+            // Render Substitutes
+            const subList = document.getElementById('list-substitute');
+            subList.innerHTML = subsData.length === 0 
+                ? `<tr><td colspan="5" class="text-center p-4 text-slate-400">لا توجد حصص احتياطية مسجلة اليوم</td></tr>`
+                : subsData.map((item, index) => `
+                    <tr class="hover:bg-slate-50 transition">
+                        <td class="p-3 font-semibold text-slate-700">${item.absent}</td>
+                        <td class="p-3 text-indigo-700 font-semibold">${item.sub}</td>
+                        <td class="p-3">${item.class}</td>
+                        <td class="p-3"><span class="bg-amber-100 text-amber-800 text-xs px-2.5 py-1 rounded-lg">${item.period}</span></td>
+                        <td class="p-3 text-center">
+                            <button onclick="deleteSub(${index})" class="text-rose-500 hover:text-rose-700"><i class="fa-solid fa-trash"></i></button>
+                        </td>
+                    </tr>
+                `).join('');
 
-            slides[currentSlide].classList.add('active');
-            if(tabs[currentSlide]) {
-                tabs[currentSlide].classList.add('active');
-                tabs[currentSlide].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-            }
+            // Render Behaviors
+            const behList = document.getElementById('list-behavior');
+            behList.innerHTML = behaviorData.length === 0 
+                ? `<tr><td colspan="5" class="text-center p-4 text-slate-400">لا توجد حالات سلوكية مسجلة اليوم</td></tr>`
+                : behaviorData.map((item, index) => `
+                    <tr class="hover:bg-slate-50 transition">
+                        <td class="p-3 font-semibold text-slate-700">${item.student}</td>
+                        <td class="p-3">${item.class}</td>
+                        <td class="p-3"><span class="bg-indigo-100 text-indigo-800 text-xs px-2.5 py-1 rounded-lg">${item.type}</span></td>
+                        <td class="p-3 text-slate-600">${item.action}</td>
+                        <td class="p-3 text-center">
+                            <button onclick="deleteBehavior(${index})" class="text-rose-500 hover:text-rose-700"><i class="fa-solid fa-trash"></i></button>
+                        </td>
+                    </tr>
+                `).join('');
 
-            slideNumber.innerText = (currentSlide + 1) + " / " + slides.length;
+            // Render Tasks
+            const taskList = document.getElementById('list-tasks');
+            taskList.innerHTML = tasksData.length === 0 
+                ? `<p class="text-center text-slate-400 py-4">لا توجد مهام إدارية مسجلة</p>`
+                : tasksData.map((item, index) => `
+                    <div class="flex items-center justify-between p-3 rounded-xl border border-slate-100 ${item.done ? 'bg-slate-50 opacity-60' : 'bg-white'}">
+                        <div class="flex items-center space-x-3 space-x-reverse">
+                            <input type="checkbox" ${item.done ? 'checked' : ''} onchange="toggleTask(${index})" class="w-5 h-5 text-indigo-600 rounded focus:ring-indigo-500">
+                            <span class="${item.done ? 'line-through text-slate-400' : 'text-slate-700 font-medium'}">${item.title}</span>
+                        </div>
+                        <button onclick="deleteTask(${index})" class="text-rose-500 hover:text-rose-700 text-sm"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                `).join('');
+
+            // Stats Update
+            document.getElementById('stat-absent').innerText = behaviorData.filter(b => b.type.includes('غياب')).length;
+            document.getElementById('stat-subs').innerText = subsData.length;
+            document.getElementById('stat-tasks').innerText = `${tasksData.filter(t => t.done).length} / ${tasksData.length}`;
         }
 
-        function nextSlide() { showSlide(currentSlide + 1); }
-        function prevSlide() { showSlide(currentSlide - 1); }
+        // Form Handlers
+        document.getElementById('form-substitute').addEventListener('submit', (e) => {
+            e.preventDefault();
+            subsData.push({
+                absent: document.getElementById('absent-teacher').value,
+                sub: document.getElementById('sub-teacher').value,
+                class: document.getElementById('sub-class').value,
+                period: document.getElementById('sub-period').value
+            });
+            localStorage.setItem('vp_subs', JSON.stringify(subsData));
+            e.target.reset();
+            renderAll();
+        });
 
-        let isEditMode = false;
-        function toggleEditMode() {
-            isEditMode = !isEditMode;
-            const editableElements = document.querySelectorAll('#editableArea .editable');
-            const editBtn = document.getElementById('editToggleBtn');
-            const saveBtn = document.getElementById('saveBtn');
+        document.getElementById('form-behavior').addEventListener('submit', (e) => {
+            e.preventDefault();
+            behaviorData.push({
+                student: document.getElementById('student-name').value,
+                class: document.getElementById('student-class').value,
+                type: document.getElementById('case-type').value,
+                action: document.getElementById('action-taken').value || 'لا يوجد'
+            });
+            localStorage.setItem('vp_behavior', JSON.stringify(behaviorData));
+            e.target.reset();
+            renderAll();
+        });
 
-            editableElements.forEach(el => { el.contentEditable = isEditMode; });
+        document.getElementById('form-task').addEventListener('submit', (e) => {
+            e.preventDefault();
+            tasksData.push({
+                title: document.getElementById('task-title').value,
+                done: false
+            });
+            localStorage.setItem('vp_tasks', JSON.stringify(tasksData));
+            e.target.reset();
+            renderAll();
+        });
 
-            if (isEditMode) {
-                document.body.classList.add('edit-mode-active');
-                editBtn.innerText = "❌ إلغاء التعديل";
-                editBtn.classList.replace('bg-amber-600', 'bg-red-600');
-                saveBtn.classList.remove('hidden');
-            } else {
-                document.body.classList.remove('edit-mode-active');
-                editBtn.innerText = "✏️ تعديل";
-                editBtn.classList.replace('bg-red-600', 'bg-amber-600');
-                saveBtn.classList.add('hidden');
-            }
-        }
+        // Delete / Action Functions
+        function deleteSub(i) { subsData.splice(i, 1); localStorage.setItem('vp_subs', JSON.stringify(subsData)); renderAll(); }
+        function deleteBehavior(i) { behaviorData.splice(i, 1); localStorage.setItem('vp_behavior', JSON.stringify(behaviorData)); renderAll(); }
+        function deleteTask(i) { tasksData.splice(i, 1); localStorage.setItem('vp_tasks', JSON.stringify(tasksData)); renderAll(); }
+        function toggleTask(i) { tasksData[i].done = !tasksData[i].done; localStorage.setItem('vp_tasks', JSON.stringify(tasksData)); renderAll(); }
 
-        function saveData() {
-            syncStatus.innerText = "⏳ جاري الحفظ...";
-            const content = document.getElementById('editableArea').innerHTML;
-            localStorage.setItem('psychologicalPlan_2026_full', content);
-            
-            syncStatus.innerText = "💾 تم الحفظ بنجاح";
-            syncStatus.className = "text-xs font-bold text-emerald-800 bg-emerald-100 px-2 py-1 rounded-lg";
-            alert('✅ تم حفظ جميع التعديلات بنجاح على كافة الصفحات والشرايح!');
-            toggleEditMode();
-        }
-
-        function loadSavedData() {
-            const localData = localStorage.getItem('psychologicalPlan_2026_full');
-            if (localData) {
-                document.getElementById('editableArea').innerHTML = localData;
-                syncStatus.innerText = "💾 تم التحميل بنجاح";
-                updateElements();
-                showSlide(0);
-            }
-        }
-
-        function resetData() {
-            if (confirm('هل أنت تأكد من إلغاء كل التعديلات والعودة للنسخة الأصلية التي تحتوي جميع الأشهر؟')) {
-                localStorage.removeItem('psychologicalPlan_2026_full');
-                location.reload();
-            }
-        }
+        // Initial Render
+        renderAll();
     </script>
 </body>
 </html>
