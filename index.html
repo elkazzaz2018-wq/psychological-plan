@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>نظام إدارة الحصص الاحتياطية</title>
+  <title>مساعد الوكيل الذكي - السجل السحابي</title>
   <style>
     :root {
       --primary: #4f46e5;
       --primary-hover: #4338ca;
       --danger: #ef4444;
-      --danger-hover: #dc2626;
+      --success: #10b981;
       --bg: #f8fafc;
       --card: #ffffff;
       --text: #1e293b;
@@ -23,8 +23,16 @@
       padding: 20px;
     }
     .container {
-      max-width: 950px;
+      max-width: 1000px;
       margin: 0 auto;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    .header h1 {
+      color: var(--primary);
+      margin-bottom: 6px;
     }
     .card {
       background: var(--card);
@@ -39,7 +47,7 @@
       align-items: center;
       margin-bottom: 16px;
     }
-    h2 { margin: 0; color: var(--primary); font-size: 1.3rem; }
+    h2 { margin: 0; color: var(--primary); font-size: 1.25rem; }
     .form-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -63,10 +71,6 @@
       border-color: var(--primary);
       box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.1);
     }
-    .actions-group {
-      display: flex;
-      gap: 10px;
-    }
     button {
       background: var(--primary);
       color: white;
@@ -80,22 +84,18 @@
     }
     button:hover { background: var(--primary-hover); }
     button:disabled { opacity: 0.6; cursor: not-allowed; }
-    .btn-print {
-      background: #059669;
-    }
-    .btn-print:hover {
-      background: #047857;
-    }
+    .btn-print { background: #059669; }
+    .btn-print:hover { background: #047857; }
     .btn-delete {
       background: #fee2e2;
       color: var(--danger);
       padding: 6px 12px;
       font-size: 12px;
       border-radius: 4px;
+      border: none;
+      cursor: pointer;
     }
-    .btn-delete:hover {
-      background: #fca5a5;
-    }
+    .btn-delete:hover { background: #fca5a5; }
     table {
       width: 100%;
       border-collapse: collapse;
@@ -113,38 +113,41 @@
       font-size: 14px;
       font-weight: bold;
     }
-    .status.success { color: #16a34a; }
-    .status.error { color: #dc2626; }
+    .status.success { color: var(--success); }
+    .status.error { color: var(--danger); }
 
-    /* تنسيقات الطباعة */
     @media print {
       body { background: white; padding: 0; }
       .no-print { display: none !important; }
       .card { box-shadow: none; padding: 0; border: none; }
       th, td { border: 1px solid #000; }
-      .btn-delete { display: none; }
     }
   </style>
 </head>
 <body>
 
 <div class="container">
-  <!-- نموذج تسجيل الحصة -->
+  <div class="header no-print">
+    <h1>🤖 مساعد الوكيل الذكي</h1>
+    <p style="color: #64748b; margin: 0;">نظام إسناد الحصص الاحتياطية وإدارة التغطية اليومية (مربوط بالسحابة)</p>
+  </div>
+
+  <!-- تسجيل الحصص الاحتياطية -->
   <div class="card no-print">
-    <h2>☁️ تسجيل حصة احتياطية جديدة</h2>
-    <form id="subForm" style="margin-top: 16px;">
+    <h2>📝 إسناد حصة احتياطية جديدة</h2>
+    <form id="agentForm" style="margin-top: 16px;">
       <div class="form-grid">
         <div class="form-group">
-          <label>المعلم الغائب</label>
+          <label>اسم المعلم الغائب</label>
           <input type="text" id="absentTeacher" placeholder="أدخل اسم المعلم الغائب" required>
         </div>
         <div class="form-group">
-          <label>المعلم البديل (الاحتياطي)</label>
+          <label>المعلم المكلف (الاحتياطي)</label>
           <input type="text" id="subTeacher" placeholder="أدخل اسم المعلم المكلف" required>
         </div>
         <div class="form-group">
-          <label>الفصل</label>
-          <input type="text" id="className" placeholder="مثال: 1 / 1" required>
+          <label>الفصل / الصف</label>
+          <input type="text" id="className" placeholder="مثال: 1 / 2" required>
         </div>
         <div class="form-group">
           <label>الحصة</label>
@@ -158,32 +161,37 @@
             <option value="الحصة السابعة">الحصة السابعة</option>
           </select>
         </div>
+        <div class="form-group">
+          <label>ملاحظات التكليف</label>
+          <input type="text" id="notes" placeholder="مثال: تغطية حصة رياضيات">
+        </div>
       </div>
-      <button type="submit" id="saveBtn">حفظ وتحديث سحابي</button>
+      <button type="submit" id="saveBtn">⚡ حفظ وإرسال للسحابة</button>
       <div id="statusMsg" class="status"></div>
     </form>
   </div>
 
-  <!-- جدول الحصص المسجلة -->
+  <!-- سجل التكليفات السحابي -->
   <div class="card">
     <div class="card-header">
-      <h2>📋 سجل الحصص الاحتياطية</h2>
-      <button onclick="window.print()" class="btn-print no-print">🖨️ طباعة السجل</button>
+      <h2>📋 سجل تكليفات الحصص الاحتياطية</h2>
+      <button onclick="window.print()" class="btn-print no-print">🖨️ طباعة تقرير اليوم</button>
     </div>
     <table>
       <thead>
         <tr>
           <th>المعلم الغائب</th>
-          <th>المعلم البديل</th>
+          <th>المعلم المكلف</th>
           <th>الفصل</th>
           <th>الحصة</th>
+          <th>الملاحظات</th>
           <th>التاريخ</th>
           <th class="no-print" style="width: 80px; text-align: center;">إجراء</th>
         </tr>
       </thead>
       <tbody id="recordsTable">
         <tr>
-          <td colspan="6" style="text-align: center;">جاري تحميل البيانات من السحابة...</td>
+          <td colspan="7" style="text-align: center;">جاري جلب بيانات مساعد الوكيل من السحابة...</td>
         </tr>
       </tbody>
     </table>
@@ -191,45 +199,43 @@
 </div>
 
 <script>
-  // بيانات الربط السحابي الخاصة بك
+  // بيانات الربط السحابي
   const BIN_ID = "6aa17373ffd5d16053f2232a"; 
   const MASTER_KEY = "$2a$10$U1s8.ywSeF2F03hGxdnBupy6OizBVc3x.LhGexSy353/GgxyZ6vZ.";
 
-  const form = document.getElementById('subForm');
+  const form = document.getElementById('agentForm');
   const saveBtn = document.getElementById('saveBtn');
   const statusMsg = document.getElementById('statusMsg');
   const recordsTable = document.getElementById('recordsTable');
 
   let recordsData = [];
 
-  // 1. جلب البيانات تلقائياً من السحابة عند تحميل الصفحة
+  // 1. جلب البيانات من السحابة
   async function loadDataFromCloud() {
     try {
-      showStatus("جاري جلب البيانات من السحابة...", "");
+      showStatus("جاري الاتصال بالسحابة وجلب التكليفات...", "");
       const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
         method: 'GET',
-        headers: {
-          'X-Master-Key': MASTER_KEY
-        }
+        headers: { 'X-Master-Key': MASTER_KEY }
       });
 
       if (!res.ok) throw new Error("تعذر جلب البيانات");
 
       const result = await res.json();
-      recordsData = Array.isArray(result.record) ? result.record : [];
+      recordsData = Array.isArray(result.record?.records) ? result.record.records : [];
       renderTable();
-      showStatus("تم تحميل البيانات بنجاح", "success");
+      showStatus("تم تحديث البيانات سحابياً بنجاح", "success");
     } catch (err) {
       console.error(err);
-      recordsTable.innerHTML = `<tr><td colspan="6" style="text-align: center; color: red;">تعذر الاتصال بالسحابة. تحقق من الاتصال بالإنترنت.</td></tr>`;
-      showStatus("تعذر جلب البيانات من السحابة", "error");
+      recordsTable.innerHTML = `<tr><td colspan="7" style="text-align: center; color: red;">تعذر الاتصال بالسحابة.</td></tr>`;
+      showStatus("خطأ في جلب البيانات من السحابة", "error");
     }
   }
 
-  // 2. عرض البيانات وتوليد صفوف الجدول
+  // 2. عرض البيانات بالجدول
   function renderTable() {
     if (recordsData.length === 0) {
-      recordsTable.innerHTML = `<tr><td colspan="6" style="text-align: center;">لا توجد حصص احتياطية مسجلة</td></tr>`;
+      recordsTable.innerHTML = `<tr><td colspan="7" style="text-align: center;">لا توجد تكليفات احتياطية مسجلة حالياً</td></tr>`;
       return;
     }
 
@@ -239,6 +245,7 @@
         <td>${item.subTeacher}</td>
         <td>${item.className}</td>
         <td>${item.period}</td>
+        <td>${item.notes || '-'}</td>
         <td>${item.date}</td>
         <td class="no-print" style="text-align: center;">
           <button class="btn-delete" onclick="deleteRecord(${index})">حذف</button>
@@ -247,61 +254,17 @@
     `).join('');
   }
 
-  // 3. إضافة حصة جديدة وحفظها في السحابة
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-
-    const newRecord = {
-      absentTeacher: document.getElementById('absentTeacher').value.trim(),
-      subTeacher: document.getElementById('subTeacher').value.trim(),
-      className: document.getElementById('className').value.trim(),
-      period: document.getElementById('period').value,
-      date: new Date().toLocaleDateString('ar-EG')
-    };
-
-    recordsData.push(newRecord);
-
-    saveBtn.disabled = true;
-    showStatus("جاري الحفظ السحابي...", "");
-
-    if (await updateCloudData()) {
-      showStatus("تم الحفظ والتحديث السحابي بنجاح!", "success");
-      renderTable();
-      form.reset();
-    } else {
-      recordsData.pop(); // التراجع عن الإضافة المحلية في حالة الفشل
-      showStatus("تعذر الحفظ السحابي، تحقق من الاتصال بالإنترنت.", "error");
-    }
-    
-    saveBtn.disabled = false;
-  });
-
-  // 4. حذف عنصر وتحديث السحابة
-  async function deleteRecord(index) {
-    if (!confirm("هل أنت تأكد من رغبتك في حذف هذه الحصة؟")) return;
-
-    const removed = recordsData.splice(index, 1);
-    showStatus("جاري تحديث السحابة بعد الحذف...", "");
-
-    if (await updateCloudData()) {
-      showStatus("تم الحذف وتحديث السحابة بنجاح", "success");
-      renderTable();
-    } else {
-      recordsData.splice(index, 0, removed[0]); // استعادة العنصر في حالة الفشل
-      showStatus("تعذر الحذف سحابياً، حاول مجدداً", "error");
-    }
-  }
-
-  // 5. دالة الاتصال بالسحابة لإرسال التعديلات (PUT)
+  // 3. التحديث السحابي (PUT)
   async function updateCloudData() {
     try {
       const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          'X-Master-Key': MASTER_KEY
+          'X-Master-Key': MASTER_KEY,
+          'X-Bin-Versioning': 'false'
         },
-        body: JSON.stringify(recordsData)
+        body: JSON.stringify({ records: recordsData })
       });
       return res.ok;
     } catch (err) {
@@ -310,12 +273,57 @@
     }
   }
 
+  // 4. حفظ تكليف جديد
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const newRecord = {
+      absentTeacher: document.getElementById('absentTeacher').value.trim(),
+      subTeacher: document.getElementById('subTeacher').value.trim(),
+      className: document.getElementById('className').value.trim(),
+      period: document.getElementById('period').value,
+      notes: document.getElementById('notes').value.trim(),
+      date: new Date().toLocaleDateString('ar-EG')
+    };
+
+    recordsData.push(newRecord);
+    saveBtn.disabled = true;
+    showStatus("جاري حفظ التكليف بالسحابة...", "");
+
+    if (await updateCloudData()) {
+      showStatus("تم تسجيل التكليف في السحابة بنجاح!", "success");
+      renderTable();
+      form.reset();
+    } else {
+      recordsData.pop();
+      showStatus("تعذر الحفظ السحابي، حاول مجدداً", "error");
+    }
+    
+    saveBtn.disabled = false;
+  });
+
+  // 5. حذف تكليف
+  async function deleteRecord(index) {
+    if (!confirm("هل أنت تأكد من رغبتك في حذف هذا التكليف؟")) return;
+
+    const removed = recordsData.splice(index, 1);
+    showStatus("جاري تحديث السحابة...", "");
+
+    if (await updateCloudData()) {
+      showStatus("تم الحذف بنجاح", "success");
+      renderTable();
+    } else {
+      recordsData.splice(index, 0, removed[0]);
+      showStatus("تعذر الحذف سحابياً", "error");
+    }
+  }
+
   function showStatus(text, type) {
     statusMsg.textContent = text;
     statusMsg.className = `status ${type}`;
   }
 
-  // بدء تشغيل البرنامج عند تحقّق تحميل الصفحة
+  // تشغيل الجلب تلقائياً
   loadDataFromCloud();
 </script>
 
