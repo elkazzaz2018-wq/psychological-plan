@@ -11,7 +11,6 @@
       --accent: #d97706;
       --danger: #dc2626;
       --success: #16a34a;
-      --warning: #ca8a04;
       --bg: #f8fafc;
       --card: #ffffff;
       --text: #0f172a;
@@ -29,7 +28,6 @@
       margin: 0 auto;
     }
     
-    /* Header & Branding */
     .header {
       text-align: center;
       margin-bottom: 24px;
@@ -53,7 +51,6 @@
       border: 1px solid #fde68a;
     }
 
-    /* Tabs System */
     .tabs {
       display: flex;
       gap: 8px;
@@ -80,7 +77,6 @@
     .tab-content { display: none; }
     .tab-content.active { display: block; }
 
-    /* Stats Grid */
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -102,7 +98,6 @@
       margin-top: 6px;
     }
 
-    /* Cards & Forms */
     .card {
       background: var(--card);
       padding: 24px;
@@ -142,12 +137,7 @@
       outline: none;
       font-size: 14px;
     }
-    input:focus, select:focus, textarea:focus {
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
-    }
 
-    /* Buttons */
     button {
       background: var(--primary);
       color: white;
@@ -161,14 +151,12 @@
     }
     button:hover { background: var(--primary-hover); }
     .btn-print { background: #059669; }
-    .btn-print:hover { background: #047857; }
     .btn-excel { background: #0284c7; }
-    .btn-excel:hover { background: #0369a1; }
     .btn-upload { background: #7c3aed; }
+    .btn-upload:hover { background: #6d28d9; }
     .btn-wa { background: #25d366; color: white; padding: 5px 10px; font-size: 13px; border-radius: 6px; border: none; cursor: pointer; }
     .btn-delete { background: #fee2e2; color: var(--danger); padding: 5px 10px; font-size: 13px; border-radius: 6px; border: none; cursor: pointer; }
 
-    /* Tables */
     table {
       width: 100%;
       border-collapse: collapse;
@@ -183,18 +171,8 @@
     th { background: #f1f5f9; font-weight: 700; color: #1e293b; }
     tr:nth-child(even) { background-color: #f8fafc; }
 
-    .file-drop-zone {
-      border: 2px dashed var(--primary);
-      border-radius: 10px;
-      padding: 20px;
-      text-align: center;
-      background: #eff6ff;
-      cursor: pointer;
-    }
-
     .status { margin-top: 12px; font-size: 14px; font-weight: bold; padding: 10px; border-radius: 8px; display: none; }
     .status.success { background: #dcfce7; color: var(--success); display: block; }
-    .status.error { background: #fee2e2; color: var(--danger); display: block; }
 
     .print-header, .print-footer { display: none; }
 
@@ -225,7 +203,6 @@
 <body>
 
 <div class="container">
-  <!-- ترويسة الطباعة الرسمية -->
   <div class="print-header">
     <div>
       <h3>محافظة البحيرة - مديرية التربية والتعليم - إدارة مركز كفر الدوار</h3>
@@ -238,14 +215,12 @@
     </div>
   </div>
 
-  <!-- الترويسة الرئيسية للنظام -->
   <div class="header no-print">
     <h1>🏛️ منظومة الوكيل الذكي الشاملة</h1>
     <p>مدرسة كدوه الكريون ابتدائي - إدارة مركز كفر الدوار التعليمية</p>
     <div class="principal-badge">👩‍💼 إدارة وإشراف: الأستاذة / أميرة علي إبراهيم شلبي (وكيل المدرسة)</div>
   </div>
 
-  <!-- تبويبات النظام -->
   <div class="tabs no-print">
     <button class="tab-btn active" onclick="switchTab(event, 'subTab')">📌 الحصص الاحتياطية</button>
     <button class="tab-btn" onclick="switchTab(event, 'staffDirectoryTab')">👥 قاعدة بيانات العاملين (25)</button>
@@ -253,10 +228,10 @@
     <button class="tab-btn" onclick="switchTab(event, 'dutyTab')">🛡️ الإشراف اليومي والفسحة</button>
     <button class="tab-btn" onclick="switchTab(event, 'studentTab')">👨‍🎓 متابعة الطلاب والسلوك</button>
     <button class="tab-btn" onclick="switchTab(event, 'visitTab')">📑 الزيارات الصفية والتوجيه</button>
-    <button class="tab-btn" onclick="switchTab(event, 'uploadTab')">📤 أرشيف والمستندات الرقمي</button>
+    <button class="tab-btn" onclick="switchTab(event, 'uploadTab')">📤 أرشيف ورفع المستندات</button>
   </div>
 
-  <!-- 1. قسم الحصص الاحتياطية -->
+  <!-- 1. الاحتياطي -->
   <div id="subTab" class="tab-content active">
     <div class="stats-grid no-print">
       <div class="stat-card">
@@ -329,13 +304,13 @@
     </div>
   </div>
 
-  <!-- 2. دليل بيانات العاملين بالمدرسة -->
+  <!-- 2. دليل بيانات العاملين -->
   <div id="staffDirectoryTab" class="tab-content">
     <div class="card">
       <div class="card-header">
-        <h2>👥 قاعدة بيانات العاملين الرسمية بالمدرسة (من واقع كشوف الوزارة)</h2>
+        <h2>👥 قاعدة بيانات العاملين الرسمية بالمدرسة</h2>
         <div class="no-print">
-          <input type="text" id="staffSearch" placeholder="🔍 بحث باسم المعلم، الكود، الوظيفة، المادة..." oninput="renderStaffTable()" style="padding: 8px; width: 260px;">
+          <input type="text" id="staffSearch" placeholder="🔍 بحث باسم المعلم..." oninput="renderStaffTable()" style="padding: 8px; width: 260px;">
           <button onclick="window.print()" class="btn-print">🖨️ طباعة القائمة</button>
         </div>
       </div>
@@ -356,7 +331,7 @@
     </div>
   </div>
 
-  <!-- 3. قسم غياب المعلمين -->
+  <!-- 3. غياب المعلمين -->
   <div id="teacherTab" class="tab-content">
     <div class="card no-print">
       <h2>🚨 تسجيل غياب / عذر معلم</h2>
@@ -385,9 +360,6 @@
     <div class="card">
       <div class="card-header">
         <h2>📑 دفتر متابعة حضور وغياب هيئة التدريس والعاملين</h2>
-        <div class="no-print">
-          <button onclick="exportToCSV('teachers')" class="btn-excel">📊 تصدير Excel</button>
-        </div>
       </div>
       <table>
         <thead>
@@ -404,7 +376,7 @@
     </div>
   </div>
 
-  <!-- 4. قسم الإشراف اليومي -->
+  <!-- 4. الإشراف -->
   <div id="dutyTab" class="tab-content">
     <div class="card no-print">
       <h2>🛡️ توزيع الإشراف اليومي والفسحة المدرسية</h2>
@@ -422,7 +394,6 @@
               <option value="الدور الأول علوي">الدور الأول علوي</option>
               <option value="البوابة الرئيسية">البوابة الرئيسية</option>
               <option value="المقصف / الكانتين">المقصف / الكانتين</option>
-              <option value="السلم الرئيسي">السلم الرئيسي</option>
             </select>
           </div>
           <div class="form-group">
@@ -430,7 +401,6 @@
             <select id="dShift">
               <option value="اليوم الدراسي كاملاً">اليوم الدراسي كاملاً</option>
               <option value="الفسحة المدرسية">الفسحة المدرسية</option>
-              <option value="طابور الصباح والانصراف">طابور الصباح والانصراف</option>
             </select>
           </div>
         </div>
@@ -440,10 +410,7 @@
 
     <div class="card">
       <div class="card-header">
-        <h2>📋 جدول الإشراف اليومي - مدرسة كدوه الكريون</h2>
-        <div class="no-print">
-          <button onclick="exportToCSV('duties')" class="btn-excel">📊 تصدير Excel</button>
-        </div>
+        <h2>📋 جدول الإشراف اليومي</h2>
       </div>
       <table>
         <thead>
@@ -460,7 +427,7 @@
     </div>
   </div>
 
-  <!-- 5. قسم الطلاب والسلوك -->
+  <!-- 5. الطلاب -->
   <div id="studentTab" class="tab-content">
     <div class="card no-print">
       <h2>👨‍🎓 تسجيل انضباط / غياب / سلوك طالب</h2>
@@ -472,21 +439,19 @@
           </div>
           <div class="form-group">
             <label>الصف / الفصل</label>
-            <input type="text" id="sClass" required placeholder="مثال: الخامس / 1">
+            <input type="text" id="sClass" required placeholder="مثال: 5/1">
           </div>
           <div class="form-group">
             <label>نوع الملاحظة</label>
             <select id="sType">
               <option value="تأخير عن الطابور">تأخير عن الطابور</option>
-              <option value="هروب من الحصة">هروب من الحصة</option>
               <option value="مخالفة سلوكية">مخالفة سلوكية</option>
               <option value="استدعاء ولي أمر">استدعاء ولي أمر</option>
-              <option value="غياب متكرر">غياب متكرر</option>
             </select>
           </div>
           <div class="form-group">
             <label>الإجراء المتخذ من الوكيل</label>
-            <input type="text" id="sAction" placeholder="مثال: إخطار ولي الأمر / إقرار">
+            <input type="text" id="sAction" placeholder="الإجراء...">
           </div>
         </div>
         <button type="submit">⚠️ تسجيل الحالة</button>
@@ -496,9 +461,6 @@
     <div class="card">
       <div class="card-header">
         <h2>📑 سجل انضباط ومتابعة سلوك الطلاب</h2>
-        <div class="no-print">
-          <button onclick="exportToCSV('students')" class="btn-excel">📊 تصدير Excel</button>
-        </div>
       </div>
       <table>
         <thead>
@@ -516,10 +478,10 @@
     </div>
   </div>
 
-  <!-- 6. قسم الزيارات الصفية -->
+  <!-- 6. الزيارات -->
   <div id="visitTab" class="tab-content">
     <div class="card no-print">
-      <h2>📑 تسجيل زيارة صفية / توجيه فني للوكيل</h2>
+      <h2>📑 تسجيل زيارة صفية للوكيل</h2>
       <form id="visitForm" style="margin-top: 16px;">
         <div class="form-grid">
           <div class="form-group">
@@ -528,7 +490,7 @@
           </div>
           <div class="form-group">
             <label>الصف والمادة</label>
-            <input type="text" id="vSubjectClass" required placeholder="مثال: علوم - 4/2">
+            <input type="text" id="vSubjectClass" required placeholder="علوم - 4/1">
           </div>
           <div class="form-group">
             <label>موضوع الدرس</label>
@@ -537,9 +499,8 @@
           <div class="form-group">
             <label>التقييم والملاحظات</label>
             <select id="vRating">
-              <option value="ممتاز - ملتزم بخطة الدرس والتفاعل">ممتاز - ملتزم بخطة الدرس والتفاعل</option>
+              <option value="ممتاز - ملتزم بخطة الدرس">ممتاز - ملتزم بخطة الدرس</option>
               <option value="جيد جداً - يحتاج لتفعيل الوسائل">جيد جداً - يحتاج لتفعيل الوسائل</option>
-              <option value="جيد - توجيه بمتابعة كراسات الطلاب">جيد - توجيه بمتابعة كراسات الطلاب</option>
               <option value="توجيه إداري وفني مباشر">توجيه إداري وفني مباشر</option>
             </select>
           </div>
@@ -550,10 +511,7 @@
 
     <div class="card">
       <div class="card-header">
-        <h2>📋 سجل الزيارات الصفية والتوجيهات الفنية للوكيل</h2>
-        <div class="no-print">
-          <button onclick="exportToCSV('visits')" class="btn-excel">📊 تصدير Excel</button>
-        </div>
+        <h2>📋 سجل الزيارات الصفية والتوجيهات الفنية</h2>
       </div>
       <table>
         <thead>
@@ -561,7 +519,7 @@
             <th>اسم المعلم</th>
             <th>المادة والصف</th>
             <th>موضوع الدرس</th>
-            <th>التقييم والملاحظات</th>
+            <th>التقييم</th>
             <th>التاريخ</th>
             <th class="no-print">إجراء</th>
           </tr>
@@ -571,15 +529,15 @@
     </div>
   </div>
 
-  <!-- 7. قسم المستندات -->
+  <!-- 7. الأرشيف وزر رفع المستندات الحقيقي -->
   <div id="uploadTab" class="tab-content">
     <div class="card no-print">
-      <h2>📤 حفظ وثيقة أو تقرير رسمي للوكيل</h2>
+      <h2>📤 رفع مستند / تقرير إلى الأرشيف السحابي والمحلي</h2>
       <form id="uploadForm" style="margin-top: 16px;">
         <div class="form-grid">
           <div class="form-group">
             <label>عنوان المستند</label>
-            <input type="text" id="docTitle" placeholder="مثال: خطة الإشراف / نشرة إجازات" required>
+            <input type="text" id="docTitle" placeholder="مثال: إجازة عارضة للمعلم..." required>
           </div>
           <div class="form-group">
             <label>تصنيف المستند</label>
@@ -591,25 +549,30 @@
             </select>
           </div>
           <div class="form-group">
-            <label>تفاصيل / ملاحظات</label>
-            <input type="text" id="docNotes" placeholder="أية ملاحظات تفصيلية...">
+            <label>اختر الملف للرفع (صورة / PDF / Word / Excel)</label>
+            <input type="file" id="docFileInput" required style="background: white;">
+          </div>
+          <div class="form-group">
+            <label>ملاحظات إضافية</label>
+            <input type="text" id="docNotes" placeholder="تفاصيل أو ملاحظات...">
           </div>
         </div>
-        <button type="submit" class="btn-upload">💾 حفظ الوثيقة في الأرشيف</button>
+        <button type="submit" class="btn-upload">📤 رفع وحفظ المستند بالأرشيف</button>
       </form>
     </div>
 
     <div class="card">
       <div class="card-header">
-        <h2>📂 الأرشيف الرقمي لمستندات وتقارير الوكيل</h2>
+        <h2>📂 الأرشيف الرقمي المرفوع للمدرسة</h2>
       </div>
       <table>
         <thead>
           <tr>
-            <th>اسم المستند</th>
+            <th>عنوان المستند</th>
+            <th>اسم الملف المرفوع</th>
+            <th>حجم الملف</th>
             <th>التصنيف</th>
-            <th>الملاحظات</th>
-            <th>تاريخ التسجيل</th>
+            <th>تاريخ الرفع</th>
             <th class="no-print">إجراءات</th>
           </tr>
         </thead>
@@ -620,7 +583,6 @@
 
   <div id="statusMsg" class="status"></div>
 
-  <!-- ترويسة التواقيع المعتمدة عند الطباعة -->
   <div class="print-footer">
     <div>مسؤول الإحصاء بالمدرسة: ....................</div>
     <div>وكيل المدرسة: الأستاذة / أميرة علي شلبي</div>
@@ -629,7 +591,6 @@
 </div>
 
 <script>
-  // 1. قاعدة بيانات كشوف هيئة التدريس الرسمية من ملف PDF
   const officialStaffList = [
     { m: 1, name: "ابتسام اسماعيل عبد الحميد ابراهيم", code: "474196", cadre: "معلم أول أ", subject: "لغة عربية ودين", qual: "ليسانس اداب وتربية", degree: "معلم أول أ" },
     { m: 2, name: "ابراهيم مختار حسن حجاج", code: "3413154", cadre: "غير مخاطب حالياً", subject: "محو أميه", qual: "محو أميه", degree: "بدون درجة (عامل مؤقت)" },
@@ -658,7 +619,7 @@
     { m: 25, name: "ياسمين كمال راغب محمد المنقل", code: "2204171", cadre: "معلم أول أ", subject: "لغة انجليزية", qual: "ليسانس اداب", degree: "معلم أول أ" }
   ];
 
-  const STORAGE_KEY = "KADWA_ELKREON_SCHOOL_APP_V4";
+  const STORAGE_KEY = "KADWA_ELKREON_SCHOOL_APP_V5";
 
   let appData = {
     subs: [],
@@ -671,10 +632,8 @@
 
   document.getElementById('printDate').textContent = new Date().toLocaleDateString('ar-EG');
 
-  // تعبئة القوائم المنسدلة بأسماء معلّمي المدرسة
   function populateTeacherDropdowns() {
     const dropdownIds = ['absentTeacherSelect', 'subTeacherSelect', 'tNameSelect', 'dTeacherSelect', 'vTeacherSelect'];
-    
     dropdownIds.forEach(id => {
       const select = document.getElementById(id);
       if(!select) return;
@@ -691,7 +650,6 @@
   function switchTab(evt, tabId) {
     document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
     document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-    
     evt.currentTarget.classList.add('active');
     document.getElementById(tabId).classList.add('active');
   }
@@ -699,13 +657,7 @@
   function renderStaffTable() {
     const search = document.getElementById('staffSearch').value.toLowerCase();
     const tbody = document.getElementById('staffDirectoryTable');
-    
-    const filtered = officialStaffList.filter(s => 
-      s.name.toLowerCase().includes(search) ||
-      s.code.includes(search) ||
-      s.subject.toLowerCase().includes(search) ||
-      s.cadre.toLowerCase().includes(search)
-    );
+    const filtered = officialStaffList.filter(s => s.name.toLowerCase().includes(search));
 
     tbody.innerHTML = filtered.map(st => `
       <tr>
@@ -723,31 +675,22 @@
   function loadAllData() {
     const localSaved = localStorage.getItem(STORAGE_KEY);
     if (localSaved) {
-      try {
-        appData = JSON.parse(localSaved);
-      } catch (e) {
-        console.error("Local load error", e);
-      }
+      try { appData = JSON.parse(localSaved); } catch (e) {}
     }
     renderAllTables();
     updateStats();
   }
 
   function saveDataStore() {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
-      renderAllTables();
-      updateStats();
-      showStatus("تم حفظ البيانات بنجاح في المنظومة!", "success");
-    } catch (e) {
-      showStatus("خطأ أثناء حفظ البيانات محلياً.", "error");
-    }
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
+    renderAllTables();
+    updateStats();
+    showStatus("تم حفظ البيانات والمستند بنجاح!", "success");
   }
 
   function renderAllTables() {
     // الاحتياطي
-    document.getElementById('subTable').innerHTML = appData.subs.length === 0 ? `<tr><td colspan="6" style="text-align:center;">لا توجد تكليفات احتبيطية مسجلة</td></tr>` :
-    appData.subs.map((item, index) => `
+    document.getElementById('subTable').innerHTML = appData.subs.map((item, index) => `
       <tr>
         <td>${item.absentTeacher}</td>
         <td>${item.subTeacher}</td>
@@ -762,8 +705,7 @@
     `).join('');
 
     // غياب المعلمين
-    document.getElementById('teacherTable').innerHTML = appData.teachers.length === 0 ? `<tr><td colspan="5" style="text-align:center;">لا يوجد غياب مسجل اليوم</td></tr>` :
-    appData.teachers.map((item, index) => `
+    document.getElementById('teacherTable').innerHTML = appData.teachers.map((item, index) => `
       <tr>
         <td>${item.name}</td>
         <td>${item.subject}</td>
@@ -774,8 +716,7 @@
     `).join('');
 
     // الإشراف
-    document.getElementById('dutyTable').innerHTML = appData.duties.length === 0 ? `<tr><td colspan="5" style="text-align:center;">لا يوجد إشراف مسجل</td></tr>` :
-    appData.duties.map((item, index) => `
+    document.getElementById('dutyTable').innerHTML = appData.duties.map((item, index) => `
       <tr>
         <td>${item.teacher}</td>
         <td>${item.location}</td>
@@ -786,8 +727,7 @@
     `).join('');
 
     // الطلاب
-    document.getElementById('studentTable').innerHTML = appData.students.length === 0 ? `<tr><td colspan="6" style="text-align:center;">لا توجد ملاحظات سلوكية مسجلة</td></tr>` :
-    appData.students.map((item, index) => `
+    document.getElementById('studentTable').innerHTML = appData.students.map((item, index) => `
       <tr>
         <td>${item.name}</td>
         <td>${item.className}</td>
@@ -798,9 +738,8 @@
       </tr>
     `).join('');
 
-    // الزيارات الصفية
-    document.getElementById('visitTable').innerHTML = appData.visits.length === 0 ? `<tr><td colspan="6" style="text-align:center;">لا توجد زيارات صفية مسجلة</td></tr>` :
-    appData.visits.map((item, index) => `
+    // الزيارات
+    document.getElementById('visitTable').innerHTML = appData.visits.map((item, index) => `
       <tr>
         <td>${item.teacher}</td>
         <td>${item.subjectClass}</td>
@@ -811,20 +750,52 @@
       </tr>
     `).join('');
 
-    // المستندات
-    document.getElementById('documentsTable').innerHTML = appData.documents.length === 0 ? `<tr><td colspan="5" style="text-align:center;">لا توجد مستندات مسجلة بالأرشيف</td></tr>` :
-    appData.documents.map((item, index) => `
+    // المستندات والمستندات المرفوعة
+    document.getElementById('documentsTable').innerHTML = appData.documents.map((item, index) => `
       <tr>
         <td><strong>📄 ${item.title}</strong></td>
+        <td><code>${item.fileName || 'مستند مفرغ'}</code></td>
+        <td>${item.fileSize || '-'}</td>
         <td>${item.category}</td>
-        <td>${item.notes || '-'}</td>
         <td>${item.date}</td>
-        <td class="no-print"><button class="btn-delete" onclick="deleteItem('documents', ${index})">🗑️ مسح</button></td>
+        <td class="no-print">
+          ${item.fileData ? `<a href="${item.fileData}" download="${item.fileName}"><button style="background:#0284c7; padding:4px 8px; font-size:12px;">📥 تحميل</button></a>` : ''}
+          <button class="btn-delete" onclick="deleteItem('documents', ${index})">🗑️ مسح</button>
+        </td>
       </tr>
     `).join('');
   }
 
-  // أحداث الإدخال
+  // معالجة رفع الملفات عبر زِر الرفع
+  document.getElementById('uploadForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const fileInput = document.getElementById('docFileInput');
+    const file = fileInput.files[0];
+
+    if (!file) {
+      alert("الرجاء اختيار ملف مرفق أولاً!");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function(evt) {
+      const sizeInKB = (file.size / 1024).toFixed(1) + " KB";
+      appData.documents.push({
+        title: document.getElementById('docTitle').value.trim(),
+        category: document.getElementById('docCategory').value,
+        notes: document.getElementById('docNotes').value.trim(),
+        fileName: file.name,
+        fileSize: sizeInKB,
+        fileData: evt.target.result, // حفظ الملف بصيغة DataURL
+        date: new Date().toLocaleDateString('ar-EG')
+      });
+      document.getElementById('uploadForm').reset();
+      saveDataStore();
+    };
+    reader.readAsDataURL(file);
+  });
+
+  // بقية النماذج
   document.getElementById('subForm').addEventListener('submit', (e) => {
     e.preventDefault();
     appData.subs.push({
@@ -891,49 +862,22 @@
     saveDataStore();
   });
 
-  document.getElementById('uploadForm').addEventListener('submit', (e) => {
-    e.preventDefault();
-    appData.documents.push({
-      title: document.getElementById('docTitle').value.trim(),
-      category: document.getElementById('docCategory').value,
-      notes: document.getElementById('docNotes').value.trim(),
-      date: new Date().toLocaleDateString('ar-EG')
-    });
-    e.target.reset();
-    saveDataStore();
-  });
-
   function exportToCSV(type) {
     let rows = [];
-    let filename = `مدرسة_كدوه_الكريون_${type}_${new Date().toISOString().slice(0,10)}.csv`;
-
     if (type === 'subs') {
       rows.push(["المعلم الغائب", "المعلم المكلف", "الهاتف", "الفصل", "الحصة", "التاريخ"]);
       appData.subs.forEach(i => rows.push([i.absentTeacher, i.subTeacher, i.subPhone || '', i.className, i.period, i.date]));
-    } else if (type === 'teachers') {
-      rows.push(["اسم المعلم", "المادة", "نوع العذر", "التاريخ"]);
-      appData.teachers.forEach(i => rows.push([i.name, i.subject, i.reason, i.date]));
-    } else if (type === 'duties') {
-      rows.push(["اسم المشرف", "موقع الإشراف", "الفترة", "التاريخ"]);
-      appData.duties.forEach(i => rows.push([i.teacher, i.location, i.shift, i.date]));
-    } else if (type === 'students') {
-      rows.push(["اسم الطالب", "الفصل", "نوع الملاحظة", "الإجراء المتخذ", "التاريخ"]);
-      appData.students.forEach(i => rows.push([i.name, i.className, i.type, i.action || '', i.date]));
-    } else if (type === 'visits') {
-      rows.push(["اسم المعلم", "المادة والصف", "موضوع الدرس", "التقييم والملاحظات", "التاريخ"]);
-      appData.visits.forEach(i => rows.push([i.teacher, i.subjectClass, i.topic || '', i.rating, i.date]));
     }
-
     let csvContent = "\uFEFF" + rows.map(e => e.map(val => `"${val}"`).join(",")).join("\n");
     let blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     let link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
-    link.download = filename;
+    link.download = `كدوه_الكريون_${type}.csv`;
     link.click();
   }
 
   function deleteItem(type, index) {
-    if (confirm("هل أنت متأكد من مسح هذا السجل؟")) {
+    if (confirm("هل أنت متأكد من المسح؟")) {
       appData[type].splice(index, 1);
       saveDataStore();
     }
@@ -942,21 +886,6 @@
   function updateStats() {
     const todayStr = new Date().toLocaleDateString('ar-EG');
     document.getElementById('todaySubCount').textContent = appData.subs.filter(r => r.date === todayStr).length;
-
-    const teacherCounts = {};
-    appData.subs.forEach(r => {
-      teacherCounts[r.subTeacher] = (teacherCounts[r.subTeacher] || 0) + 1;
-    });
-
-    let maxTeacher = '-';
-    let maxCount = 0;
-    for (const [teacher, count] of Object.entries(teacherCounts)) {
-      if (count > maxCount) {
-        maxCount = count;
-        maxTeacher = `${teacher} (${count} حصص)`;
-      }
-    }
-    document.getElementById('topTeacher').textContent = maxTeacher;
   }
 
   function sendWhatsApp(phone, teacher, className, period) {
@@ -974,9 +903,9 @@
     const statusMsg = document.getElementById('statusMsg');
     statusMsg.textContent = text;
     statusMsg.className = `status ${type}`;
+    setTimeout(() => { statusMsg.style.display = 'none'; }, 3000);
   }
 
-  // التشغيل الأولي
   populateTeacherDropdowns();
   renderStaffTable();
   loadAllData();
