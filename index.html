@@ -1,915 +1,610 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>منظومة الوكيل الذكي - مدرسة كدوه الكريون ابتدائي</title>
-  <style>
-    :root {
-      --primary: #1e3a8a;
-      --primary-hover: #1e40af;
-      --accent: #d97706;
-      --danger: #dc2626;
-      --success: #16a34a;
-      --bg: #f8fafc;
-      --card: #ffffff;
-      --text: #0f172a;
-      --border: #cbd5e1;
-    }
-    body {
-      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-      background-color: var(--bg);
-      color: var(--text);
-      margin: 0;
-      padding: 20px;
-    }
-    .container {
-      max-width: 1300px;
-      margin: 0 auto;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>البرنامج التفاعلي الشامل للتربية النفسية 2026 - 2027</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
     
-    .header {
-      text-align: center;
-      margin-bottom: 24px;
-      background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
-      color: white;
-      padding: 24px;
-      border-radius: 16px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-    .header h1 { margin: 0 0 8px 0; font-size: 1.8rem; }
-    .header p { margin: 0; opacity: 0.9; font-size: 1.1rem; }
-    .principal-badge {
-      display: inline-block;
-      background: #fef3c7;
-      color: #92400e;
-      padding: 8px 20px;
-      border-radius: 20px;
-      font-size: 15px;
-      font-weight: bold;
-      margin-top: 12px;
-      border: 1px solid #fde68a;
-    }
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0fdf4; }
+        .slide { display: none; }
+        .slide.active { display: block; animation: fadeIn 0.3s ease-in-out; }
+        .tab-btn.active { background-color: #15803d; color: white; border-color: #15803d; transform: scale(1.02); }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-    .tabs {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
-    }
-    .tab-btn {
-      background: #e2e8f0;
-      color: var(--text);
-      padding: 12px 18px;
-      border-radius: 10px;
-      border: none;
-      cursor: pointer;
-      font-weight: bold;
-      transition: all 0.2s;
-      font-size: 14px;
-    }
-    .tab-btn.active {
-      background: var(--primary);
-      color: white;
-      box-shadow: 0 2px 6px rgba(30, 58, 138, 0.3);
-    }
+        .tabs-scroll::-webkit-scrollbar { height: 6px; }
+        .tabs-scroll::-webkit-scrollbar-thumb { background-color: #16a34a; border-radius: 10px; }
 
-    .tab-content { display: none; }
-    .tab-content.active { display: block; }
+        .cover-frame {
+            border: 8px double #15803d;
+            outline: 2px solid #86efac;
+            outline-offset: -12px;
+            position: relative;
+        }
 
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 16px;
-      margin-bottom: 20px;
-    }
-    .stat-card {
-      background: var(--card);
-      padding: 18px;
-      border-radius: 12px;
-      border: 1px solid var(--border);
-      text-align: center;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-    }
-    .stat-card .val {
-      font-size: 26px;
-      font-weight: bold;
-      color: var(--primary);
-      margin-top: 6px;
-    }
+        .edit-mode-active [contenteditable="true"] {
+            outline: 2px dashed #16a34a !important;
+            background-color: #f0fdf4 !important;
+            padding: 2px 4px;
+            border-radius: 6px;
+            cursor: text;
+        }
 
-    .card {
-      background: var(--card);
-      padding: 24px;
-      border-radius: 14px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-      border: 1px solid var(--border);
-      margin-bottom: 20px;
-    }
-    .card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-bottom: 18px;
-      border-bottom: 2px solid #f1f5f9;
-      padding-bottom: 10px;
-    }
-    h2 { margin: 0; color: var(--primary); font-size: 1.3rem; }
-
-    .form-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 16px;
-      margin-bottom: 16px;
-    }
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-    label { font-size: 14px; font-weight: 600; color: #334155; }
-    input, select, textarea {
-      padding: 10px 12px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      outline: none;
-      font-size: 14px;
-    }
-
-    button {
-      background: var(--primary);
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: 600;
-      transition: background 0.2s;
-      font-size: 14px;
-    }
-    button:hover { background: var(--primary-hover); }
-    .btn-print { background: #059669; }
-    .btn-excel { background: #0284c7; }
-    .btn-upload { background: #7c3aed; }
-    .btn-upload:hover { background: #6d28d9; }
-    .btn-wa { background: #25d366; color: white; padding: 5px 10px; font-size: 13px; border-radius: 6px; border: none; cursor: pointer; }
-    .btn-delete { background: #fee2e2; color: var(--danger); padding: 5px 10px; font-size: 13px; border-radius: 6px; border: none; cursor: pointer; }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 10px;
-    }
-    th, td {
-      border: 1px solid var(--border);
-      padding: 10px 12px;
-      text-align: right;
-      font-size: 13px;
-    }
-    th { background: #f1f5f9; font-weight: 700; color: #1e293b; }
-    tr:nth-child(even) { background-color: #f8fafc; }
-
-    .status { margin-top: 12px; font-size: 14px; font-weight: bold; padding: 10px; border-radius: 8px; display: none; }
-    .status.success { background: #dcfce7; color: var(--success); display: block; }
-
-    .print-header, .print-footer { display: none; }
-
-    @media print {
-      body { background: white; padding: 0; }
-      .no-print, .tabs { display: none !important; }
-      .tab-content { display: block !important; }
-      .card { box-shadow: none; padding: 0; border: none; }
-      th, td { border: 1px solid #000; padding: 6px; font-size: 11px; }
-      .print-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        border-bottom: 2px solid #000;
-        padding-bottom: 10px;
-        margin-bottom: 15px;
-      }
-      .print-footer {
-        display: flex;
-        justify-content: space-between;
-        margin-top: 40px;
-        padding-top: 15px;
-        font-weight: bold;
-      }
-    }
-  </style>
+        @media print {
+            nav, .no-print, button, input, select, .modal-backdrop { display: none !important; }
+            body { background-color: white !important; font-size: 12pt; }
+            main { padding: 0 !important; }
+            .slide { display: block !important; page-break-after: always; }
+            .slide:last-child { page-break-after: avoid; }
+            .shadow-2xl, .shadow-md, .shadow-sm { box-shadow: none !important; }
+            .border-2 { border-width: 1px !important; }
+        }
+    </style>
 </head>
-<body>
+<body class="flex flex-col min-h-screen relative text-gray-800">
 
-<div class="container">
-  <div class="print-header">
-    <div>
-      <h3>محافظة البحيرة - مديرية التربية والتعليم - إدارة مركز كفر الدوار</h3>
-      <h4>مدرسة: كدوه الكريون ابتدائي</h4>
-      <p>مكتب وكيل المدرسة: الأستاذة / أميرة علي إبراهيم شلبي</p>
-    </div>
-    <div style="text-align: left;">
-      <p>التاريخ: <span id="printDate"></span></p>
-      <p>سجل إداري رسمي معتمد</p>
-    </div>
-  </div>
+    <!-- شريط التحكم والتبويبات -->
+    <nav class="bg-white/95 backdrop-blur-md shadow-md p-3 sticky top-0 z-40 border-b border-green-200 no-print">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-2">
+            
+            <div class="flex gap-1.5 overflow-x-auto pb-1 tabs-scroll justify-start w-full md:w-auto flex-grow" id="tabs-container">
+                <button onclick="showSlide(0)" class="tab-btn active px-3 py-1.5 rounded-xl border border-green-700 font-bold text-green-800 text-xs whitespace-nowrap transition-all shadow-sm">الغلاف</button>
+                <button onclick="showSlide(1)" class="tab-btn px-3 py-1.5 rounded-xl border border-green-700 font-bold text-green-800 text-xs whitespace-nowrap transition-all shadow-sm">سبتمبر</button>
+                <button onclick="showSlide(2)" class="tab-btn px-3 py-1.5 rounded-xl border border-green-700 font-bold text-green-800 text-xs whitespace-nowrap transition-all shadow-sm">أكتوبر</button>
+                <button onclick="showSlide(3)" class="tab-btn px-3 py-1.5 rounded-xl border border-green-700 font-bold text-green-800 text-xs whitespace-nowrap transition-all shadow-sm">نوفمبر</button>
+                <button onclick="showSlide(4)" class="tab-btn px-3 py-1.5 rounded-xl border border-green-700 font-bold text-green-800 text-xs whitespace-nowrap transition-all shadow-sm">ديسمبر</button>
+                <button onclick="showSlide(5)" class="tab-btn px-3 py-1.5 rounded-xl border border-green-700 font-bold text-green-800 text-xs whitespace-nowrap transition-all shadow-sm">يناير/فبراير</button>
+                <button onclick="showSlide(6)" class="tab-btn px-3 py-1.5 rounded-xl border border-green-700 font-bold text-green-800 text-xs whitespace-nowrap transition-all shadow-sm">مارس</button>
+                <button onclick="showSlide(7)" class="tab-btn px-3 py-1.5 rounded-xl border border-green-700 font-bold text-green-800 text-xs whitespace-nowrap transition-all shadow-sm">أبريل/مايو</button>
+                <button onclick="showSlide(8)" class="tab-btn px-3 py-1.5 rounded-xl border border-green-700 font-bold text-green-800 text-xs whitespace-nowrap transition-all shadow-sm">تحضير معتمد 📝</button>
+                <button onclick="showSlide(9)" class="tab-btn px-3 py-1.5 rounded-xl border border-green-700 font-bold text-green-800 text-xs whitespace-nowrap transition-all shadow-sm">المتفوقون 🌟</button>
+                <button onclick="showSlide(10)" class="tab-btn px-3 py-1.5 rounded-xl border border-green-700 font-bold text-green-800 text-xs whitespace-nowrap transition-all shadow-sm">المتأخرون 📈</button>
+                <button onclick="showSlide(11)" class="tab-btn px-3 py-1.5 rounded-xl border border-green-700 font-bold text-green-800 text-xs whitespace-nowrap transition-all shadow-sm">الموهوبون 🎨</button>
+                <button onclick="showSlide(12)" class="tab-btn px-3 py-1.5 rounded-xl border border-green-700 font-bold text-green-800 text-xs whitespace-nowrap transition-all shadow-sm">برنامج الدمج 🤝</button>
+                <button onclick="showSlide(13)" class="tab-btn px-3 py-1.5 rounded-xl border border-green-700 font-bold text-green-800 text-xs whitespace-nowrap transition-all shadow-sm bg-emerald-50">سجل الجلسات 📋</button>
+                <button onclick="showSlide(14)" class="tab-btn px-3 py-1.5 rounded-xl border border-green-700 font-bold text-green-800 text-xs whitespace-nowrap transition-all shadow-sm bg-emerald-50">مقياس سريع 📊</button>
+            </div>
 
-  <div class="header no-print">
-    <h1>🏛️ منظومة الوكيل الذكي الشاملة</h1>
-    <p>مدرسة كدوه الكريون ابتدائي - إدارة مركز كفر الدوار التعليمية</p>
-    <div class="principal-badge">👩‍💼 إدارة وإشراف: الأستاذة / أميرة علي إبراهيم شلبي (وكيل المدرسة)</div>
-  </div>
-
-  <div class="tabs no-print">
-    <button class="tab-btn active" onclick="switchTab(event, 'subTab')">📌 الحصص الاحتياطية</button>
-    <button class="tab-btn" onclick="switchTab(event, 'staffDirectoryTab')">👥 قاعدة بيانات العاملين (25)</button>
-    <button class="tab-btn" onclick="switchTab(event, 'teacherTab')">👨‍🏫 غياب وتأخير المعلمين</button>
-    <button class="tab-btn" onclick="switchTab(event, 'dutyTab')">🛡️ الإشراف اليومي والفسحة</button>
-    <button class="tab-btn" onclick="switchTab(event, 'studentTab')">👨‍🎓 متابعة الطلاب والسلوك</button>
-    <button class="tab-btn" onclick="switchTab(event, 'visitTab')">📑 الزيارات الصفية والتوجيه</button>
-    <button class="tab-btn" onclick="switchTab(event, 'uploadTab')">📤 أرشيف ورفع المستندات</button>
-  </div>
-
-  <!-- 1. الاحتياطي -->
-  <div id="subTab" class="tab-content active">
-    <div class="stats-grid no-print">
-      <div class="stat-card">
-        <div>إجمالي الاحتياطي المسجل اليوم</div>
-        <div class="val" id="todaySubCount">0</div>
-      </div>
-      <div class="stat-card">
-        <div>الأكثر تكليفاً بالإحتياطي</div>
-        <div class="val" id="topTeacher" style="font-size: 15px; margin-top: 8px;">-</div>
-      </div>
-    </div>
-
-    <div class="card no-print">
-      <h2>📝 إسناد حصة احتياطية جديدة</h2>
-      <form id="subForm" style="margin-top: 16px;">
-        <div class="form-grid">
-          <div class="form-group">
-            <label>اسم المعلم الغائب</label>
-            <select id="absentTeacherSelect" required></select>
-          </div>
-          <div class="form-group">
-            <label>المعلم المكلف (الاحتياطي)</label>
-            <select id="subTeacherSelect" required></select>
-          </div>
-          <div class="form-group">
-            <label>رقم هاتف المكلف (لواتساب)</label>
-            <input type="tel" id="subPhone" placeholder="010xxxxxxxx">
-          </div>
-          <div class="form-group">
-            <label>الصف / الفصل</label>
-            <input type="text" id="className" required placeholder="مثال: 1/2 أو 3/1">
-          </div>
-          <div class="form-group">
-            <label>الحصة</label>
-            <select id="period">
-              <option value="الحصة الأولى">الحصة الأولى</option>
-              <option value="الحصة الثانية">الحصة الثانية</option>
-              <option value="الحصة الثالثة">الحصة الثالثة</option>
-              <option value="الحصة الرابعة">الحصة الرابعة</option>
-              <option value="الحصة الخامسة">الحصة الخامسة</option>
-              <option value="الحصة السادسة">الحصة السادسة</option>
-            </select>
-          </div>
+            <div class="flex items-center gap-1.5 w-full md:w-auto justify-end flex-wrap">
+                <span id="syncStatus" class="text-xs font-bold text-gray-600 bg-gray-100 px-2 py-1 rounded-lg">⚙️ جاهز</span>
+                <button id="editToggleBtn" onclick="toggleEditMode()" class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-1 px-2.5 rounded-xl text-xs shadow-md transition">✏️ تعديل الصفحة</button>
+                <button id="saveBtn" onclick="saveData()" class="bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-1 px-2.5 rounded-xl text-xs shadow-md transition hidden">💾 حفظ التغييرات</button>
+                <button onclick="exportDataJSON()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded-xl text-xs shadow-sm transition" title="تصدير نسخة احتياطية">📥 احتياطي</button>
+                <button onclick="importDataJSON()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-1 px-2 rounded-xl text-xs shadow-sm transition" title="استرجاع نسخة احتياطية">📤 استرجاع</button>
+                <button onclick="resetData()" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-1 px-2 rounded-xl text-xs shadow-sm transition" title="استعادة الأصلي">🔄</button>
+                <button onclick="window.print()" class="bg-red-700 hover:bg-red-800 text-white font-bold py-1 px-3 rounded-xl text-xs shadow-md transition">🖨️ PDF</button>
+            </div>
         </div>
-        <button type="submit" id="saveSubBtn">⚡ تسجيل التكليف وحفظه</button>
-      </form>
-    </div>
+    </nav>
 
-    <div class="card">
-      <div class="card-header">
-        <h2>📋 دفتر تكليفات الحصص الاحتياطية - مدرسة كدوه الكريون</h2>
-        <div class="no-print">
-          <button onclick="exportToCSV('subs')" class="btn-excel">📊 تصدير Excel</button>
-          <button onclick="window.print()" class="btn-print">🖨️ طباعة السجل</button>
+    <!-- المنطقة الرئيسية -->
+    <main class="flex-grow flex items-center justify-center p-3 md:p-6">
+        <div class="w-full max-w-5xl bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl border-2 border-green-500/30 p-5 md:p-8 min-h-[620px] flex flex-col justify-between transition-all" id="editableArea">
+
+            <!-- الشريحة 0: الغلاف -->
+            <div class="slide active cover-frame p-6 md:p-10 rounded-2xl bg-gradient-to-b from-white via-green-50/20 to-emerald-50/40 text-center my-auto space-y-6">
+                <div class="flex justify-between items-center text-xs md:text-sm font-bold text-green-900 border-b-2 border-green-600 pb-3">
+                    <div class="editable">وزارة التربية والتعليم والتعليم الفني</div>
+                    <div class="editable">مديرية التربية والتعليم</div>
+                    <div class="editable">توجيه التربية النفسية</div>
+                </div>
+
+                <div class="space-y-3 my-6">
+                    <div class="inline-block bg-green-700 text-white text-xs md:text-sm font-extrabold px-6 py-1.5 rounded-full shadow-md editable">البرنامج التفاعلي المعتمد</div>
+                    <h1 class="text-3xl md:text-5xl font-black text-green-900 leading-tight editable">الخطة والبرنامج الزمني للتربية النفسية</h1>
+                    <h2 class="text-xl md:text-2xl font-bold text-gray-700 editable">للعام الدراسي 2026 / 2027 م</h2>
+                    <div class="w-40 h-1.5 bg-gradient-to-r from-green-400 via-green-600 to-green-800 mx-auto rounded-full my-2"></div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-3xl mx-auto text-right bg-white/80 p-4 rounded-2xl border border-green-200 shadow-sm text-xs md:text-sm">
+                    <div class="space-y-1">
+                        <p class="font-bold text-green-900">إعداد الأخصائي النفسي:</p>
+                        <p class="text-gray-800 font-extrabold text-sm md:text-base border-r-4 border-green-600 pr-2 editable">أ/ محمد عبدالوهاب القزاز</p>
+                    </div>
+                    <div class="space-y-1">
+                        <p class="font-bold text-green-900">تحت إشراف وتوجيه الكرام:</p>
+                        <p class="text-gray-800 font-bold border-r-4 border-emerald-600 pr-2 editable">أ/ هويدا الجوجري</p>
+                        <p class="text-gray-800 font-bold border-r-4 border-emerald-600 pr-2 editable">أ/ منير أبو المجد</p>
+                    </div>
+                </div>
+
+                <div class="pt-4 no-print flex justify-center gap-3">
+                    <button onclick="nextSlide()" class="bg-gradient-to-r from-green-600 to-emerald-800 hover:from-green-700 hover:to-emerald-900 text-white font-black text-base md:text-lg py-3 px-10 rounded-2xl shadow-xl hover:scale-105 transition-all">
+                        بدء العرض التفاعلي 👈
+                    </button>
+                </div>
+            </div>
+
+            <!-- الشريحة 1: سبتمبر -->
+            <div class="slide space-y-4">
+                <div class="flex justify-between items-center border-b-2 border-green-500 pb-2">
+                    <h2 class="text-xl md:text-2xl font-bold text-green-800 editable">خطة شهر سبتمبر - سجل الازدهار النفسي</h2>
+                    <span class="bg-green-100 text-green-800 text-xs px-3 py-1 rounded-full font-bold shadow-sm editable">التهيئة والاستقبال</span>
+                </div>
+                <div class="p-4 bg-gradient-to-br from-green-50 to-emerald-100/60 rounded-2xl border border-green-300 shadow-sm">
+                    <span class="text-xs font-bold text-green-700 bg-green-200 px-2 py-0.5 rounded">الجلسة الإرشادية الشهريّة</span>
+                    <h3 class="font-bold text-green-900 text-lg mt-1 editable">العنوان: أنا أستحق أن أكون سعيداً</h3>
+                    <p class="text-gray-700 text-xs md:text-sm mt-2"><strong>الهدف:</strong> <span class="editable">بناء التفكير الإيجابي وتنمية تقدير الذات لمواجهة ضغوط بداية العام الدراسي.</span></p>
+                </div>
+            </div>
+
+            <!-- الشريحة 2: أكتوبر -->
+            <div class="slide space-y-4">
+                <div class="flex justify-between items-center border-b-2 border-green-500 pb-2">
+                    <h2 class="text-xl md:text-2xl font-bold text-green-800 editable">خطة شهر أكتوبر - سجل الازدهار النفسي</h2>
+                    <span class="bg-green-100 text-green-800 text-xs px-3 py-1 rounded-full font-bold shadow-sm editable">التوعية والصحة النفسية</span>
+                </div>
+                <div class="p-4 bg-gradient-to-br from-green-50 to-emerald-100/60 rounded-2xl border border-green-300 shadow-sm">
+                    <span class="text-xs font-bold text-green-700 bg-green-200 px-2 py-0.5 rounded">الجلسة الإرشادية الشهريّة</span>
+                    <h3 class="font-bold text-green-900 text-lg mt-1 editable">العنوان: إدارة المشاعر والتعبير التوكيدي</h3>
+                    <p class="text-gray-700 text-xs md:text-sm mt-2"><strong>الهدف:</strong> <span class="editable">خفض الانفعالات الحادة واكتساب مهارة التعبير الحازم عن النفس.</span></p>
+                </div>
+            </div>
+
+            <!-- الشريحة 3: نوفمبر -->
+            <div class="slide space-y-4">
+                <div class="flex justify-between items-center border-b-2 border-green-500 pb-2">
+                    <h2 class="text-xl md:text-2xl font-bold text-green-800 editable">خطة شهر نوفمبر - سجل الازدهار النفسي</h2>
+                    <span class="bg-green-100 text-green-800 text-xs px-3 py-1 rounded-full font-bold shadow-sm editable">المهارات الحياتية</span>
+                </div>
+                <div class="p-4 bg-gradient-to-br from-green-50 to-emerald-100/60 rounded-2xl border border-green-300 shadow-sm">
+                    <span class="text-xs font-bold text-green-700 bg-green-200 px-2 py-0.5 rounded">الجلسة الإرشادية الشهريّة</span>
+                    <h3 class="font-bold text-green-900 text-lg mt-1 editable">العنوان: قوة التفكير الإيجابي وإعادة التأطير</h3>
+                    <p class="text-gray-700 text-xs md:text-sm mt-2"><strong>الهدف:</strong> <span class="editable">تعديل الأفكار التلقائية السلبية واستبدالها بنظرة معرفية مرنة وبناءة.</span></p>
+                </div>
+            </div>
+
+            <!-- الشريحة 4: ديسمبر -->
+            <div class="slide space-y-4">
+                <div class="flex justify-between items-center border-b-2 border-green-500 pb-2">
+                    <h2 class="text-xl md:text-2xl font-bold text-green-800 editable">خطة شهر ديسمبر - سجل الازدهار النفسي</h2>
+                    <span class="bg-green-100 text-green-800 text-xs px-3 py-1 rounded-full font-bold shadow-sm editable">الاستعداد للامتحانات</span>
+                </div>
+                <div class="p-4 bg-gradient-to-br from-green-50 to-emerald-100/60 rounded-2xl border border-green-300 shadow-sm">
+                    <span class="text-xs font-bold text-green-700 bg-green-200 px-2 py-0.5 rounded">الجلسة الإرشادية الشهريّة</span>
+                    <h3 class="font-bold text-green-900 text-lg mt-1 editable">العنوان: إدارة قلق الاختبارات ومهارات الاستذكار</h3>
+                    <p class="text-gray-700 text-xs md:text-sm mt-2"><strong>الهدف:</strong> <span class="editable">تخفيف القلق الانفعالي قبل فترة الامتحانات وتحسين أساليب التحصيل الدراسي.</span></p>
+                </div>
+            </div>
+
+            <!-- الشريحة 5: يناير/فبراير -->
+            <div class="slide space-y-4">
+                <div class="flex justify-between items-center border-b-2 border-green-500 pb-2">
+                    <h2 class="text-xl md:text-2xl font-bold text-green-800 editable">خطة شهر يناير / فبراير - الفصل الدراسي الثاني</h2>
+                    <span class="bg-green-100 text-green-800 text-xs px-3 py-1 rounded-full font-bold shadow-sm editable">إعادة التقييم والانطلاق</span>
+                </div>
+                <div class="p-4 bg-gradient-to-br from-green-50 to-emerald-100/60 rounded-2xl border border-green-300 shadow-sm">
+                    <span class="text-xs font-bold text-green-700 bg-green-200 px-2 py-0.5 rounded">الجلسة الإرشادية الشهريّة</span>
+                    <h3 class="font-bold text-green-900 text-lg mt-1 editable">العنوان: التجديد الذاتي وبناء أهداف الفصل الثاني</h3>
+                    <p class="text-gray-700 text-xs md:text-sm mt-2"><strong>الهدف:</strong> <span class="editable">تحفيز الطلاب وتحديد نقاط التحسين للاستمرار بنجاح في الفصل الدراسي الثاني.</span></p>
+                </div>
+            </div>
+
+            <!-- الشريحة 6: مارس -->
+            <div class="slide space-y-4">
+                <div class="flex justify-between items-center border-b-2 border-green-500 pb-2">
+                    <h2 class="text-xl md:text-2xl font-bold text-green-800 editable">خطة شهر مارس - سجل الازدهار النفسي</h2>
+                    <span class="bg-green-100 text-green-800 text-xs px-3 py-1 rounded-full font-bold shadow-sm editable">الذكاء الاجتماعي وتجنب التنمر</span>
+                </div>
+                <div class="p-4 bg-gradient-to-br from-green-50 to-emerald-100/60 rounded-2xl border border-green-300 shadow-sm">
+                    <span class="text-xs font-bold text-green-700 bg-green-200 px-2 py-0.5 rounded">الجلسة الإرشادية الشهريّة</span>
+                    <h3 class="font-bold text-green-900 text-lg mt-1 editable">العنوان: المهارات الاجتماعية وبناء العلاقات السليمة</h3>
+                    <p class="text-gray-700 text-xs md:text-sm mt-2"><strong>الهدف:</strong> <span class="editable">تعزيز التعاطف والذكاء الاجتماعي ومكافحة مظاهر السلوك العدواني والتنمر.</span></p>
+                </div>
+            </div>
+
+            <!-- الشريحة 7: أبريل/مايو -->
+            <div class="slide space-y-4">
+                <div class="flex justify-between items-center border-b-2 border-green-500 pb-2">
+                    <h2 class="text-xl md:text-2xl font-bold text-green-800 editable">خطة شهر أبريل / مايو - الحصاد والختام</h2>
+                    <span class="bg-green-100 text-green-800 text-xs px-3 py-1 rounded-full font-bold shadow-sm editable">نهاية العام الدراسي</span>
+                </div>
+                <div class="p-4 bg-gradient-to-br from-green-50 to-emerald-100/60 rounded-2xl border border-green-300 shadow-sm">
+                    <span class="text-xs font-bold text-green-700 bg-green-200 px-2 py-0.5 rounded">الجلسة الإرشادية الشهريّة</span>
+                    <h3 class="font-bold text-green-900 text-lg mt-1 editable">العنوان: الثبات الانفعالي والتأهب للامتحانات النهائية</h3>
+                    <p class="text-gray-700 text-xs md:text-sm mt-2"><strong>الهدف:</strong> <span class="editable">دعم الطلاب في تحصيلهم النهائي وتنظيم أوقات المراجعة النهائية بثقة.</span></p>
+                </div>
+            </div>
+
+            <!-- الشريحة 8: تحضير معتمد -->
+            <div class="slide space-y-4">
+                <div class="flex justify-between items-center border-b-2 border-green-500 pb-2">
+                    <h2 class="text-xl md:text-2xl font-bold text-green-800 editable">نموذج تحضير جلسة إرشادية معتمدة 📝</h2>
+                </div>
+                <div class="p-3 bg-white border-r-4 border-green-600 shadow-sm rounded-lg text-xs md:text-sm space-y-2">
+                    <div>
+                        <h3 class="font-bold text-green-900">الأهداف الإجرائية للجلسة:</h3>
+                        <p class="text-gray-700 mt-1 editable">• أن يحدد الطالب نقطتي قوة في شخصيته بدقة.</p>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-green-900">الفنيات والأساليب الإرشادية:</h3>
+                        <p class="text-gray-700 mt-1 editable">• المناقشة والحوار • النمذجة السلوكية • إعادة التشكيل المعرفي • الواجب المنزلي.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- الشريحة 9: المتفوقون -->
+            <div class="slide space-y-4">
+                <div class="flex justify-between items-center border-b-2 border-green-500 pb-2">
+                    <h2 class="text-xl md:text-2xl font-bold text-green-800 editable">برنامج رعاية الطلاب المتفوقين 🌟</h2>
+                </div>
+                <div class="p-4 bg-yellow-50/80 rounded-2xl border border-yellow-300 shadow-sm text-xs md:text-sm space-y-2">
+                    <p class="editable"><strong>الأهداف:</strong> استثمار الطاقات المرتفعة، تنمية التفكير الناقد والدافعية المرتفعة للإنجاز.</p>
+                    <p class="editable"><strong>الأنشطة:</strong> ورش عمل في تنظيم الوقت، التوجيه الذاتي، وتكريم دوري بالمدرسة.</p>
+                </div>
+            </div>
+
+            <!-- الشريحة 10: المتأخرون -->
+            <div class="slide space-y-4">
+                <div class="flex justify-between items-center border-b-2 border-green-500 pb-2">
+                    <h2 class="text-xl md:text-2xl font-bold text-green-800 editable">برنامج رعاية المتأخرين دراسياً 📈</h2>
+                </div>
+                <div class="p-4 bg-orange-50/80 rounded-2xl border border-orange-300 shadow-sm text-xs md:text-sm space-y-2">
+                    <p class="editable"><strong>الأهداف:</strong> تشخيص أسباب التأخر التحصيلي (أنماط التعلم، القلق، العوامل الأسرية) وبناء خطط علاجية.</p>
+                    <p class="editable"><strong>الأنشطة:</strong> جلسات إرشاد جماعي وفردي، تحسين الدافعية للتفكير والإنجاز.</p>
+                </div>
+            </div>
+
+            <!-- الشريحة 11: الموهوبون -->
+            <div class="slide space-y-4">
+                <div class="flex justify-between items-center border-b-2 border-green-500 pb-2">
+                    <h2 class="text-xl md:text-2xl font-bold text-green-800 editable">برنامج اكتشاف ورعاية الموهوبين 🎨</h2>
+                </div>
+                <div class="p-4 bg-purple-50/80 rounded-2xl border border-purple-300 shadow-sm text-xs md:text-sm space-y-2">
+                    <p class="editable"><strong>الأهداف:</strong> اكتشاف المهارات الخاصة وتوجيه الابتكار والقدرات الفنية/العلمية.</p>
+                    <p class="editable"><strong>الأنشطة:</strong> معارض مدرسية، ورش الابتكار، والربط بالمسابقات المحلية.</p>
+                </div>
+            </div>
+
+            <!-- الشريحة 12: الدمج -->
+            <div class="slide space-y-4">
+                <div class="flex justify-between items-center border-b-2 border-green-500 pb-2">
+                    <h2 class="text-xl md:text-2xl font-bold text-green-800 editable">برنامج الطلاب المدمجين وذوي الإعاقة 🤝</h2>
+                </div>
+                <div class="p-4 bg-blue-50/80 rounded-2xl border border-blue-300 shadow-sm text-xs md:text-sm space-y-2">
+                    <p class="editable"><strong>الأهداف:</strong> الدعم النفسي والاجتماعي، التكيف الميداني، ومساعدة البيئة المدرسية على التقبُّل والدمج.</p>
+                    <p class="editable"><strong>الأنشطة:</strong> جلسات تعديل سلوك، وتفعيل الأنشطة المشتركة لتنمية التفاعل الاجتماعي.</p>
+                </div>
+            </div>
+
+            <!-- الشريحة 13: سجل الجلسات الميداني الإرشادي -->
+            <div class="slide space-y-4">
+                <div class="flex justify-between items-center border-b-2 border-emerald-600 pb-2">
+                    <h2 class="text-xl md:text-2xl font-bold text-green-800">📋 سجل متابعة الجلسات والإرشاد الفردي/الجماعي</h2>
+                    <span class="bg-emerald-100 text-emerald-800 text-xs px-3 py-1 rounded-full font-bold">أداة عمل ميدانية</span>
+                </div>
+                
+                <!-- نموذج إضافة جلسة -->
+                <div class="bg-emerald-50/60 p-4 rounded-2xl border border-emerald-200 space-y-3 no-print text-xs md:text-sm">
+                    <h3 class="font-bold text-emerald-900">➕ تسجيل جلسة إرشادية جديدة:</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-2">
+                        <input type="date" id="sessDate" class="p-2 rounded-lg border border-emerald-300">
+                        <input type="text" id="sessStudent" placeholder="اسم الطالب / الفصل" class="p-2 rounded-lg border border-emerald-300">
+                        <select id="sessType" class="p-2 rounded-lg border border-emerald-300">
+                            <option value="فردي - سلوكي">فردي - سلوكي</option>
+                            <option value="فردي - تحصيلي">فردي - تحصيلي</option>
+                            <option value="جماعي - إرشادي">جماعي - إرشادي</option>
+                            <option value="متابعة دمج">متابعة دمج</option>
+                            <option value="رعاية موهبة">رعاية موهبة</option>
+                        </select>
+                        <input type="text" id="sessGoal" placeholder="موضوع الجلسة / الهدف" class="p-2 rounded-lg border border-emerald-300">
+                    </div>
+                    <div class="flex justify-between items-center pt-1">
+                        <input type="text" id="sessNotes" placeholder="التوصيات والواجب الإرشادي..." class="p-2 rounded-lg border border-emerald-300 flex-grow ml-2">
+                        <button onclick="addSessionRecord()" class="bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-2 px-4 rounded-xl transition shadow-md whitespace-nowrap">إضافة للسجل</button>
+                    </div>
+                </div>
+
+                <!-- جدول الجلسات المسجلة -->
+                <div class="overflow-x-auto">
+                    <table class="w-full text-xs md:text-sm text-right border-collapse border border-green-200 rounded-xl overflow-hidden shadow-sm">
+                        <thead class="bg-green-700 text-white">
+                            <tr>
+                                <th class="p-2 border border-green-600">التاريخ</th>
+                                <th class="p-2 border border-green-600">اسم الطالب / الفصل</th>
+                                <th class="p-2 border border-green-600">نوع الجلسة</th>
+                                <th class="p-2 border border-green-600">الموضوع / الهدف</th>
+                                <th class="p-2 border border-green-600">التوصيات والنتائج</th>
+                                <th class="p-2 border border-green-600 no-print">إجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="sessionsTableBody" class="bg-white divide-y divide-green-100">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- الشريحة 14: التقييم والمقياس النفسي السريع -->
+            <div class="slide space-y-4">
+                <div class="flex justify-between items-center border-b-2 border-emerald-600 pb-2">
+                    <h2 class="text-xl md:text-2xl font-bold text-green-800">📊 أداة الفرز والتقييم النفسي والمدرسي السريع</h2>
+                    <span class="bg-emerald-100 text-emerald-800 text-xs px-3 py-1 rounded-full font-bold">مقياس تقدير الدافعية والتكيف</span>
+                </div>
+
+                <div class="bg-white p-4 rounded-2xl border border-emerald-200 space-y-4 text-xs md:text-sm">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 bg-emerald-50 p-3 rounded-xl">
+                        <div>
+                            <label class="font-bold text-emerald-900 block mb-1">اسم الطالب المعاين:</label>
+                            <input type="text" id="quizStudentName" placeholder="أدخل اسم الطالب..." class="w-full p-2 rounded-lg border border-emerald-300">
+                        </div>
+                        <div>
+                            <label class="font-bold text-emerald-900 block mb-1">الصف / الفصل:</label>
+                            <input type="text" id="quizStudentClass" placeholder="مثال: 1 / 2 ثانوي" class="w-full p-2 rounded-lg border border-emerald-300">
+                        </div>
+                    </div>
+
+                    <div class="space-y-3">
+                        <h3 class="font-bold text-green-900">بنود التقييم السريع (اختر من 1 إلى 5):</h3>
+                        
+                        <div class="flex justify-between items-center bg-gray-50 p-2 rounded-lg">
+                            <span>1. الانتظام والتكيف مع الجو المدرسي:</span>
+                            <select class="quiz-score p-1 rounded border border-gray-300"><option value="1">1 (ضعيف)</option><option value="2">2</option><option value="3" selected>3 (متوسط)</option><option value="4">4</option><option value="5">5 (ممتاز)</option></select>
+                        </div>
+                        <div class="flex justify-between items-center bg-gray-50 p-2 rounded-lg">
+                            <span>2. الدافعية للتحصيل والاستيعاب الدراسي:</span>
+                            <select class="quiz-score p-1 rounded border border-gray-300"><option value="1">1 (ضعيف)</option><option value="2">2</option><option value="3" selected>3 (متوسط)</option><option value="4">4</option><option value="5">5 (ممتاز)</option></select>
+                        </div>
+                        <div class="flex justify-between items-center bg-gray-50 p-2 rounded-lg">
+                            <span>3. التواصل الاجتماعي مع الأقران والمعلمين:</span>
+                            <select class="quiz-score p-1 rounded border border-gray-300"><option value="1">1 (ضعيف)</option><option value="2">2</option><option value="3" selected>3 (متوسط)</option><option value="4">4</option><option value="5">5 (ممتاز)</option></select>
+                        </div>
+                        <div class="flex justify-between items-center bg-gray-50 p-2 rounded-lg">
+                            <span>4. الاتزان الانفعالي والتحكم في الغضب:</span>
+                            <select class="quiz-score p-1 rounded border border-gray-300"><option value="1">1 (ضعيف)</option><option value="2">2</option><option value="3" selected>3 (متوسط)</option><option value="4">4</option><option value="5">5 (ممتاز)</option></select>
+                        </div>
+                    </div>
+
+                    <div class="pt-2 flex justify-between items-center">
+                        <button onclick="calculateQuiz()" class="bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-2 px-6 rounded-xl shadow-md transition">حساب التقييم والتوصية</button>
+                        <div id="quizResult" class="font-bold text-sm text-green-900 bg-green-100 p-2 rounded-xl border border-green-300 hidden"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- أزرار التنقل السفلية -->
+            <div class="flex justify-between items-center pt-3 border-t border-gray-200 mt-3 no-print">
+                <button onclick="prevSlide()" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-5 rounded-xl transition text-xs md:text-sm shadow-sm">السابق</button>
+                <span id="slide-number" class="text-xs md:text-sm font-bold text-green-800 bg-green-100 px-3 py-1 rounded-full">1 / 15</span>
+                <button onclick="nextSlide()" class="bg-green-700 hover:bg-green-800 text-white font-bold py-2 px-5 rounded-xl transition text-xs md:text-sm shadow-md">التالي</button>
+            </div>
+
         </div>
-      </div>
-      <table>
-        <thead>
-          <tr>
-            <th>المعلم الغائب</th>
-            <th>المعلم المكلف</th>
-            <th>الفصل</th>
-            <th>الحصة</th>
-            <th>التاريخ</th>
-            <th class="no-print">إجراءات</th>
-          </tr>
-        </thead>
-        <tbody id="subTable"></tbody>
-      </table>
-    </div>
-  </div>
+    </main>
 
-  <!-- 2. دليل بيانات العاملين -->
-  <div id="staffDirectoryTab" class="tab-content">
-    <div class="card">
-      <div class="card-header">
-        <h2>👥 قاعدة بيانات العاملين الرسمية بالمدرسة</h2>
-        <div class="no-print">
-          <input type="text" id="staffSearch" placeholder="🔍 بحث باسم المعلم..." oninput="renderStaffTable()" style="padding: 8px; width: 260px;">
-          <button onclick="window.print()" class="btn-print">🖨️ طباعة القائمة</button>
-        </div>
-      </div>
-      <table>
-        <thead>
-          <tr>
-            <th>م</th>
-            <th>الاسم رباعي</th>
-            <th>كود المعلم</th>
-            <th>الوظيفة الكادر / الحالية</th>
-            <th>مادة التدريس</th>
-            <th>المؤهل الدراسي</th>
-            <th>الدرجة المالية</th>
-          </tr>
-        </thead>
-        <tbody id="staffDirectoryTable"></tbody>
-      </table>
-    </div>
-  </div>
+    <input type="file" id="importFileInput" class="hidden" accept=".json" onchange="handleImportFile(event)">
 
-  <!-- 3. غياب المعلمين -->
-  <div id="teacherTab" class="tab-content">
-    <div class="card no-print">
-      <h2>🚨 تسجيل غياب / عذر معلم</h2>
-      <form id="teacherForm" style="margin-top: 16px;">
-        <div class="form-grid">
-          <div class="form-group">
-            <label>اختر المعلم</label>
-            <select id="tNameSelect" required></select>
-          </div>
-          <div class="form-group">
-            <label>نوع الإجازة / العذر</label>
-            <select id="tReason">
-              <option value="عارضة">إجازة عارضة</option>
-              <option value="اعتيادي">إجازة اعتيادي</option>
-              <option value="مرضي">إجازة مرضية</option>
-              <option value="غياب بدون إذن">غياب بدون إذن</option>
-              <option value="تأخير صباحي">تأخير صباحي</option>
-              <option value="خط سير / مأمورية">خط سير / مأمورية</option>
-            </select>
-          </div>
-        </div>
-        <button type="submit">📌 تسجيل السجل</button>
-      </form>
-    </div>
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const tabs = document.querySelectorAll('.tab-btn');
+        const slideNumber = document.getElementById('slide-number');
+        const syncStatus = document.getElementById('syncStatus');
 
-    <div class="card">
-      <div class="card-header">
-        <h2>📑 دفتر متابعة حضور وغياب هيئة التدريس والعاملين</h2>
-      </div>
-      <table>
-        <thead>
-          <tr>
-            <th>اسم المعلم</th>
-            <th>المادة / الوظيفة</th>
-            <th>نوع العذر/الغياب</th>
-            <th>التاريخ</th>
-            <th class="no-print">إجراء</th>
-          </tr>
-        </thead>
-        <tbody id="teacherTable"></tbody>
-      </table>
-    </div>
-  </div>
+        window.onload = function() {
+            document.querySelectorAll('#editableArea .editable').forEach((el, index) => {
+                el.setAttribute('data-edit-id', 'element_' + index);
+            });
+            loadSavedData();
+            renderSessionsTable();
+        };
 
-  <!-- 4. الإشراف -->
-  <div id="dutyTab" class="tab-content">
-    <div class="card no-print">
-      <h2>🛡️ توزيع الإشراف اليومي والفسحة المدرسية</h2>
-      <form id="dutyForm" style="margin-top: 16px;">
-        <div class="form-grid">
-          <div class="form-group">
-            <label>المعلم المشرف</label>
-            <select id="dTeacherSelect" required></select>
-          </div>
-          <div class="form-group">
-            <label>موقع الإشراف</label>
-            <select id="dLocation">
-              <option value="الفناء المدرسي">الفناء المدرسي</option>
-              <option value="الدور الأرضي">الدور الأرضي</option>
-              <option value="الدور الأول علوي">الدور الأول علوي</option>
-              <option value="البوابة الرئيسية">البوابة الرئيسية</option>
-              <option value="المقصف / الكانتين">المقصف / الكانتين</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>فترة الإشراف</label>
-            <select id="dShift">
-              <option value="اليوم الدراسي كاملاً">اليوم الدراسي كاملاً</option>
-              <option value="الفسحة المدرسية">الفسحة المدرسية</option>
-            </select>
-          </div>
-        </div>
-        <button type="submit">🛡️ إسناد الإشراف</button>
-      </form>
-    </div>
+        function showSlide(index) {
+            slides[currentSlide].classList.remove('active');
+            if(tabs[currentSlide]) tabs[currentSlide].classList.remove('active');
+            
+            currentSlide = index;
+            if (currentSlide >= slides.length) currentSlide = 0;
+            if (currentSlide < 0) currentSlide = slides.length - 1;
 
-    <div class="card">
-      <div class="card-header">
-        <h2>📋 جدول الإشراف اليومي</h2>
-      </div>
-      <table>
-        <thead>
-          <tr>
-            <th>اسم المشرف</th>
-            <th>موقع الإشراف</th>
-            <th>الفترة</th>
-            <th>التاريخ</th>
-            <th class="no-print">إجراء</th>
-          </tr>
-        </thead>
-        <tbody id="dutyTable"></tbody>
-      </table>
-    </div>
-  </div>
+            slides[currentSlide].classList.add('active');
+            if(tabs[currentSlide]) {
+                tabs[currentSlide].classList.add('active');
+                tabs[currentSlide].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            }
 
-  <!-- 5. الطلاب -->
-  <div id="studentTab" class="tab-content">
-    <div class="card no-print">
-      <h2>👨‍🎓 تسجيل انضباط / غياب / سلوك طالب</h2>
-      <form id="studentForm" style="margin-top: 16px;">
-        <div class="form-grid">
-          <div class="form-group">
-            <label>اسم الطالب</label>
-            <input type="text" id="sName" required placeholder="اسم الطالب">
-          </div>
-          <div class="form-group">
-            <label>الصف / الفصل</label>
-            <input type="text" id="sClass" required placeholder="مثال: 5/1">
-          </div>
-          <div class="form-group">
-            <label>نوع الملاحظة</label>
-            <select id="sType">
-              <option value="تأخير عن الطابور">تأخير عن الطابور</option>
-              <option value="مخالفة سلوكية">مخالفة سلوكية</option>
-              <option value="استدعاء ولي أمر">استدعاء ولي أمر</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>الإجراء المتخذ من الوكيل</label>
-            <input type="text" id="sAction" placeholder="الإجراء...">
-          </div>
-        </div>
-        <button type="submit">⚠️ تسجيل الحالة</button>
-      </form>
-    </div>
+            slideNumber.innerText = (currentSlide + 1) + " / " + slides.length;
+        }
 
-    <div class="card">
-      <div class="card-header">
-        <h2>📑 سجل انضباط ومتابعة سلوك الطلاب</h2>
-      </div>
-      <table>
-        <thead>
-          <tr>
-            <th>اسم الطالب</th>
-            <th>الفصل</th>
-            <th>الملاحظة السلوكية</th>
-            <th>الإجراء المتخذ</th>
-            <th>التاريخ</th>
-            <th class="no-print">إجراء</th>
-          </tr>
-        </thead>
-        <tbody id="studentTable"></tbody>
-      </table>
-    </div>
-  </div>
+        function nextSlide() { showSlide(currentSlide + 1); }
+        function prevSlide() { showSlide(currentSlide - 1); }
 
-  <!-- 6. الزيارات -->
-  <div id="visitTab" class="tab-content">
-    <div class="card no-print">
-      <h2>📑 تسجيل زيارة صفية للوكيل</h2>
-      <form id="visitForm" style="margin-top: 16px;">
-        <div class="form-grid">
-          <div class="form-group">
-            <label>اسم المعلم المزار</label>
-            <select id="vTeacherSelect" required></select>
-          </div>
-          <div class="form-group">
-            <label>الصف والمادة</label>
-            <input type="text" id="vSubjectClass" required placeholder="علوم - 4/1">
-          </div>
-          <div class="form-group">
-            <label>موضوع الدرس</label>
-            <input type="text" id="vTopic" placeholder="عنوان الدرس">
-          </div>
-          <div class="form-group">
-            <label>التقييم والملاحظات</label>
-            <select id="vRating">
-              <option value="ممتاز - ملتزم بخطة الدرس">ممتاز - ملتزم بخطة الدرس</option>
-              <option value="جيد جداً - يحتاج لتفعيل الوسائل">جيد جداً - يحتاج لتفعيل الوسائل</option>
-              <option value="توجيه إداري وفني مباشر">توجيه إداري وفني مباشر</option>
-            </select>
-          </div>
-        </div>
-        <button type="submit">📝 حفظ الزيارة</button>
-      </form>
-    </div>
+        let isEditMode = false;
+        function toggleEditMode() {
+            isEditMode = !isEditMode;
+            
+            const activeSlide = slides[currentSlide];
+            const editableElements = activeSlide.querySelectorAll('.editable');
+            const editBtn = document.getElementById('editToggleBtn');
+            const saveBtn = document.getElementById('saveBtn');
 
-    <div class="card">
-      <div class="card-header">
-        <h2>📋 سجل الزيارات الصفية والتوجيهات الفنية</h2>
-      </div>
-      <table>
-        <thead>
-          <tr>
-            <th>اسم المعلم</th>
-            <th>المادة والصف</th>
-            <th>موضوع الدرس</th>
-            <th>التقييم</th>
-            <th>التاريخ</th>
-            <th class="no-print">إجراء</th>
-          </tr>
-        </thead>
-        <tbody id="visitTable"></tbody>
-      </table>
-    </div>
-  </div>
+            editableElements.forEach(el => { el.contentEditable = isEditMode; });
 
-  <!-- 7. الأرشيف وزر رفع المستندات الحقيقي -->
-  <div id="uploadTab" class="tab-content">
-    <div class="card no-print">
-      <h2>📤 رفع مستند / تقرير إلى الأرشيف السحابي والمحلي</h2>
-      <form id="uploadForm" style="margin-top: 16px;">
-        <div class="form-grid">
-          <div class="form-group">
-            <label>عنوان المستند</label>
-            <input type="text" id="docTitle" placeholder="مثال: إجازة عارضة للمعلم..." required>
-          </div>
-          <div class="form-group">
-            <label>تصنيف المستند</label>
-            <select id="docCategory">
-              <option value="قرارات وتكليفات">قرارات وتكليفات</option>
-              <option value="إجازات وأعذار">إجازات وأعذار معلمين</option>
-              <option value="تقارير انضباط طلاب">تقارير انضباط طلاب</option>
-              <option value="نشرات وزارية">نشرات وزارية وإدارية</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>اختر الملف للرفع (صورة / PDF / Word / Excel)</label>
-            <input type="file" id="docFileInput" required style="background: white;">
-          </div>
-          <div class="form-group">
-            <label>ملاحظات إضافية</label>
-            <input type="text" id="docNotes" placeholder="تفاصيل أو ملاحظات...">
-          </div>
-        </div>
-        <button type="submit" class="btn-upload">📤 رفع وحفظ المستند بالأرشيف</button>
-      </form>
-    </div>
+            if (isEditMode) {
+                document.body.classList.add('edit-mode-active');
+                editBtn.innerText = "❌ إلغاء التعديل";
+                editBtn.classList.replace('bg-amber-600', 'bg-red-600');
+                saveBtn.classList.remove('hidden');
+            } else {
+                document.body.classList.remove('edit-mode-active');
+                editBtn.innerText = "✏️ تعديل الصفحة";
+                editBtn.classList.replace('bg-red-600', 'bg-amber-600');
+                saveBtn.classList.add('hidden');
+            }
+        }
 
-    <div class="card">
-      <div class="card-header">
-        <h2>📂 الأرشيف الرقمي المرفوع للمدرسة</h2>
-      </div>
-      <table>
-        <thead>
-          <tr>
-            <th>عنوان المستند</th>
-            <th>اسم الملف المرفوع</th>
-            <th>حجم الملف</th>
-            <th>التصنيف</th>
-            <th>تاريخ الرفع</th>
-            <th class="no-print">إجراءات</th>
-          </tr>
-        </thead>
-        <tbody id="documentsTable"></tbody>
-      </table>
-    </div>
-  </div>
+        function saveData() {
+            syncStatus.innerText = "⏳ جاري الحفظ...";
+            
+            const savedDict = JSON.parse(localStorage.getItem('psychologicalPlan_local_db') || '{}');
+            
+            document.querySelectorAll('#editableArea .editable').forEach(el => {
+                const id = el.getAttribute('data-edit-id');
+                if (id) {
+                    savedDict[id] = el.innerHTML;
+                }
+            });
 
-  <div id="statusMsg" class="status"></div>
+            localStorage.setItem('psychologicalPlan_local_db', JSON.stringify(savedDict));
+            
+            syncStatus.innerText = "💾 تم الحفظ بنجاح";
+            syncStatus.className = "text-xs font-bold text-emerald-800 bg-emerald-100 px-2 py-1 rounded-lg";
+            alert('✅ تم حفظ التعديل بنجاح في موقعه المخصص!');
+            toggleEditMode();
+        }
 
-  <div class="print-footer">
-    <div>مسؤول الإحصاء بالمدرسة: ....................</div>
-    <div>وكيل المدرسة: الأستاذة / أميرة علي شلبي</div>
-    <div>مدير المدرسة: ....................</div>
-  </div>
-</div>
+        function loadSavedData() {
+            const savedDict = JSON.parse(localStorage.getItem('psychologicalPlan_local_db') || '{}');
+            
+            document.querySelectorAll('#editableArea .editable').forEach(el => {
+                const id = el.getAttribute('data-edit-id');
+                if (id && savedDict[id]) {
+                    el.innerHTML = savedDict[id];
+                }
+            });
 
-<script>
-  const officialStaffList = [
-    { m: 1, name: "ابتسام اسماعيل عبد الحميد ابراهيم", code: "474196", cadre: "معلم أول أ", subject: "لغة عربية ودين", qual: "ليسانس اداب وتربية", degree: "معلم أول أ" },
-    { m: 2, name: "ابراهيم مختار حسن حجاج", code: "3413154", cadre: "غير مخاطب حالياً", subject: "محو أميه", qual: "محو أميه", degree: "بدون درجة (عامل مؤقت)" },
-    { m: 3, name: "ازهار سعد محمد شحاته زيد", code: "2512221", cadre: "أخصائي تكنولوجيا أول", subject: "تكنولوجيا التعليم", qual: "ليسانس دراسات اسلامية + دبلومة", degree: "أخصائي تكنولوجيا أول" },
-    { m: 4, name: "اسراء رجب بدوى عبد الله", code: "2773388", cadre: "معلم أول", subject: "لغة إنجليزية", qual: "ليسانس اداب + دبلومة تربوية", degree: "معلم أول" },
-    { m: 5, name: "اسماء احمد محمد عطا غانم", code: "3702328", cadre: "غير مخاطب حالياً", subject: "علوم", qual: "بكالوريوس علوم وتربية", degree: "معلم مساعد" },
-    { m: 6, name: "اسماء نبيل محمد عبدربه", code: "3477528", cadre: "غير مخاطب حالياً", subject: "لغة إنجليزية", qual: "بكالوريوس تربية", degree: "معلم بالحصة" },
-    { m: 7, name: "اشرف نبيل محمد على", code: "474584", cadre: "معلم خبير", subject: "رياضيات", qual: "بكالوريوس علوم وتربية", degree: "معلم خبير" },
-    { m: 8, name: "أميرة علي إبراهيم شلبي", code: "476216", cadre: "معلم خبير - وكيل مدرسة", subject: "علوم", qual: "دبلومة مهنية في التربية", degree: "معلم خبير - وكيل مدرسة" },
-    { m: 9, name: "ايمان احمد عبد الفتاح محمود", code: "2632803", cadre: "معلم أول", subject: "مدرس فصل", qual: "ليسانس اداب وتربية - تعليم أساسي", degree: "معلم أول" },
-    { m: 10, name: "بركات حسن ابراهيم فرج", code: "2042786", cadre: "معلم خبير", subject: "لغة عربية ودين", qual: "ليسانس دراسات اسلامية + دبلوم عام", degree: "معلم خبير" },
-    { m: 11, name: "تهاني فؤاد عبد العزيز محمد", code: "2832805", cadre: "معلم أول", subject: "لغة عربية ودين", qual: "ليسانس لغة عربية أزهر", degree: "معلم أول" },
-    { m: 12, name: "حنان محمد علي العبد", code: "475426", cadre: "معلم", subject: "مدرس فصل", qual: "ليسانس تربية", degree: "معلم" },
-    { m: 13, name: "رافت نصر ابراهيم قنبر", code: "474807", cadre: "معلم خبير", subject: "مجال صناعي", qual: "دبلوم التلمذة الصناعية", degree: "معلم خبير" },
-    { m: 14, name: "سلامه رمضان احمد ابو حسن", code: "2917590", cadre: "غير مخاطب حالياً", subject: "خدمات", qual: "محو أميه", degree: "عامل خدمات متعاقد" },
-    { m: 15, name: "شاهيناز السيد عبد الصبور راغب", code: "479083", cadre: "معلم أول أ", subject: "مدرس فصل", qual: "ليسانس اداب + دبلومة تربوية", degree: "معلم أول أ" },
-    { m: 16, name: "شيرين محمد عبد الحليم صالح", code: "475425", cadre: "معلم أول", subject: "اقتصاد منزلي", qual: "دبلوم صناعة ثانوى", degree: "معلم أول" },
-    { m: 17, name: "صبحي حامد علي محمد سيد احمد نعام", code: "1756870", cadre: "معلم أول", subject: "علوم", qual: "بكالوريوس تربية", degree: "معلم أول" },
-    { m: 18, name: "عبير عطية عبد الجواد رشوان", code: "3436183", cadre: "معلم", subject: "علوم", qual: "بكالوريوس علوم وتربية", degree: "معلم" },
-    { m: 19, name: "عصام الدين جلال الدين مرسى محمد", code: "474607", cadre: "أخصائي اجتماعي أول أ", subject: "لغة إنجليزية", qual: "دبلوم عام في التربية", degree: "أخصائي اجتماعي أول أ" },
-    { m: 20, name: "منة الله عادل عيد سليمان", code: "3613593", cadre: "غير مخاطب حالياً", subject: "لغة عربية ودين", qual: "ليسانس اداب", degree: "معلم بالحصة" },
-    { m: 21, name: "نبيله الصاوي احمد حمدان", code: "3119705", cadre: "معلم", subject: "لغة عربية ودين", qual: "ليسانس تربية", degree: "معلم" },
-    { m: 22, name: "نورهان احمد شحاته محمود شعبان", code: "3436182", cadre: "معلم", subject: "دراسات إجتماعية", qual: "ليسانس اداب وتربية", degree: "معلم" },
-    { m: 23, name: "وفاء رجب سعد احمد", code: "2207204", cadre: "معلم أول أ", subject: "لغة إنجليزية", qual: "بكالوريوس تربية", degree: "معلم أول أ" },
-    { m: 24, name: "وفاء كامل بسيوني ابراهيم", code: "3616956", cadre: "غير مخاطب حالياً", subject: "لغة عربية ودين", qual: "الاجازة العالية في العلوم", degree: "معلم بالحصة" },
-    { m: 25, name: "ياسمين كمال راغب محمد المنقل", code: "2204171", cadre: "معلم أول أ", subject: "لغة انجليزية", qual: "ليسانس اداب", degree: "معلم أول أ" }
-  ];
+            syncStatus.innerText = "⚙️ جاهز";
+        }
 
-  const STORAGE_KEY = "KADWA_ELKREON_SCHOOL_APP_V5";
+        function resetData() {
+            if (confirm('هل أنت تأكد من إلغاء كافة التعديلات والعودة للنسخة الأصلية؟')) {
+                localStorage.removeItem('psychologicalPlan_local_db');
+                localStorage.removeItem('psychologicalPlan_sessions');
+                location.reload();
+            }
+        }
 
-  let appData = {
-    subs: [],
-    teachers: [],
-    duties: [],
-    students: [],
-    visits: [],
-    documents: []
-  };
+        function exportDataJSON() {
+            const data = {
+                textData: JSON.parse(localStorage.getItem('psychologicalPlan_local_db') || '{}'),
+                sessionsData: JSON.parse(localStorage.getItem('psychologicalPlan_sessions') || '[]')
+            };
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `نسخة_احتياطية_للخطط_والجلسات_${new Date().toISOString().slice(0,10)}.json`;
+            a.click();
+        }
 
-  document.getElementById('printDate').textContent = new Date().toLocaleDateString('ar-EG');
+        function importDataJSON() {
+            document.getElementById('importFileInput').click();
+        }
 
-  function populateTeacherDropdowns() {
-    const dropdownIds = ['absentTeacherSelect', 'subTeacherSelect', 'tNameSelect', 'dTeacherSelect', 'vTeacherSelect'];
-    dropdownIds.forEach(id => {
-      const select = document.getElementById(id);
-      if(!select) return;
-      select.innerHTML = '<option value="">-- اختر من القائمة --</option>';
-      officialStaffList.forEach(st => {
-        const option = document.createElement('option');
-        option.value = st.name;
-        option.textContent = `${st.name} (${st.subject})`;
-        select.appendChild(option);
-      });
-    });
-  }
+        function handleImportFile(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const parsed = JSON.parse(e.target.result);
+                    if (parsed.textData) localStorage.setItem('psychologicalPlan_local_db', JSON.stringify(parsed.textData));
+                    if (parsed.sessionsData) localStorage.setItem('psychologicalPlan_sessions', JSON.stringify(parsed.sessionsData));
+                    alert('✅ تم استرجاع النسخة الاحتياطية بنجاح!');
+                    location.reload();
+                } catch(err) {
+                    alert('❌ حدث خطأ أثناء استرجاع الملف، يرجى التأكد من اختيار ملف صحيح.');
+                }
+            };
+            reader.readAsText(file);
+        }
 
-  function switchTab(evt, tabId) {
-    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-    document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-    evt.currentTarget.classList.add('active');
-    document.getElementById(tabId).classList.add('active');
-  }
+        function addSessionRecord() {
+            const date = document.getElementById('sessDate').value || new Date().toISOString().slice(0,10);
+            const student = document.getElementById('sessStudent').value.trim();
+            const type = document.getElementById('sessType').value;
+            const goal = document.getElementById('sessGoal').value.trim();
+            const notes = document.getElementById('sessNotes').value.trim();
 
-  function renderStaffTable() {
-    const search = document.getElementById('staffSearch').value.toLowerCase();
-    const tbody = document.getElementById('staffDirectoryTable');
-    const filtered = officialStaffList.filter(s => s.name.toLowerCase().includes(search));
+            if (!student || !goal) {
+                alert('يرجى كتابة اسم الطالب وموضوع الجلسة على الأقل.');
+                return;
+            }
 
-    tbody.innerHTML = filtered.map(st => `
-      <tr>
-        <td>${st.m}</td>
-        <td><strong>${st.name}</strong></td>
-        <td><code>${st.code}</code></td>
-        <td>${st.cadre}</td>
-        <td>${st.subject}</td>
-        <td>${st.qual}</td>
-        <td>${st.degree}</td>
-      </tr>
-    `).join('');
-  }
+            const sessions = JSON.parse(localStorage.getItem('psychologicalPlan_sessions') || '[]');
+            sessions.push({ id: Date.now(), date, student, type, goal, notes });
+            localStorage.setItem('psychologicalPlan_sessions', JSON.stringify(sessions));
 
-  function loadAllData() {
-    const localSaved = localStorage.getItem(STORAGE_KEY);
-    if (localSaved) {
-      try { appData = JSON.parse(localSaved); } catch (e) {}
-    }
-    renderAllTables();
-    updateStats();
-  }
+            document.getElementById('sessStudent').value = '';
+            document.getElementById('sessGoal').value = '';
+            document.getElementById('sessNotes').value = '';
 
-  function saveDataStore() {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
-    renderAllTables();
-    updateStats();
-    showStatus("تم حفظ البيانات والمستند بنجاح!", "success");
-  }
+            renderSessionsTable();
+        }
 
-  function renderAllTables() {
-    // الاحتياطي
-    document.getElementById('subTable').innerHTML = appData.subs.map((item, index) => `
-      <tr>
-        <td>${item.absentTeacher}</td>
-        <td>${item.subTeacher}</td>
-        <td>${item.className}</td>
-        <td>${item.period}</td>
-        <td>${item.date}</td>
-        <td class="no-print">
-          <button class="btn-wa" onclick="sendWhatsApp('${item.subPhone}', '${item.subTeacher}', '${item.className}', '${item.period}')">📱 واتساب</button>
-          <button class="btn-delete" onclick="deleteItem('subs', ${index})">🗑️</button>
-        </td>
-      </tr>
-    `).join('');
+        function renderSessionsTable() {
+            const sessions = JSON.parse(localStorage.getItem('psychologicalPlan_sessions') || '[]');
+            const tbody = document.getElementById('sessionsTableBody');
+            if (!tbody) return;
 
-    // غياب المعلمين
-    document.getElementById('teacherTable').innerHTML = appData.teachers.map((item, index) => `
-      <tr>
-        <td>${item.name}</td>
-        <td>${item.subject}</td>
-        <td>${item.reason}</td>
-        <td>${item.date}</td>
-        <td class="no-print"><button class="btn-delete" onclick="deleteItem('teachers', ${index})">🗑️</button></td>
-      </tr>
-    `).join('');
+            if (sessions.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="text-center p-4 text-gray-500">لا توجد جلسات مسجلة حتى الآن.</td></tr>`;
+                return;
+            }
 
-    // الإشراف
-    document.getElementById('dutyTable').innerHTML = appData.duties.map((item, index) => `
-      <tr>
-        <td>${item.teacher}</td>
-        <td>${item.location}</td>
-        <td>${item.shift}</td>
-        <td>${item.date}</td>
-        <td class="no-print"><button class="btn-delete" onclick="deleteItem('duties', ${index})">🗑️</button></td>
-      </tr>
-    `).join('');
+            tbody.innerHTML = sessions.map(s => `
+                <tr>
+                    <td class="p-2 border border-green-200">${s.date}</td>
+                    <td class="p-2 border border-green-200 font-bold">${s.student}</td>
+                    <td class="p-2 border border-green-200"><span class="bg-green-100 text-green-800 px-2 py-0.5 rounded text-xs font-bold">${s.type}</span></td>
+                    <td class="p-2 border border-green-200">${s.goal}</td>
+                    <td class="p-2 border border-green-200">${s.notes || '-'}</td>
+                    <td class="p-2 border border-green-200 no-print text-center">
+                        <button onclick="deleteSessionRecord(${s.id})" class="text-red-600 hover:text-red-800 font-bold text-xs">حذف ❌</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
 
-    // الطلاب
-    document.getElementById('studentTable').innerHTML = appData.students.map((item, index) => `
-      <tr>
-        <td>${item.name}</td>
-        <td>${item.className}</td>
-        <td>${item.type}</td>
-        <td>${item.action || '-'}</td>
-        <td>${item.date}</td>
-        <td class="no-print"><button class="btn-delete" onclick="deleteItem('students', ${index})">🗑️</button></td>
-      </tr>
-    `).join('');
+        function deleteSessionRecord(id) {
+            if (confirm('هل ترغب في حذف هذه الجلسة من السجل؟')) {
+                let sessions = JSON.parse(localStorage.getItem('psychologicalPlan_sessions') || '[]');
+                sessions = sessions.filter(s => s.id !== id);
+                localStorage.setItem('psychologicalPlan_sessions', JSON.stringify(sessions));
+                renderSessionsTable();
+            }
+        }
 
-    // الزيارات
-    document.getElementById('visitTable').innerHTML = appData.visits.map((item, index) => `
-      <tr>
-        <td>${item.teacher}</td>
-        <td>${item.subjectClass}</td>
-        <td>${item.topic || '-'}</td>
-        <td>${item.rating}</td>
-        <td>${item.date}</td>
-        <td class="no-print"><button class="btn-delete" onclick="deleteItem('visits', ${index})">🗑️</button></td>
-      </tr>
-    `).join('');
+        function calculateQuiz() {
+            const student = document.getElementById('quizStudentName').value.trim();
+            const cls = document.getElementById('quizStudentClass').value.trim();
+            
+            if (!student) {
+                alert('يرجى أدخل اسم الطالب أولاً.');
+                return;
+            }
 
-    // المستندات والمستندات المرفوعة
-    document.getElementById('documentsTable').innerHTML = appData.documents.map((item, index) => `
-      <tr>
-        <td><strong>📄 ${item.title}</strong></td>
-        <td><code>${item.fileName || 'مستند مفرغ'}</code></td>
-        <td>${item.fileSize || '-'}</td>
-        <td>${item.category}</td>
-        <td>${item.date}</td>
-        <td class="no-print">
-          ${item.fileData ? `<a href="${item.fileData}" download="${item.fileName}"><button style="background:#0284c7; padding:4px 8px; font-size:12px;">📥 تحميل</button></a>` : ''}
-          <button class="btn-delete" onclick="deleteItem('documents', ${index})">🗑️ مسح</button>
-        </td>
-      </tr>
-    `).join('');
-  }
+            const selects = document.querySelectorAll('.quiz-score');
+            let total = 0;
+            selects.forEach(s => total += parseInt(s.value));
 
-  // معالجة رفع الملفات عبر زِر الرفع
-  document.getElementById('uploadForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    const fileInput = document.getElementById('docFileInput');
-    const file = fileInput.files[0];
+            let category = "";
+            let recommendation = "";
 
-    if (!file) {
-      alert("الرجاء اختيار ملف مرفق أولاً!");
-      return;
-    }
+            if (total >= 16) {
+                category = "التكيف ممتاز (مرتفع)";
+                recommendation = "توجيه الطالب لبرامج رعاية المتفوقين أو الموهوبين وإسناد أدوار قيادية له.";
+            } else if (total >= 11) {
+                category = "التكيف متوسط";
+                recommendation = "متابعة دورية بسيطة مع تعزيز مهارات التكيف والدافعية الدراسية.";
+            } else {
+                category = "يحتاج إلى تدخل إرشادي (منخفض)";
+                recommendation = "فتح حالة فردية وتحويل الطالب لبرنامج الدعم النفسي/التحصيلي وتعيين جلسات متابعة.";
+            }
 
-    const reader = new FileReader();
-    reader.onload = function(evt) {
-      const sizeInKB = (file.size / 1024).toFixed(1) + " KB";
-      appData.documents.push({
-        title: document.getElementById('docTitle').value.trim(),
-        category: document.getElementById('docCategory').value,
-        notes: document.getElementById('docNotes').value.trim(),
-        fileName: file.name,
-        fileSize: sizeInKB,
-        fileData: evt.target.result, // حفظ الملف بصيغة DataURL
-        date: new Date().toLocaleDateString('ar-EG')
-      });
-      document.getElementById('uploadForm').reset();
-      saveDataStore();
-    };
-    reader.readAsDataURL(file);
-  });
-
-  // بقية النماذج
-  document.getElementById('subForm').addEventListener('submit', (e) => {
-    e.preventDefault();
-    appData.subs.push({
-      absentTeacher: document.getElementById('absentTeacherSelect').value,
-      subTeacher: document.getElementById('subTeacherSelect').value,
-      subPhone: document.getElementById('subPhone').value.trim(),
-      className: document.getElementById('className').value.trim(),
-      period: document.getElementById('period').value,
-      date: new Date().toLocaleDateString('ar-EG')
-    });
-    e.target.reset();
-    saveDataStore();
-  });
-
-  document.getElementById('teacherForm').addEventListener('submit', (e) => {
-    e.preventDefault();
-    const name = document.getElementById('tNameSelect').value;
-    const staffObj = officialStaffList.find(s => s.name === name);
-    appData.teachers.push({
-      name: name,
-      subject: staffObj ? staffObj.subject : '-',
-      reason: document.getElementById('tReason').value,
-      date: new Date().toLocaleDateString('ar-EG')
-    });
-    e.target.reset();
-    saveDataStore();
-  });
-
-  document.getElementById('dutyForm').addEventListener('submit', (e) => {
-    e.preventDefault();
-    appData.duties.push({
-      teacher: document.getElementById('dTeacherSelect').value,
-      location: document.getElementById('dLocation').value,
-      shift: document.getElementById('dShift').value,
-      date: new Date().toLocaleDateString('ar-EG')
-    });
-    e.target.reset();
-    saveDataStore();
-  });
-
-  document.getElementById('studentForm').addEventListener('submit', (e) => {
-    e.preventDefault();
-    appData.students.push({
-      name: document.getElementById('sName').value.trim(),
-      className: document.getElementById('sClass').value.trim(),
-      type: document.getElementById('sType').value,
-      action: document.getElementById('sAction').value.trim(),
-      date: new Date().toLocaleDateString('ar-EG')
-    });
-    e.target.reset();
-    saveDataStore();
-  });
-
-  document.getElementById('visitForm').addEventListener('submit', (e) => {
-    e.preventDefault();
-    appData.visits.push({
-      teacher: document.getElementById('vTeacherSelect').value,
-      subjectClass: document.getElementById('vSubjectClass').value.trim(),
-      topic: document.getElementById('vTopic').value.trim(),
-      rating: document.getElementById('vRating').value,
-      date: new Date().toLocaleDateString('ar-EG')
-    });
-    e.target.reset();
-    saveDataStore();
-  });
-
-  function exportToCSV(type) {
-    let rows = [];
-    if (type === 'subs') {
-      rows.push(["المعلم الغائب", "المعلم المكلف", "الهاتف", "الفصل", "الحصة", "التاريخ"]);
-      appData.subs.forEach(i => rows.push([i.absentTeacher, i.subTeacher, i.subPhone || '', i.className, i.period, i.date]));
-    }
-    let csvContent = "\uFEFF" + rows.map(e => e.map(val => `"${val}"`).join(",")).join("\n");
-    let blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    let link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = `كدوه_الكريون_${type}.csv`;
-    link.click();
-  }
-
-  function deleteItem(type, index) {
-    if (confirm("هل أنت متأكد من المسح؟")) {
-      appData[type].splice(index, 1);
-      saveDataStore();
-    }
-  }
-
-  function updateStats() {
-    const todayStr = new Date().toLocaleDateString('ar-EG');
-    document.getElementById('todaySubCount').textContent = appData.subs.filter(r => r.date === todayStr).length;
-  }
-
-  function sendWhatsApp(phone, teacher, className, period) {
-    const text = `الأستاذ/ة ${teacher} المحترم/ة،\nتحية طيبة وبعد،،\nيرجى العلم بأنه تم تكليفكم بحصة احتياطية بمدرسة كدوه الكريون:\n📍 الفصل: ${className}\n⏰ ${period}\nشاكرين تعاونكم - مكتب وكيل المدرسة الأستاذة / أميرة علي إبراهيم شلبي.`;
-    let url = `https://wa.me/`;
-    if (phone) {
-      const cleanPhone = phone.replace(/[^0-9]/g, '');
-      url += cleanPhone.startsWith('0') ? `2${cleanPhone}` : cleanPhone;
-    }
-    url += `?text=${encodeURIComponent(text)}`;
-    window.open(url, '_blank');
-  }
-
-  function showStatus(text, type) {
-    const statusMsg = document.getElementById('statusMsg');
-    statusMsg.textContent = text;
-    statusMsg.className = `status ${type}`;
-    setTimeout(() => { statusMsg.style.display = 'none'; }, 3000);
-  }
-
-  populateTeacherDropdowns();
-  renderStaffTable();
-  loadAllData();
-</script>
-
+            const resDiv = document.getElementById('quizResult');
+            resDiv.classList.remove('hidden');
+            resDiv.innerHTML = `
+                📌 <strong>النتيجة للطالب (${student} - ${cls || 'غير محدد'}):</strong> ${total} / 20 درجة<br>
+                🏷️ <strong>التصنيف:</strong> ${category}<br>
+                💡 <strong>التوصية الإرشادية:</strong> ${recommendation}
+            `;
+        }
+    </script>
 </body>
 </html>
